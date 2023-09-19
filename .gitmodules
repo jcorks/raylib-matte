@@ -1,0 +1,6 @@
+[submodule "raylib"]
+	path = raylib
+	url = https://github.com/raysan5/raylib
+[submodule "matte"]
+	path = matte
+	url = https://github.com/jcorks/matte
