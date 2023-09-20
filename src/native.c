@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "../matte/src/matte_store.h"
 #include "../matte/src/matte_string.h"
+#include "../matte/src/matte_array.h"
 
 enum {
     RAYMATTE_NATIVE_TYPE__IMAGE = 866,
@@ -107,11 +108,8 @@ matteValue_t native_to_value_image(matteVM_t * vm, Image img) {
 matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2 v2) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
-    matteValue_t x = matte_store_new_value(store);
-    matteValue_t y = matte_store_new_value(store);
-
-    matte_value_into_number(store, &x, v2.x);
-    matte_value_into_number(store, &y, v2.y);
+    matteValue_t x = native_to_value_float(vm, v2.x);
+    matteValue_t y = native_to_value_float(vm, v2.y);
 
     matteValue_t v = matte_store_new_value(store);
     matte_value_into_new_object_ref(store, &v);
@@ -120,6 +118,79 @@ matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2 v2) {
 
     return v;
 }   
+
+matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t x = native_to_value_float(vm, v3.x);
+    matteValue_t y = native_to_value_float(vm, v3.y);
+    matteValue_t z = native_to_value_float(vm, v3.z);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"), x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "z"), z);
+
+    return v;
+}   
+
+
+matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix m) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t vals[] = {
+        native_to_value_float(vm, m.m0),
+        native_to_value_float(vm, m.m4),
+        native_to_value_float(vm, m.m8),
+        native_to_value_float(vm, m.m12),
+
+        native_to_value_float(vm, m.m1),
+        native_to_value_float(vm, m.m5),
+        native_to_value_float(vm, m.m9),
+        native_to_value_float(vm, m.m13),
+
+        native_to_value_float(vm, m.m2),
+        native_to_value_float(vm, m.m6),
+        native_to_value_float(vm, m.m10),
+        native_to_value_float(vm, m.m14),
+
+        native_to_value_float(vm, m.m3),
+        native_to_value_float(vm, m.m7),
+        native_to_value_float(vm, m.m11),
+        native_to_value_float(vm, m.m15)
+    };
+
+    matteArray_t arr = MATTE_ARRAY_CAST(
+        vals,
+        sizeof(matteValue_t),
+        16
+    );
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_array_ref(store, &v, &arr);
+
+    return v;
+}   
+
+
+
+matteValue_t native_to_value_ray(matteVM_t * vm, Ray ray) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t position = native_to_value_vector3(vm, ray.position);
+    matteValue_t direction = native_to_value_vector3(vm, ray.direction);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "position"), position);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "direction"), direction);
+
+    return v;
+
+}
 
 
 matteValue_t native_to_value_renderTexture(matteVM_t * vm, RenderTexture img) {
@@ -241,6 +312,9 @@ Vector3 native_from_value_vector3(matteVM_t * vm, matteValue_t v3) {
 }   
 
 
+
+
+
 Vector4 native_from_value_vector4(matteVM_t * vm, matteValue_t v4) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -340,7 +414,7 @@ Camera2D native_from_value_camera2D(matteVM_t * vm, matteValue_t cam) {
     return v;
 }   
 
-Camera3D native_from_value_camera3D(matteVM_t * vm, matteValue_t cam) {
+Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t cam) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
     if (cam.binID != MATTE_VALUE_TYPE_OBJECT) {

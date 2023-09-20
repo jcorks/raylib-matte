@@ -25,9 +25,12 @@ matteValue_t native_to_value_string(matteVM_t * vm, const char * value);
 
 matteValue_t native_to_value_image(matteVM_t * vm, Image img);
 matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2); 
+matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3);
+matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix m);
 matteValue_t native_to_value_renderTexture(matteVM_t * vm, RenderTexture img);
 matteValue_t native_to_value_texture(matteVM_t * vm, Texture img);
 matteValue_t native_to_value_shader(matteVM_t * vm, Shader img);
+matteValue_t native_to_value_ray(matteVM_t * vm, Ray ray);
 
 
 // DOES NOT check values
@@ -43,7 +46,7 @@ Color native_from_value_color(matteVM_t * vm, matteValue_t cl);
 Vector3 native_from_value_vector3(matteVM_t * vm, matteValue_t cl);
 Vector4 native_from_value_vector4(matteVM_t * vm, matteValue_t cl);
 Camera2D native_from_value_camera2D(matteVM_t * vm, matteValue_t cam);
-Camera3D native_from_value_camera3D(matteVM_t * vm, matteValue_t cam);
+Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t cam);
 RenderTexture native_from_value_renderTexture(matteVM_t * vm, matteValue_t tex);
 Texture native_from_value_texture(matteVM_t * vm, matteValue_t tex);
 Shader native_from_value_shader(matteVM_t * vm, matteValue_t shad);

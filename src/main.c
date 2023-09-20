@@ -430,7 +430,7 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_BeginMode3D, MATTE_VALUE_TYPE_OBJECT)
-    BeginMode3D(native_from_value_camera3D(vm, args[0]));
+    BeginMode3D(native_from_value_camera(vm, args[0]));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG0(raylib_EndMode3D)
@@ -827,6 +827,139 @@ RAYLIB_FN__END
 
 
 
+
+/// Screen-space-related functions 
+
+RAYLIB_FN__ARG2(raylib_GetMouseRay, 
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_ray(
+        vm,
+        GetMouseRay(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_camera(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_GetCameraMatrix, 
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        GetCameraMatrix(
+            native_from_value_camera(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetCameraMatrix2D, 
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        GetCameraMatrix2D(
+            native_from_value_camera2D(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetWorldToScreen, 
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        GetWorldToScreen(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_camera(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_GetScreenToWorld2D, 
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        GetScreenToWorld2D(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_camera2D(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_GetWorldToScreenEx, 
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER    
+)
+    return native_to_value_vector2(
+        vm,
+        GetWorldToScreenEx(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_camera(vm, args[1]),
+            args[2].value.number,
+            args[3].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_GetWorldToScreen2D, 
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        GetWorldToScreen2D(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_camera2D(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+// Timing-related functions 
+RAYLIB_FN__ARG1(raylib_SetTargetFPS, MATTE_VALUE_TYPE_NUMBER)
+    SetTargetFPS(args[0].value.number);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetFPS)
+    return native_to_value_int(vm, 
+        GetFPS()
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetFrameTime)
+    return native_to_value_float(vm, 
+        GetFrameTime()
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetTime)
+    return native_to_value_float(vm, 
+        GetTime()
+    );
+RAYLIB_FN__END
+
+
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -936,6 +1069,22 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_SetShaderValueMatrix", raylib_SetShaderValueMatrix, NULL, "shader", "locIndex", "mat", NULL);
     matte_add_external_function(m, "raylib_SetShaderValueTexture", raylib_SetShaderValueTexture, NULL, "shader", "locIndex", "texture", NULL);
     matte_add_external_function(m, "raylib_UnloadShader", raylib_UnloadShader, NULL, "shader", NULL);
+    
+    
+    matte_add_external_function(m, "raylib_GetMouseRay", raylib_GetMouseRay, NULL, "mousePosition", "camera", NULL);
+    matte_add_external_function(m, "raylib_GetCameraMatrix", raylib_GetCameraMatrix, NULL, "camera", NULL);
+    matte_add_external_function(m, "raylib_GetCameraMatrix2D", raylib_GetCameraMatrix2D, NULL, "camera", NULL);
+    matte_add_external_function(m, "raylib_GetWorldToScreen", raylib_GetWorldToScreen, NULL, "position", "camera", NULL);
+    matte_add_external_function(m, "raylib_GetScreenToWorld2D", raylib_GetScreenToWorld2D, NULL, "position", "camera", NULL);
+    matte_add_external_function(m, "raylib_GetWorldToScreenEx", raylib_GetWorldToScreenEx, NULL, "position", "camera", "width", "height", NULL);
+    matte_add_external_function(m, "raylib_GetWorldToScreen2D", raylib_GetWorldToScreen2D, NULL, "position", "camera", NULL);
+
+
+    matte_add_external_function(m, "raylib_SetTargetFPS", raylib_SetTargetFPS, NULL, "fps",  NULL);
+    matte_add_external_function(m, "raylib_GetFPS", raylib_GetFPS, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetFrameTime", raylib_GetFrameTime, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetTime", raylib_GetTime, NULL, NULL);
+    
 } 
 
 

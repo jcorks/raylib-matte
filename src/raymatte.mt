@@ -558,7 +558,20 @@
     UnloadShader : getExternalFunction(name:"raylib_UnloadShader"),
 
 
-
+    // Screen-space-related functions 
+    GetMouseRay : getExternalFunction(name:"raylib_GetMouseRay"),
+    GetCameraMatrix : getExternalFunction(name:"raylib_GetCameraMatrix"),
+    GetCameraMatrix2D : getExternalFunction(name:"raylib_GetCameraMatrix2D"),
+    GetWorldToScreen : getExternalFunction(name:"raylib_GetWorldToScreen"),
+    GetScreenToWorld2D : getExternalFunction(name:"raylib_GetScreenToWorld2D"),
+    GetWorldToScreenEx : getExternalFunction(name:"raylib_GetWorldToScreenEx"),
+    GetWorldToScreen2D : getExternalFunction(name:"raylib_GetWorldToScreen2D"),
+    
+    // Timing related functions 
+    SetTargetFPS : getExternalFunction(name:"raylib_SetTargetFPS"),
+    GetFPS : getExternalFunction(name:"raylib_GetFPS"),
+    GetFrameTime : getExternalFunction(name:"raylib_GetFrameTime"),
+    GetTime : getExternalFunction(name:"raylib_GetTime")
 
 };
 
