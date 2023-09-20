@@ -242,6 +242,34 @@ matteValue_t native_to_value_shader(matteVM_t * vm, Shader shad) {
 }
 
 
+matteValue_t native_to_value_filePathList(matteVM_t * vm, FilePathList list) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t capacity = native_to_value_int(vm, list.capacity);
+
+    matteValue_t * vals = calloc(list.count, sizeof(matteValue_t));
+    int i;
+    for(i = 0; i < list.count; ++i) {
+        vals[i] = native_to_value_string(vm, list.paths[i]);
+    }
+
+    matteValue_t paths = matte_store_new_value(store);
+    matteArray_t pathsArr = MATTE_ARRAY_CAST(vals, matteValue_t, list.count);
+    matte_value_into_new_object_array_ref(
+        store,
+        &paths, 
+        &pathsArr
+    );
+    free(vals);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "capacity"), capacity);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "paths"), paths);
+
+    return v;    
+}
 
 
 

@@ -21,6 +21,7 @@ matteValue_t native_to_value_pointer(matteVM_t * vm, void * ptr);
 matteValue_t native_to_value_int(matteVM_t * vm, int value);
 matteValue_t native_to_value_boolean(matteVM_t * vm, int value);
 matteValue_t native_to_value_float(matteVM_t * vm, float value);
+matteValue_t native_to_value_double(matteVM_t * vm, double value);
 matteValue_t native_to_value_string(matteVM_t * vm, const char * value);
 
 matteValue_t native_to_value_image(matteVM_t * vm, Image img);
@@ -31,6 +32,7 @@ matteValue_t native_to_value_renderTexture(matteVM_t * vm, RenderTexture img);
 matteValue_t native_to_value_texture(matteVM_t * vm, Texture img);
 matteValue_t native_to_value_shader(matteVM_t * vm, Shader img);
 matteValue_t native_to_value_ray(matteVM_t * vm, Ray ray);
+matteValue_t native_to_value_filePathList(matteVM_t * vm, FilePathList list);
 
 
 // DOES NOT check values

@@ -1,94 +1,9 @@
+@:MemoryBuffer = import(module:'Matte.Core.MemoryBuffer');
 
 
-// Changes vs. C Implemention
-/*
-    - ALL symbols are part of a module object (referred to as a namespace) 
-      rather than in scope references
-      
-    - Enums are layed out flat within the raylib namespace
-
-    - Some functions are not implemented:
-    
-         Functions which are currently NOT implemented
-              BeginVrStereoMode
-              EndVrStereoMode
-              LoadVrStereoConfig
-              UnloadVrStereoConfig
-
-         Functions that are NOT supported
-              GetWindowHandle     
-              
-    - Some structs are designated as "read-only".
-      "read-only structs" are where the object is maintained by raylib 
-      and isnt meant to be modified by usercode. As such members are retrieved
-      using Getters from the Read-Only Member Accessor functions. They follow 
-      the syntax [StructName]Get[MemberName] using PascalCase. I.e.:
-      ImageGetWidth().
-      
-      The objects that are read-only structs are:
-    
-        Image 
-        RenderTexture / RenderTexture2D
-        Texture / Texture2D
-        Shader (no getters)
-    
-      Such objects are NOT able to be produced "by hand" and need to be 
-      sourced from raylib functions on some level. 
-      
-    - Members of structs that point to native objects, such as OpenGL 
-      texture IDs are not made available.
-
-    - SetShaderValue / SetShaderValueV takes a pointer argument in 
-      C for the data to be uploaded. This has been replaced with 
-      SetShaderValueFloat / SetShaderValueFloatV and 
-      SetShaderValueInt / SetShaderValueIntV for each uniform 
-      type available. Sampler2D has a separate 
-      SetShaderValueSampler2D / SetShaderValueSampler2DV
-      
-      
-      For The V variants, a "numComponents" 
-      argument is provided, consisting of the number of values per 
-      item. I.e. for a Vec3, numComponents would be 3. 
-      The "value" argument is replaced with a "values" array input 
-      consisting of a (flat) array of numbers to pack into the shader.             
-      Thus, numComponents denotes the groupings of these values within the "values"
-      array.
-
-      I.e. uploading 2 Vector3s to a shader would look like:
-        
-        raylib.SetShaderValueFloatV(
-            shader:   myShader,
-            locIndex: myLocationIndex,
-            numComponents: 3
-            values:   [
-                            1, 0, 0, //<- Vector 1,
-                            0, 1, 0, //<- Vector 2
-                      ],
-        );
-        
-        
-      For non-V variants, the values array denotes how many components 
-      the value has based on its length. For example, uploading a 
-      single int would look like:
-
-        raylib.SetShaderValueInt(
-            shader:   myShader,
-            locIndex: myLocationIndex,
-            value: [10]
-        );
-        
-
-    - Any inputs / outputs that consist of "pointer + size" array are 
-      converted to array objects in Matte.
-      
-    - Matrix is implemented as an array of Numbers in Matte in OpenGL 
-      (column-major) order.
-
-
-*/
-
-
-
+@:wrapped__LoadFileData = getExternalFunction(name:"raylib_LoadFileData");
+@:wrapped__SaveFileData = getExternalFunction(name:"raylib_SaveFileData");
+@:wrapped__ExportDataAsCode = getExternalFunction(name:"raylib_ExportDataAsCode");
 
 @:raylib = {
 
@@ -571,11 +486,62 @@
     SetTargetFPS : getExternalFunction(name:"raylib_SetTargetFPS"),
     GetFPS : getExternalFunction(name:"raylib_GetFPS"),
     GetFrameTime : getExternalFunction(name:"raylib_GetFrameTime"),
-    GetTime : getExternalFunction(name:"raylib_GetTime")
-
+    GetTime : getExternalFunction(name:"raylib_GetTime"),
+    
+    
+    // Misc Functions
+    GetRandomValue : getExternalFunction(name:"raylib_GetRandomValue"),
+    SetRandomSeed : getExternalFunction(name:"raylib_SetRandomSeed"),
+    TakeScreenshot : getExternalFunction(name:"raylib_TakeScreenshot"),
+    SetConfigFlags : getExternalFunction(name:"raylib_SetConfigFlags"),
+    
+    TraceLog : getExternalFunction(name:"raylib_TraceLog"),
+    SetTraceLogLevel : getExternalFunction(name:"raylib_SetTraceLogLevel"),
+    OpenURL : getExternalFunction(name:"raylib_OpenURL"),
+    
+    
+    
+    
+    
+    // File management functions
+    LoadFileData :: (fileName) {
+        @:buf = MemoryBuffer.new();
+        buf.bindNative(handle:wrapped__LoadFileData(fileName));
+        return buf;
+    },
+    SaveFileData :: (fileName, bytes) {
+        wrapped__SaveFileData(fileName, bytes:bytes.handle);
+    },
+        
+    ExportDataAsCode ::(bytes, fileName) {
+        wrapped__ExportDataAsCode(bytes:bytes.handle, fileName);
+    },
+    LoadFileText : getExternalFunction(name:"raylib_LoadFileText"),
+    SaveFileText : getExternalFunction(name:"raylib_SaveFileText"),
+    FileExists : getExternalFunction(name:"raylib_FileExists"),
+    DirectoryExists : getExternalFunction(name:"raylib_DirectoryExists"),
+    IsFileExtension : getExternalFunction(name:"raylib_IsFileExtension"),
+    GetFileLength : getExternalFunction(name:"raylib_GetFileLength"),
+    GetFileExtension : getExternalFunction(name:"raylib_GetFileExtension"),
+    GetFileName : getExternalFunction(name:"raylib_GetFileName"),
+    GetFileNameWithoutExt : getExternalFunction(name:"raylib_GetFileNameWithoutExt"),
+    GetDirectoryPath : getExternalFunction(name:"raylib_GetDirectoryPath"),
+    GetPrevDirectoryPath : getExternalFunction(name:"raylib_GetPrevDirectoryPath"),
+    GetWorkingDirectory : getExternalFunction(name:"raylib_GetWorkingDirectory"),
+    GetApplicationDirectory : getExternalFunction(name:"raylib_GetApplicationDirectory"),
+    ChangeDirectory : getExternalFunction(name:"raylib_ChangeDirectory"),
+    IsPathFile : getExternalFunction(name:"raylib_IsPathFile"),
+    LoadDirectoryFiles : getExternalFunction(name:"raylib_LoadDirectoryFiles"),
+    LoadDirectoryFilesEx : getExternalFunction(name:"raylib_LoadDirectoryFilesEx"),
+    IsFileDropped : getExternalFunction(name:"raylib_IsFileDropped"),   
+    LoadDroppedFiles : getExternalFunction(name:"raylib_LoadDroppedFiles"),
+    GetFileModTime : getExternalFunction(name:"raylib_GetFileModTime")
+        
+    
+    
+    
 };
 
 
-raylib->setIsInterface(enabled:true);
 
 return raylib;

@@ -960,6 +960,388 @@ RAYLIB_FN__END
 
 
 
+
+
+
+
+// Misc Functions 
+
+RAYLIB_FN__ARG2(raylib_GetRandomValue,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_int(
+        vm,
+        GetRandomValue(
+            args[0].value.number,
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_SetRandomSeed,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetRandomSeed(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_TakeScreenshot,
+    MATTE_VALUE_TYPE_STRING
+)
+    TakeScreenshot(
+        native_from_value_string_unsafe(vm, args[0]) // ok!
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_SetConfigFlags,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetConfigFlags(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_TraceLog,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_STRING
+)
+    TraceLog(
+        args[0].value.number,
+        native_from_value_string_unsafe(vm, args[1]) // ok!
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_SetTraceLogLevel,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetTraceLogLevel(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_OpenURL,
+    MATTE_VALUE_TYPE_STRING
+)
+    OpenURL(
+        native_from_value_string_unsafe(vm, args[0]) // ok!
+    );
+RAYLIB_FN__END
+
+
+
+
+// File management functions
+
+RAYLIB_FN__ARG1(raylib_LoadFileData,
+    MATTE_VALUE_TYPE_STRING
+)
+    unsigned int size = 0;
+    unsigned char * data = LoadFileData(
+        native_from_value_string_unsafe(vm, args[0]), // ok!
+        &size
+    );
+    if (!data) size = 0;
+    
+    matteValue_t output = matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        data,
+        size
+    );
+    
+    UnloadFileData(data);
+
+    return output;
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_SaveFileData,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t size = 0;
+    const uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+    
+    if (!data) size = 0;
+    if (size == 0) goto L_END;
+    
+    
+    return native_to_value_boolean(vm, 
+        SaveFileData(
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            (void*)data,
+            size
+        )
+    );
+  L_END:
+    return native_to_value_boolean(vm, FALSE);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ExportDataAsCode,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    uint32_t size = 0;
+    const uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+    
+    if (!data) size = 0;
+    if (size == 0) goto L_END;
+    
+    
+    return native_to_value_boolean(vm, ExportDataAsCode(
+        data,
+        size,
+        native_from_value_string_unsafe(vm, args[0]) // ok!
+    ));
+  L_END:
+    return native_to_value_boolean(vm, FALSE);
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG1(raylib_LoadFileText,
+    MATTE_VALUE_TYPE_STRING
+)
+    char * str = LoadFileText(native_from_value_string_unsafe(vm, args[0])); // ok!
+    matteValue_t strv = native_to_value_string(vm, str);
+    UnloadFileText(str);
+    return strv;    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_SaveFileText,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        SaveFileText(
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            (char*)native_from_value_string_unsafe(vm, args[1]) // ok! but for some reason SaveFileText() takes an input string that isnt const
+        )
+    );   
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_FileExists,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        FileExists(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_DirectoryExists,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        DirectoryExists(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_IsFileExtension,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        IsFileExtension(
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );   
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetFileLength,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GetFileLength(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_GetFileExtension,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GetFileExtension(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetFileName,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GetFileName(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetFileNameWithoutExt,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GetFileNameWithoutExt(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetDirectoryPath,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GetDirectoryPath(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetPrevDirectoryPath,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GetPrevDirectoryPath(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetWorkingDirectory
+)
+    return native_to_value_string(
+        vm,
+        GetWorkingDirectory(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetApplicationDirectory
+)
+    return native_to_value_string(
+        vm,
+        GetApplicationDirectory(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ChangeDirectory,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        ChangeDirectory(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_IsPathFile,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        IsPathFile(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_LoadDirectoryFiles,
+    MATTE_VALUE_TYPE_STRING
+)
+    FilePathList list = LoadDirectoryFiles(native_from_value_string_unsafe(vm, args[0]));
+    matteValue_t output = native_to_value_filePathList(vm, list);
+    UnloadDirectoryFiles(list);
+    return output;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_LoadDirectoryFilesEx,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    FilePathList list = LoadDirectoryFilesEx(
+        native_from_value_string_unsafe(vm, args[0]), // ok!
+        native_from_value_string_unsafe(vm, args[1]), // ok!
+        args[0].value.boolean
+    );
+    matteValue_t output = native_to_value_filePathList(vm, list);
+    UnloadDirectoryFiles(list);
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_IsFileDropped
+)
+    return native_to_value_boolean(
+        vm,
+        IsFileDropped(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_LoadDroppedFiles
+)
+    FilePathList list = LoadDroppedFiles(
+    );
+    matteValue_t output = native_to_value_filePathList(vm, list);
+    UnloadDroppedFiles(list);
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetFileModTime,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_double(
+        vm,
+        GetFileModTime(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -1084,6 +1466,41 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_GetFPS", raylib_GetFPS, NULL, NULL);
     matte_add_external_function(m, "raylib_GetFrameTime", raylib_GetFrameTime, NULL, NULL);
     matte_add_external_function(m, "raylib_GetTime", raylib_GetTime, NULL, NULL);
+    
+    
+    matte_add_external_function(m, "raylib_GetRandomValue", raylib_GetRandomValue, NULL, "min", "max",  NULL);
+    matte_add_external_function(m, "raylib_SetRandomSeed", raylib_SetRandomSeed, NULL, "seed", NULL);
+    matte_add_external_function(m, "raylib_TakeScreenshot", raylib_TakeScreenshot, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_SetConfigFlags", raylib_SetConfigFlags, NULL, "flags", NULL);
+
+    matte_add_external_function(m, "raylib_TraceLog", raylib_TraceLog, NULL, "logLevel", "text",  NULL);
+    matte_add_external_function(m, "raylib_SetTraceLogLevel", raylib_SetTraceLogLevel, NULL, "logLevel", NULL);
+
+    matte_add_external_function(m, "raylib_OpenURL", raylib_OpenURL, NULL, "url", NULL);
+
+    matte_add_external_function(m, "raylib_LoadFileData", raylib_LoadFileData, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_SaveFileData", raylib_SaveFileData, NULL, "fileName", "bytes", NULL);
+    matte_add_external_function(m, "raylib_ExportDataAsCode", raylib_ExportDataAsCode, NULL, "bytes", "fileName", NULL);
+    matte_add_external_function(m, "raylib_LoadFileText", raylib_LoadFileText, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_SaveFileText", raylib_SaveFileText, NULL, "fileName", "text", NULL);
+    matte_add_external_function(m, "raylib_FileExists", raylib_FileExists, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_DirectoryExists", raylib_DirectoryExists, NULL, "dirPath", NULL);
+    matte_add_external_function(m, "raylib_IsFileExtension", raylib_IsFileExtension, NULL, "fileName", "ext", NULL);
+    matte_add_external_function(m, "raylib_GetFileLength", raylib_GetFileLength, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_GetFileExtension", raylib_GetFileExtension, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_GetFileName", raylib_GetFileName, NULL, "filePath", NULL);
+    matte_add_external_function(m, "raylib_GetFileNameWithoutExt", raylib_GetFileNameWithoutExt, NULL, "filePath",  NULL);
+    matte_add_external_function(m, "raylib_GetDirectoryPath", raylib_GetDirectoryPath, NULL, "filePath", NULL);
+    matte_add_external_function(m, "raylib_GetPrevDirectoryPath", raylib_GetPrevDirectoryPath, NULL, "dirPath", NULL);
+    matte_add_external_function(m, "raylib_GetWorkingDirectory", raylib_GetWorkingDirectory, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetApplicationDirectory", raylib_GetApplicationDirectory, NULL, NULL);
+    matte_add_external_function(m, "raylib_ChangeDirectory", raylib_ChangeDirectory, NULL, "dir", NULL);
+    matte_add_external_function(m, "raylib_IsPathFile", raylib_IsPathFile, NULL, "path", NULL);
+    matte_add_external_function(m, "raylib_LoadDirectoryFiles", raylib_LoadDirectoryFiles, NULL, "dirPath", NULL);
+    matte_add_external_function(m, "raylib_LoadDirectoryFilesEx", raylib_LoadDirectoryFilesEx, NULL, "basePath", "filter", "scanSubdirs",NULL);
+    matte_add_external_function(m, "raylib_IsFileDropped", raylib_IsFileDropped, NULL, NULL);
+    matte_add_external_function(m, "raylib_LoadDroppedFiles", raylib_LoadDroppedFiles, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetFileModTime", raylib_GetFileModTime, NULL, "fileName", NULL);
     
 } 
 
