@@ -17,6 +17,9 @@
 #define RAYLIB_FN__ARG2(__T__, __T0__, __T1__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types2(vm, args, __T0__, __T1__)) return matte_store_new_value(store);
 #define RAYLIB_FN__ARG3(__T__, __T0__, __T1__, __T2__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types3(vm, args, __T0__, __T1__, __T2__)) return matte_store_new_value(store);
 #define RAYLIB_FN__ARG4(__T__, __T0__, __T1__, __T2__, __T3__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types4(vm, args, __T0__, __T1__, __T2__, __T3__)) return matte_store_new_value(store);
+#define RAYLIB_FN__ARG5(__T__, __T0__, __T1__, __T2__, __T3__, __T4__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types5(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__)) return matte_store_new_value(store);
+#define RAYLIB_FN__ARG6(__T__, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types6(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__)) return matte_store_new_value(store);
+#define RAYLIB_FN__ARG7(__T__, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types7(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__)) return matte_store_new_value(store);
 #define RAYLIB_FN__END return matte_store_new_value(store);}
 
 
@@ -59,7 +62,44 @@ static int ensure_arg_types4(matteVM_t * vm, const matteValue_t * args, int bin0
     return TRUE;
 }
 
+static int ensure_arg_types5(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4) {
+    if (args[0].binID != bin0 ||
+        args[1].binID != bin1 ||
+        args[2].binID != bin2 ||
+        args[3].binID != bin3 ||
+        args[4].binID != bin4) {
+        matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
+        return FALSE;
+    }
+    return TRUE;
+}
 
+static int ensure_arg_types6(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5) {
+    if (args[0].binID != bin0 ||
+        args[1].binID != bin1 ||
+        args[2].binID != bin2 ||
+        args[3].binID != bin3 ||
+        args[4].binID != bin4 ||
+        args[5].binID != bin5) {
+        matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static int ensure_arg_types7(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6) {
+    if (args[0].binID != bin0 ||
+        args[1].binID != bin1 ||
+        args[2].binID != bin2 ||
+        args[3].binID != bin3 ||
+        args[4].binID != bin4 ||
+        args[5].binID != bin5 ||
+        args[6].binID != bin6) {
+        matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
+        return FALSE;
+    }
+    return TRUE;
+}
 
 
 
@@ -2037,6 +2077,823 @@ RAYLIB_FN__END
 
 
 
+// rshapes 
+RAYLIB_FN__ARG2(raylib_SetShapesTexture,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    SetShapesTexture(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_rectangle(vm, args[1])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawPixel,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPixel(  
+        args[0].value.number,
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_DrawPixelV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPixelV(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawLine,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLine(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawLineV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLineV(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_DrawLineEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLineEx(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_DrawLineBezier,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLineBezier(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawLineBezierQuad,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLineBezierQuad(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_DrawLineBezierCubic,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLineBezierCubic(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_vector2(vm, args[3]),
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_DrawLineStrip,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[0]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "DrawLineStrip received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2+1));
+    }
+
+    DrawLineStrip(  
+        pts,
+        num/2,
+        native_from_value_color(vm, args[1])
+    );
+    
+    MemFree(pts);
+  L_END:
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_DrawCircle,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircle(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_DrawCircleSector,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircleSector(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_DrawCircleSectorLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircleSectorLines(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawCircleGradient,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircleGradient(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3]),
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawCircleV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircleV(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_DrawCircleLines,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircleLines(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawEllipse,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawEllipse(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawEllipseLines,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawEllipseLines(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG7(raylib_DrawRing,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRing(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        args[5].value.number,
+        native_from_value_color(vm, args[6])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG7(raylib_DrawRingLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRingLines(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        args[5].value.number,
+        native_from_value_color(vm, args[6])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawRectangle,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangle(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawRectangleV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleV(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_DrawRectangleRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleRec(  
+        native_from_value_rectangle(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_DrawRectanglePro,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectanglePro(  
+        native_from_value_rectangle(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_DrawRectangleGradientV,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleGradientV(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+
+        native_from_value_color(vm, args[4]),
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_DrawRectangleGradientH,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleGradientH(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+
+        native_from_value_color(vm, args[4]),
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawRectangleGradientEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleGradientEx(  
+        native_from_value_rectangle(vm, args[0]),
+        native_from_value_color(vm, args[1]),
+        native_from_value_color(vm, args[2]),
+        native_from_value_color(vm, args[3]),
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawRectangleLines,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleLines(  
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_DrawRectangleLinesEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleLinesEx(  
+        native_from_value_rectangle(vm, args[0]),
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_DrawRectangleRounded,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleRounded(  
+        native_from_value_rectangle(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawRectangleRoundedLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRectangleRoundedLines(  
+        native_from_value_rectangle(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_DrawTriangle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTriangle(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_DrawTriangleLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTriangleLines(  
+        native_from_value_vector2(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_DrawTriangleFan,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[0]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "DrawTriangleStrip received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2+1));
+    }
+
+    DrawTriangleFan(  
+        pts,
+        num/2,
+        native_from_value_color(vm, args[1])
+    );
+    
+    MemFree(pts);
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_DrawTriangleStrip,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[0]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "DrawTriangleStrip received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2+1));
+    }
+
+    DrawTriangleStrip(  
+        pts,
+        num/2,
+        native_from_value_color(vm, args[1])
+    );
+    
+    MemFree(pts);
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawPoly,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPoly(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawPolyLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPolyLines(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_DrawPolyLinesEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPolyLinesEx(  
+        native_from_value_vector2(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+
+
+// Collision
+
+RAYLIB_FN__ARG2(raylib_CheckCollisionRecs,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionRecs(  
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_rectangle(vm, args[1])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_CheckCollisionCircles,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionCircles(  
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number,
+            native_from_value_vector2(vm, args[2]),
+            args[3].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_CheckCollisionCircleRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionCircleRec(  
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number,
+            native_from_value_rectangle(vm, args[2])
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_CheckCollisionPointRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionPointRec(  
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_rectangle(vm, args[1])
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_CheckCollisionPointCircle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionPointCircle(  
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            args[2].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_CheckCollisionPointTriangle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionPointTriangle(  
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            native_from_value_vector2(vm, args[2]),
+            native_from_value_vector2(vm, args[3])
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_CheckCollisionPointPoly,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[1]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "CheckCollisionPointPoly received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[1], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[1], i*2+1));
+    }
+
+    int out = CheckCollisionPointPoly(  
+        native_from_value_vector2(vm, args[0]),
+        pts,
+        num/2
+    );
+    
+    MemFree(pts);
+    
+    return native_to_value_boolean(vm, out);
+  L_END:
+
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_CheckCollisionLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector2 location = native_from_value_vector2(vm, args[4]);
+    matteValue_t out = native_to_value_boolean(
+        vm,
+        CheckCollisionLines(  
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            native_from_value_vector2(vm, args[2]),
+            native_from_value_vector2(vm, args[3]),
+            &location
+        )        
+    );
+    
+    native_update_value_vector2(vm, args[4], location);
+    return out;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_CheckCollisionPointLine,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        CheckCollisionPointLine(  
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            native_from_value_vector2(vm, args[2]),
+            args[3].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetCollisionRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_rectangle(
+        vm,
+        GetCollisionRec(  
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_rectangle(vm, args[1])
+        )        
+    );
+RAYLIB_FN__END
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -2257,6 +3114,57 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_UpdateCamera", raylib_UpdateCamera, NULL, "camera", "mode", NULL);
     matte_add_external_function(m, "raylib_UpdateCameraPro", raylib_UpdateCameraPro, NULL, "camera", "movement", "rotation", "zoom", NULL);
     
+    
+    matte_add_external_function(m, "raylib_SetShapesTexture", raylib_SetShapesTexture, NULL, "texture", "source",  NULL);
+    matte_add_external_function(m, "raylib_DrawPixel", raylib_DrawPixel, NULL, "posX", "posY", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawPixelV", raylib_DrawPixelV, NULL, "position", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLine", raylib_DrawLine, NULL, "startPosX", "startPosY", "endPosX", "endPosY", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineV", raylib_DrawLineV, NULL, "startPos", "endPos", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineEx", raylib_DrawLineEx, NULL, "startPos", "endPos", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineBezier", raylib_DrawLineBezier, NULL, "startPos", "endPos", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineBezierQuad", raylib_DrawLineBezierQuad, NULL, "startPos", "endPos", "controlPos", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineBezierCubic", raylib_DrawLineBezierCubic, NULL, "startPos", "endPos", "startControlPos", "endControlPos", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineStrip", raylib_DrawLineStrip, NULL, "points", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawCircle", raylib_DrawCircle, NULL, "centerX", "centerY", "radius", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawCircleSector", raylib_DrawCircleSector, NULL, "center", "radius", "startAngle", "endAngle", "segments", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawCircleSectorLines", raylib_DrawCircleSectorLines, NULL, "center", "radius", "startAngle", "endAngle", "segments", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawCircleGradient", raylib_DrawCircleGradient, NULL, "centerX", "centerY", "radius", "color1", "color2", NULL);
+    matte_add_external_function(m, "raylib_DrawCircleV", raylib_DrawCircleV, NULL, "center", "radius", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawCircleLines", raylib_DrawCircleLines, NULL, "centerX", "centerY", "radius", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawEllipse", raylib_DrawEllipse, NULL, "centerX", "centerY", "radiusH", "radiusB", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawEllipseLines", raylib_DrawEllipseLines, NULL, "centerX", "centerY", "radiusH", "radiusB", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRing", raylib_DrawRing, NULL, "center", "innerRadius", "outerRadius", "startAngle", "endAngle", "segments", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRingLines", raylib_DrawRingLines, NULL, "center", "innerRadius", "outerRadius", "startAngle", "endAngle", "segments", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangle", raylib_DrawRectangle, NULL, "posX", "posY", "width", "height", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleV", raylib_DrawRectangleV, NULL, "position", "size", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleRec", raylib_DrawRectangleRec, NULL, "rec", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectanglePro", raylib_DrawRectanglePro, NULL, "rec", "origin", "rotation", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleGradientV", raylib_DrawRectangleGradientV, NULL, "posX", "posY", "width", "height", "color1", "color2", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleGradientH", raylib_DrawRectangleGradientH, NULL, "posX", "posY", "width", "height", "color1", "color2", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleGradientEx", raylib_DrawRectangleGradientEx, NULL, "rec", "col1", "col2", "col3", "col4", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleLines", raylib_DrawRectangleLines, NULL, "posX", "posY", "width", "height", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleLinesEx", raylib_DrawRectangleLinesEx, NULL, "rec", "lineThick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleRounded", raylib_DrawRectangleRounded, NULL, "rec", "roundness", "segments", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangleRoundedLines", raylib_DrawRectangleRoundedLines, NULL, "rec", "roundness", "segments", "lineThick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawTriangle", raylib_DrawTriangle, NULL, "v1", "v2", "v3", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawTriangleLines", raylib_DrawTriangleLines, NULL, "v1", "v2", "v3", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawTriangleFan", raylib_DrawTriangleFan, NULL, "points", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawTriangleStrip", raylib_DrawTriangleStrip, NULL, "points", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawPoly", raylib_DrawPoly, NULL, "center", "sides", "radius", "rotation", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawPolyLines", raylib_DrawPolyLines, NULL, "center", "sides", "radius", "rotation", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawPolyLinesEx", raylib_DrawPolyLinesEx, NULL, "center", "sides", "radius", "rotation", "lineThick", "color", NULL);
+
+
+    matte_add_external_function(m, "raylib_CheckCollisionRecs", raylib_CheckCollisionRecs, NULL, "rec1", "rec2", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionCircles", raylib_CheckCollisionCircles, NULL, "center1", "radius1", "vecter2", "radius2", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionCircleRec", raylib_CheckCollisionCircleRec, NULL, "center", "radius", "rec", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionPointRec", raylib_CheckCollisionPointRec, NULL, "point", "rec", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionPointCircle", raylib_CheckCollisionPointCircle, NULL, "point", "center", "radius",  NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionPointTriangle", raylib_CheckCollisionPointTriangle, NULL, "point", "p1", "p2", "p3", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionPointPoly", raylib_CheckCollisionPointPoly, NULL, "point", "points", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionLines", raylib_CheckCollisionLines, NULL, "startPos1", "endPos1", "startPos2", "endPos2", "collisionPoint", NULL);
+    matte_add_external_function(m, "raylib_CheckCollisionPointLine", raylib_CheckCollisionPointLine, NULL, "point", "p1", "p2", "threshold", NULL);
+    matte_add_external_function(m, "raylib_GetCollisionRec", raylib_GetCollisionRec, NULL, "rec1", "rec2", NULL);
 } 
 
 

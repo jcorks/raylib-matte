@@ -649,7 +649,70 @@
     
     
     UpdateCamera : getExternalFunction(name:"raylib_UpdateCamera"),
-    UpdateCameraPro : getExternalFunction(name:"raylib_UpdateCameraPro")
+    UpdateCameraPro : getExternalFunction(name:"raylib_UpdateCameraPro"),
+    
+    
+    
+    
+    
+    
+    
+    // rshapes
+    
+    SetShapesTexture : getExternalFunction(name:"raylib_SetShapesTexture"),
+    
+    
+    // basic shapes
+    DrawPixel : getExternalFunction(name:"raylib_DrawPixel"),
+    DrawPixelV : getExternalFunction(name:"raylib_DrawPixelV"),
+    DrawLine : getExternalFunction(name:"raylib_DrawLine"),
+    DrawLineV : getExternalFunction(name:"raylib_DrawLineV"),
+    DrawLineEx : getExternalFunction(name:"raylib_DrawLineEx"),
+    DrawLineBezier : getExternalFunction(name:"raylib_DrawLineBezier"),
+    DrawLineBezierQuad : getExternalFunction(name:"raylib_DrawLineBezierQuad"),
+    DrawLineBezierCubic : getExternalFunction(name:"raylib_DrawLineBezierCubic"),
+    DrawLineStrip : getExternalFunction(name:"raylib_DrawLineStrip"),
+    DrawCircle : getExternalFunction(name:"raylib_DrawCircle"),
+    DrawCircleSector : getExternalFunction(name:"raylib_DrawCircleSector"),
+    DrawCircleSectorLines : getExternalFunction(name:"raylib_DrawCircleSectorLines"),
+    DrawCircleGradient : getExternalFunction(name:"raylib_DrawCircleGradient"),
+    DrawCircleV : getExternalFunction(name:"raylib_DrawCircleV"),
+    DrawCircleLines : getExternalFunction(name: "raylib_DrawCircleLines"),
+    DrawEllipse : getExternalFunction(name: "raylib_DrawEllipse"),
+    DrawEllipseLines : getExternalFunction(name: "raylib_DrawEllipseLines"),
+    DrawRing : getExternalFunction(name: "raylib_DrawRing"),
+    DrawRingLines : getExternalFunction(name: "raylib_DrawRingLines"),
+    DrawRectangle : getExternalFunction(name:"raylib_DrawRectangle"),
+    DrawRectangleV : getExternalFunction(name:"raylib_DrawRectangleV"),
+    DrawRectangleRec : getExternalFunction(name: "raylib_DrawRectangleRec"),
+    DrawRectanglePro : getExternalFunction(name: "raylib_DrawRectanglePro"),
+    DrawRectangleGradientV : getExternalFunction(name: "raylib_DrawRectangleGradientV"),
+    DrawRectangleGradientH : getExternalFunction(name: "raylib_DrawRectangleGradientH"),
+    DrawRectangleGradientEx : getExternalFunction(name: "raylib_DrawRectangleGradientEx"),
+    DrawRectangleLines : getExternalFunction(name : "raylib_DrawRectangleLines"),
+    DrawRectangleLinesEx : getExternalFunction(name : "raylib_DrawRectangleLinesEx"),
+    DrawRectangleRounded : getExternalFunction(name : "raylib_DrawRectangleRounded"),
+    DrawRectangleRoundedLines : getExternalFunction(name : "raylib_DrawRectangleRoundedLines"),
+    DrawTriangle : getExternalFunction(name : "raylib_DrawTriangle"),
+    DrawTriangleLines : getExternalFunction(name: "raylib_DrawTriangleLines"),
+    DrawTriangleFan : getExternalFunction(name: "raylib_DrawTriangleFan"),
+    DrawTriangleStrip : getExternalFunction(name: "raylib_DrawTriangleStrip"),
+    DrawPoly : getExternalFunction(name : "raylib_DrawPoly"),
+    DrawPolyLines : getExternalFunction(name : "raylib_DrawPolyLines"),
+    DrawPolyLinesEx : getExternalFunction(name: "raylib_DrawPolyLinesEx"),
+    
+    
+    CheckCollisionRecs : getExternalFunction(name: "raylib_CheckCollisionRecs"),
+    CheckCollisionCircles : getExternalFunction(name: "raylib_CheckCollisionCircles"),
+    CheckCollisionCircleRec : getExternalFunction(name : "raylib_CheckCollisionCircleRec"),
+    CheckCollisionPointRec : getExternalFunction(name : "raylib_CheckCollisionPointRec"),
+    CheckCollisionPointCircle : getExternalFunction(name: "raylib_CheckCollisionPointCircle"),
+    CheckCollisionPointTriangle : getExternalFunction(name: "raylib_CheckCollisionPointTriangle"),
+    CheckCollisionPointPoly : getExternalFunction(name: "raylib_CheckCollisionPointPoly"),
+    CheckCollisionLines : getExternalFunction(name: "raylib_CheckCollisionLines"),
+    CheckCollisionPointLine : getExternalFunction(name:"raylib_CheckCollisionPointLine"),
+    GetCollisionRec : getExternalFunction(name: "raylib_GetCollisionRec")
+    
     
 };  
 

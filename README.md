@@ -131,6 +131,16 @@ These changes are listed here:
 
 - CompressData and DecompressData returns a MemoryBuffer and takes a MemoryBuffer ("bytes").
 
+- DrawLineStrip, DrawTriangleFan, DrawTriangleStrip, and CheckCollisionPointPoly all take an input array of "flat values", that is, an array of 
+  number values in a single array, rather than an array of xy objects.
+  
+  I.e.
+  ```
+  raylib.DrawLineStrip(
+    points: [1, 2   3, 4   5, 6],
+    color: raylib.GREEN
+  )
+  ```
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.

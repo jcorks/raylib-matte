@@ -136,6 +136,26 @@ matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3) {
     return v;
 }   
 
+
+matteValue_t native_to_value_rectangle(matteVM_t * vm, Rectangle r) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t x = native_to_value_float(vm, r.x);
+    matteValue_t y = native_to_value_float(vm, r.y);
+    matteValue_t width = native_to_value_float(vm, r.width);
+    matteValue_t height = native_to_value_float(vm, r.height);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"), x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "width"), width);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "height"), height);
+
+    return v;
+}   
+
 matteValue_t native_to_value_camera(matteVM_t * vm, Camera cam) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -387,6 +407,26 @@ Vector4 native_from_value_vector4(matteVM_t * vm, matteValue_t v4) {
 }   
 
 
+Rectangle native_from_value_rectangle(matteVM_t * vm, matteValue_t rec) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (rec.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Rectangle: value is not an Object.");
+        Rectangle errOut = {};
+        return errOut;
+    }
+
+
+    Rectangle v = {};
+    v.x = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "x")));
+    v.y = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "y")));
+    v.width = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "width")));
+    v.height = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "height")));
+
+    return v;
+}   
+
+
 Matrix native_from_value_matrix(matteVM_t * vm, matteValue_t ma) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -593,6 +633,17 @@ void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam) {
 
 
 
+void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 vec) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+
+    matteValue_t x   = native_to_value_float(vm, vec.x);
+    matteValue_t y   = native_to_value_float(vm, vec.y);
+
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"), x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
+}
 
 
 
