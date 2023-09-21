@@ -711,8 +711,21 @@
     CheckCollisionPointPoly : getExternalFunction(name: "raylib_CheckCollisionPointPoly"),
     CheckCollisionLines : getExternalFunction(name: "raylib_CheckCollisionLines"),
     CheckCollisionPointLine : getExternalFunction(name:"raylib_CheckCollisionPointLine"),
-    GetCollisionRec : getExternalFunction(name: "raylib_GetCollisionRec")
+    GetCollisionRec : getExternalFunction(name: "raylib_GetCollisionRec"),
     
+    
+    
+    // rtextures 
+    LoadImage : getExternalFunction(name: "raylib_LoadImage"),
+    LoadImageRaw : getExternalFunction(name: "raylib_LoadImageRaw"),
+    LoadImageAnim : getExternalFunction(name: "raylib_LoadImageAnim"),
+    LoadImageFromMemory : getExternalFunction(name: "raylib_LoadImageFromMemory"),
+    LoadImageFromTexture : getExternalFunction(name: "raylib_LoadImageFromTexture"),
+    LoadImageFromScreen : getExternalFunction(name: "raylib_LoadImageFromScreen"),
+    IsImageReady : getExternalFunction(name: "raylib_IsImageReady"),
+    UnloadImage : getExternalFunction(name: "raylib_UnloadImage"),
+    ExportImage : getExternalFunction(name: "raylib_ExportImage"),
+    ExportImageAsCode : getExternalFunction(name: "raylib_ExportImageAsCode")
     
 };  
 

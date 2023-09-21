@@ -141,6 +141,9 @@ These changes are listed here:
     color: raylib.GREEN
   )
   ```
+  
+- LoadImageAnim will return an image object with an extra public member called "frames",
+  which contains the output frame count
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.

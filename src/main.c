@@ -2894,6 +2894,157 @@ RAYLIB_FN__END
 
 
 
+
+// rtextures
+
+RAYLIB_FN__ARG1(raylib_LoadImage,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_image(
+        vm,
+        LoadImage(  
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_LoadImageRaw,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_image(
+        vm,
+        LoadImageRaw(  
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            args[4].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_LoadImageAnim,
+    MATTE_VALUE_TYPE_STRING
+)
+    int nframes = 0;
+    matteValue_t img = native_to_value_image(
+        vm,
+        LoadImageAnim(  
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            &nframes
+        )        
+    );
+    
+    matteValue_t nframesv = native_to_value_int(vm, nframes);
+    matte_value_object_set_key_string(store, img, MATTE_VM_STR_CAST(vm, "frames"), nframesv);
+    return img;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_LoadImageFromMemory,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    uint32_t size = 0;
+    const uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+    if (size == 0 || data == NULL) goto L_END;
+    
+    return native_to_value_image(
+        vm,
+        LoadImageFromMemory(
+            native_from_value_string_unsafe(vm, args[0]),
+            data,
+            size 
+        )
+    );
+    
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_LoadImageFromTexture,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        LoadImageFromTexture(  
+            native_from_value_texture(vm, args[0])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_LoadImageFromScreen
+)
+    return native_to_value_image(
+        vm,
+        LoadImageFromScreen(  
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_IsImageReady,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        IsImageReady(  
+            native_from_value_image(vm, args[0])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_UnloadImage,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    UnloadImage(  
+        native_from_value_image(vm, args[0])
+    );
+    native_unload(vm, args[0]);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_ExportImage,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        ExportImage(  
+            native_from_value_image(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ExportImageAsCode,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        ExportImageAsCode(  
+            native_from_value_image(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )        
+    );
+RAYLIB_FN__END
+
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -3165,6 +3316,21 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_CheckCollisionLines", raylib_CheckCollisionLines, NULL, "startPos1", "endPos1", "startPos2", "endPos2", "collisionPoint", NULL);
     matte_add_external_function(m, "raylib_CheckCollisionPointLine", raylib_CheckCollisionPointLine, NULL, "point", "p1", "p2", "threshold", NULL);
     matte_add_external_function(m, "raylib_GetCollisionRec", raylib_GetCollisionRec, NULL, "rec1", "rec2", NULL);
+
+
+    // rtextures 
+    
+    matte_add_external_function(m, "raylib_LoadImage", raylib_LoadImage, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_LoadImageRaw", raylib_LoadImageRaw, NULL, "fileName", "width", "height", "format", "headerSize", NULL);
+    matte_add_external_function(m, "raylib_LoadImageAnim", raylib_LoadImageAnim, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raylib_LoadImageFromMemory", raylib_LoadImageFromMemory, NULL, "fileType", "bytes", NULL);
+    matte_add_external_function(m, "raylib_LoadImageFromTexture", raylib_LoadImageFromTexture, NULL, "texture", NULL);
+    matte_add_external_function(m, "raylib_LoadImageFromScreen", raylib_LoadImageFromScreen, NULL, NULL);
+    matte_add_external_function(m, "raylib_IsImageReady", raylib_IsImageReady, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_UnloadImage", raylib_UnloadImage, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ExportImage", raylib_ExportImage, NULL, "image", "fileName", NULL);
+    matte_add_external_function(m, "raylib_ExportImageAsCode", raylib_ExportImageAsCode, NULL, "image", "fileName", NULL);
+
 } 
 
 
