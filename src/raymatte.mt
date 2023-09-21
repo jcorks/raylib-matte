@@ -725,7 +725,18 @@
     IsImageReady : getExternalFunction(name: "raylib_IsImageReady"),
     UnloadImage : getExternalFunction(name: "raylib_UnloadImage"),
     ExportImage : getExternalFunction(name: "raylib_ExportImage"),
-    ExportImageAsCode : getExternalFunction(name: "raylib_ExportImageAsCode")
+    ExportImageAsCode : getExternalFunction(name: "raylib_ExportImageAsCode"),
+
+
+    GenImageColor : getExternalFunction(name: "raylib_GenImageColor"),
+    GenImageGradientLinear : getExternalFunction(name: "raylib_GenImageGradientLinear"),
+    GenImageGradientRadial : getExternalFunction(name: "raylib_GenImageGradientRadial"),
+    GenImageGradientSquare : getExternalFunction(name: "raylib_GenImageGradientSquare"),
+    GenImageChecked : getExternalFunction(name: "raylib_GenImageChecked"),
+    GenImageWhiteNoise : getExternalFunction(name: "raylib_GenImageWhiteNoise"),
+    GenImagePerlinNoise : getExternalFunction(name: "raylib_GenImagePerlinNoise"),
+    GenImageCellular : getExternalFunction(name: "raylib_GenImageCellular"),
+    GenImageText : getExternalFunction(name: "raylib_GenImageText") 
     
 };  
 

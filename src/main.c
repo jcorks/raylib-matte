@@ -3044,6 +3044,170 @@ RAYLIB_FN__END
 
 
 
+RAYLIB_FN__ARG3(raylib_GenImageColor,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        GenImageColor(  
+            args[0].value.number,
+            args[1].value.number,
+            native_from_value_color(vm, args[2])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_GenImageGradientLinear,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        GenImageGradientLinear(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            native_from_value_color(vm, args[3]),
+            native_from_value_color(vm, args[4])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_GenImageGradientRadial,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        GenImageGradientRadial(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            native_from_value_color(vm, args[3]),
+            native_from_value_color(vm, args[4])
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_GenImageGradientSquare,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        GenImageGradientSquare(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            native_from_value_color(vm, args[3]),
+            native_from_value_color(vm, args[4])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_GenImageChecked,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        GenImageChecked(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            native_from_value_color(vm, args[4]),
+            native_from_value_color(vm, args[5])
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_GenImageWhiteNoise,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_image(
+        vm,
+        GenImageWhiteNoise(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_GenImagePerlinNoise,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_image(
+        vm,
+        GenImagePerlinNoise(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            args[4].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_GenImageCellular,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_image(
+        vm,
+        GenImageCellular(  
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )        
+    );
+RAYLIB_FN__END
+
+
+/// ??????
+RAYLIB_FN__ARG3(raylib_GenImageText,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_image(
+        vm,
+        GenImageText(  
+            args[0].value.number,
+            args[1].value.number,
+            native_from_value_string_unsafe(vm, args[2]) // ok!
+        )        
+    );
+RAYLIB_FN__END
+
+
+
 
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
@@ -3330,6 +3494,16 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_UnloadImage", raylib_UnloadImage, NULL, "image", NULL);
     matte_add_external_function(m, "raylib_ExportImage", raylib_ExportImage, NULL, "image", "fileName", NULL);
     matte_add_external_function(m, "raylib_ExportImageAsCode", raylib_ExportImageAsCode, NULL, "image", "fileName", NULL);
+
+    matte_add_external_function(m, "raylib_GenImageColor", raylib_GenImageColor, NULL, "width", "height", "color",  NULL);
+    matte_add_external_function(m, "raylib_GenImageGradientLinear", raylib_GenImageGradientLinear, NULL, "width", "height", "direction", "start", "end", NULL);
+    matte_add_external_function(m, "raylib_GenImageGradientRadial", raylib_GenImageGradientRadial, NULL, "width", "height", "density", "inner", "outer", NULL);
+    matte_add_external_function(m, "raylib_GenImageGradientSquare", raylib_GenImageGradientSquare, NULL, "width", "height", "density", "inner", "outer", NULL);
+    matte_add_external_function(m, "raylib_GenImageChecked", raylib_GenImageChecked, NULL, "width", "height", "checksX", "checksY", "col1", "col2", NULL);
+    matte_add_external_function(m, "raylib_GenImageWhiteNoise", raylib_GenImageWhiteNoise, NULL,"width", "height","factor",  NULL);
+    matte_add_external_function(m, "raylib_GenImagePerlinNoise", raylib_GenImagePerlinNoise, NULL, "width", "height", "offsetX", "offsetY", "scale", NULL);
+    matte_add_external_function(m, "raylib_GenImageCellular", raylib_GenImageCellular, NULL, "width", "height", "tileSize", NULL);
+    matte_add_external_function(m, "raylib_GenImageText", raylib_GenImageText, NULL, "width", "height", "text", NULL);
 
 } 
 
