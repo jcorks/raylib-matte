@@ -4,10 +4,20 @@ Raylib bindings for Matte with some extra goodies.
 
 **STILL A WORK IN PROGRESS.**
 
-*Progress: 12%*
+*Progress: 20%*
 
 
 ## Differences vs. the C API
+
+A number of strict changes exist between the original C/C++ API 
+and the Matte bindings. Many of the changes are to leverage
+the higher-level nature of the environment, such as replacing 
+C-string inputs with Matte strings, "pointer + length" input 
+sets with Matte arrays, "byte pointer + length" with 
+Matte MemoryBuffer objects, and avoiding use of direct pointers.
+
+These changes are listed here:
+
 
 - ALL symbols are part of a module object (referred to as a namespace) 
   rather than in scope references
@@ -38,7 +48,7 @@ Raylib bindings for Matte with some extra goodies.
           `UnloadDroppedFiles` (Not needed)
         
 - Instances of output/input that call for char * (C-Strings) are replaced 
-  with matte strings.            
+  with Matte strings.            
           
 - Some structs are designated as "read-only".
   "read-only structs" are where the object is maintained by raylib 
@@ -119,7 +129,7 @@ Raylib bindings for Matte with some extra goodies.
 - TraceLog only takes logLevel and text, since built-in string 
   operations for Matte cover the text utilities provided.
 
-
+- CompressData and DecompressData returns a MemoryBuffer and takes a MemoryBuffer ("bytes").
 
 ## Additional Notes
 

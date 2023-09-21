@@ -136,6 +136,30 @@ matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3) {
     return v;
 }   
 
+matteValue_t native_to_value_camera(matteVM_t * vm, Camera cam) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+
+    matteValue_t position   = native_to_value_vector3(vm, cam.position);
+    matteValue_t target     = native_to_value_vector3(vm, cam.target);
+    matteValue_t up         = native_to_value_vector3(vm, cam.up);
+    matteValue_t fovy       = native_to_value_float(vm, cam.fovy);
+    matteValue_t projection = native_to_value_float(vm, cam.projection);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "position"), position);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "target"), target);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "up"), up);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "fovy"), fovy);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "projection"), projection);
+
+    return v;
+}   
+
+
 
 matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix m) {
     matteStore_t * store = matte_vm_get_store(vm);    
@@ -464,6 +488,9 @@ Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t cam) {
 
 
 
+
+
+
 RenderTexture native_from_value_renderTexture(matteVM_t * vm, matteValue_t img) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -543,6 +570,26 @@ void native_unload(matteVM_t * vm, matteValue_t obj) {
 
 
 
+
+
+
+void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+
+    matteValue_t position   = native_to_value_vector3(vm, cam.position);
+    matteValue_t target     = native_to_value_vector3(vm, cam.target);
+    matteValue_t up         = native_to_value_vector3(vm, cam.up);
+    matteValue_t fovy       = native_to_value_float(vm, cam.fovy);
+    matteValue_t projection = native_to_value_float(vm, cam.projection);
+
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "position"), position);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "target"), target);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "up"), up);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "fovy"), fovy);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "projection"), projection);
+}
 
 
 

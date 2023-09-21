@@ -1,11 +1,45 @@
 @:MemoryBuffer = import(module:'Matte.Core.MemoryBuffer');
 
 
-@:wrapped__LoadFileData = getExternalFunction(name:"raylib_LoadFileData");
-@:wrapped__SaveFileData = getExternalFunction(name:"raylib_SaveFileData");
-@:wrapped__ExportDataAsCode = getExternalFunction(name:"raylib_ExportDataAsCode");
+@:base__LoadFileData = getExternalFunction(name:"raylib_LoadFileData");
+@:base__SaveFileData = getExternalFunction(name:"raylib_SaveFileData");
+@:base__ExportDataAsCode = getExternalFunction(name:"raylib_ExportDataAsCode");
+@:base__CompressData = getExternalFunction(name:"raylib_CompressData");
+@:base__DecompressData = getExternalFunction(name:"raylib_DecompressData");
+@:base__EncodeDataBase64 = getExternalFunction(name:"raylib_EncodeDataBase64");
+@:base__DecodeDataBase64 = getExternalFunction(name:"raylib_DecodeDataBase64");
 
 @:raylib = {
+    // Defines
+    LIGHTGRAY  : {r:200, g:200, b:200, a:255},   // Light Gray
+    GRAY       : {r:130, g:130, b:130, a:255},  // Gray
+    DARKGRAY   : {r:80,  g:80,  b:80,  a:255},      // Dark Gray
+    YELLOW     : {r:253, g:249, b:0,   a:255},     // Yellow
+    GOLD       : {r:255, g:203, b:0,   a:255},     // Gold
+    ORANGE     : {r:255, g:161, b:0,   a:255},     // Orange
+    PINK       : {r:255, g:109, b:194, a:255},   // Pink
+    RED        : {r:230, g:41,  b:55,  a:255},     // Red
+    MAROON     : {r:190, g:33,  b:55,  a:255},     // Maroon
+    GREEN      : {r:0,   g:228, b:48,  a:255},      // Green
+    LIME       : {r:0,   g:158, b:47,  a:255},      // Lime
+    DARKGREEN  : {r:0,   g:117, b:44,  a:255},     // Dark Green
+    SKYBLUE    : {r:102, g:191, b:255, a:255},   // Sky Blue
+    BLUE       : {r:0,   g:121, b:241, a:255},     // Blue
+    DARKBLUE   : {r:0,   g:82,  b:172, a:255},      // Dark Blue
+    PURPLE     : {r:200, g:122, b:255, a:255},   // Purple
+    VIOLET     : {r:135, g:60,  b:190, a:255},    // Violet
+    DARKPURPLE : {r:112, g:31,  b:126, a:255},    // Dark Purple
+    BEIGE      : {r:211, g:176, b:131, a:255},   // Beige
+    BROWN      : {r:127, g:106, b:79,  a:255},    // Brown
+    DARKBROWN  : {r:76,  g:63,  b:47,  a:255},      // Dark Brown
+
+    WHITE      : {r:255, g:255, b:255, a:255},   // White
+    BLACK      : {r:0,   g:0,   a:0,   a:255},         // Black
+    BLANK      : {r:0,   g:0,   b:0,   a:0  },           // Blank (Transparent)
+    MAGENTA    : {r:255, g:0,   b:255, a:255},     // Magenta
+    RAYWHITE   : {r:245, g:245, b:245, a:255},   // My own White (raylib logo)
+
+
 
     // Enums
     //
@@ -506,15 +540,15 @@
     // File management functions
     LoadFileData :: (fileName) {
         @:buf = MemoryBuffer.new();
-        buf.bindNative(handle:wrapped__LoadFileData(fileName));
+        buf.bindNative(handle:base__LoadFileData(fileName));
         return buf;
     },
-    SaveFileData :: (fileName, bytes) {
-        wrapped__SaveFileData(fileName, bytes:bytes.handle);
+    SaveFileData :: (fileName, bytes => MemoryBuffer.type) {
+        base__SaveFileData(fileName, bytes:bytes.handle);
     },
         
-    ExportDataAsCode ::(bytes, fileName) {
-        wrapped__ExportDataAsCode(bytes:bytes.handle, fileName);
+    ExportDataAsCode ::(bytes => MemoryBuffer.type, fileName) {
+        base__ExportDataAsCode(bytes:bytes.handle, fileName);
     },
     LoadFileText : getExternalFunction(name:"raylib_LoadFileText"),
     SaveFileText : getExternalFunction(name:"raylib_SaveFileText"),
@@ -535,12 +569,89 @@
     LoadDirectoryFilesEx : getExternalFunction(name:"raylib_LoadDirectoryFilesEx"),
     IsFileDropped : getExternalFunction(name:"raylib_IsFileDropped"),   
     LoadDroppedFiles : getExternalFunction(name:"raylib_LoadDroppedFiles"),
-    GetFileModTime : getExternalFunction(name:"raylib_GetFileModTime")
+    GetFileModTime : getExternalFunction(name:"raylib_GetFileModTime"),
         
     
     
+    // Compression/Encoding 
+    CompressData ::(bytes => MemoryBuffer.type) {
+        @:out = MemoryBuffer.new();
+        out.bindNative(handle:base__CompressData(bytes:bytes.handle));
+        return out;
+    },
+    DecompressData ::(bytes => MemoryBuffer.type) {
+        @:out = MemoryBuffer.new();
+        out.bindNative(handle:base__DecompressData(bytes:bytes.handle));
+        return out;
+    },
+    EncodeDataBase64 ::(bytes => MemoryBuffer.type) {
+        return base__EncodeDataBase64(bytes:bytes.handle);
+    },
+    DecodeDataBase64 ::(data => String) {
+        @:out = MemoryBuffer.new();
+        out.bindNative(handle:base__DecodeDataBase64(data));
+        return out;        
+    },
+    // Input handling 
     
-};
+    // Keyboard
+    IsKeyPressed : getExternalFunction(name:"raylib_IsKeyPressed"),
+    IsKeyDown : getExternalFunction(name:"raylib_IsKeyDown"),
+    IsKeyReleased : getExternalFunction(name:"raylib_IsKeyReleased"),
+    IsKeyUp : getExternalFunction(name:"raylib_IsKeyUp"),
+    SetExitKey : getExternalFunction(name:"raylib_SetExitKey"),
+    GetKeyPressed : getExternalFunction(name:"raylib_GetKeyPressed"),
+    GetCharPressed : getExternalFunction(name:"raylib_GetCharPressed"),
+    
+    // gamepads 
+    IsGamepadAvailable : getExternalFunction(name:"raylib_IsGamepadAvailable"),
+    GetGamepadName : getExternalFunction(name:"raylib_GetGamepadName"),
+    IsGamepadButtonPressed : getExternalFunction(name:"raylib_IsGamepadButtonPressed"),
+    IsGamepadButtonDown : getExternalFunction(name:"raylib_IsGamepadButtonDown"),
+    IsGamepadButtonReleased : getExternalFunction(name:"raylib_IsGamepadButtonReleased"),
+    IsGamepadButtonUp : getExternalFunction(name:"raylib_IsGamepadButtonUp"),
+    GetGamepadButtonPressed : getExternalFunction(name:"raylib_GetGamepadButtonPressed"),
+    GetGamepadAxisCount : getExternalFunction(name:"raylib_GetGamepadAxisCount"),
+    GetGamepadAxisMovement : getExternalFunction(name:"raylib_GetGamepadAxisMovement"),
+    SetGamepadMappings : getExternalFunction(name:"raylib_SetGamepadMappings"),
+    
+    
+    // mouse 
+    IsMouseButtonPressed : getExternalFunction(name:"raylib_IsMouseButtonPressed"),
+    IsMouseButtonDown : getExternalFunction(name:"raylib_IsMouseButtonDown"),
+    IsMouseButtonReleased : getExternalFunction(name:"raylib_IsMouseButtonReleased"),
+    IsMouseButtonUp : getExternalFunction(name:"raylib_IsMouseButtonUp"),
+    GetMouseX : getExternalFunction(name:"raylib_GetMouseX"),
+    GetMouseY : getExternalFunction(name:"raylib_GetMouseY"),
+    GetMousePosition : getExternalFunction(name:"raylib_GetMousePosition"),
+    GetMouseDelta : getExternalFunction(name:"raylib_GetMouseDelta"),
+    SetMousePosition : getExternalFunction(name:"raylib_SetMousePosition"),
+    SetMouseOffset : getExternalFunction(name:"raylib_SetMouseOffset"),
+    SetMouseScale : getExternalFunction(name:"raylib_SetMouseScale"),
+    GetMouseWheelMove : getExternalFunction(name:"raylib_GetMouseWheelMove"),
+    GetMouseWheelMoveV : getExternalFunction(name:"raylib_GetMouseWheelMoveV"),
+    SetMouseCursor : getExternalFunction(name:"raylib_SetMouseCursor"),
+    
+    GetTouchX : getExternalFunction(name:"raylib_GetTouchX"),
+    GetTouchY : getExternalFunction(name:"raylib_GetTouchY"),
+    GetTouchPosition : getExternalFunction(name:"raylib_GetTouchPosition"),
+    GetTouchPointId : getExternalFunction(name:"raylib_GetTouchPointId"),
+    GetTouchPointCount : getExternalFunction(name:"raylib_GetTouchPointCount"),
+    
+    SetGesturedEnabled : getExternalFunction(name:"raylib_SetGesturesEnabled"),
+    IsGestureDetected: getExternalFunction(name:"raylib_IsGestureDetected"),
+    GetGestureDetected : getExternalFunction(name:"raylib_GetGestureDetected"),
+    GetGestureHoldDuration : getExternalFunction(name:"raylib_GetGestureHoldDuration"),
+    GetGestureDragVector : getExternalFunction(name: "raylib_GetGestureDragVector"),
+    GetGestureDragAngle : getExternalFunction(name:"raylib_GetGestureDragAngle"),
+    GetGesturePinchVector : getExternalFunction(name:"raylib_GetGesturePinchVector"),
+    GetGesturePinchAngle : getExternalFunction(name:"raylib_GetGesturePinchAngle"),
+    
+    
+    UpdateCamera : getExternalFunction(name:"raylib_UpdateCamera"),
+    UpdateCameraPro : getExternalFunction(name:"raylib_UpdateCameraPro")
+    
+};  
 
 
 

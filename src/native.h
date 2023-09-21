@@ -54,6 +54,7 @@ Texture native_from_value_texture(matteVM_t * vm, matteValue_t tex);
 Shader native_from_value_shader(matteVM_t * vm, matteValue_t shad);
 Matrix native_from_value_matrix(matteVM_t * vm, matteValue_t cl);
 
+void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);
 
 
 // Unloads a native object safely.

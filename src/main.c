@@ -1342,6 +1342,701 @@ RAYLIB_FN__ARG1(raylib_GetFileModTime,
 RAYLIB_FN__END
 
 
+
+
+// Compression / Encoding 
+RAYLIB_FN__ARG1(raylib_CompressData,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t sizeSrc = 0;
+    const uint8_t * dataSrc = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &sizeSrc
+    );
+    if (!dataSrc || sizeSrc == 0)
+        goto L_END;
+
+
+    unsigned int sizeOut;
+    unsigned char * dataOut = CompressData(dataSrc, sizeSrc, &sizeOut);
+
+
+    matteValue_t output = matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        dataOut,
+        sizeOut
+    );    
+    
+    MemFree(dataOut);
+    return output;
+  L_END:
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_DecompressData,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t sizeSrc = 0;
+    const uint8_t * dataSrc = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &sizeSrc
+    );
+    if (!dataSrc || sizeSrc == 0)
+        goto L_END;
+
+
+    unsigned int sizeOut;
+    unsigned char * dataOut = DecompressData(dataSrc, sizeSrc, &sizeOut);
+
+
+    matteValue_t output = matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        dataOut,
+        sizeOut
+    );    
+    
+    MemFree(dataOut);
+    return output;
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_EncodeDataBase64,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t sizeSrc = 0;
+    const uint8_t * dataSrc = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &sizeSrc
+    );
+    if (!dataSrc || sizeSrc == 0)
+        goto L_END;
+
+
+    unsigned int sizeOut;
+    char * dataOut = EncodeDataBase64(dataSrc, sizeSrc, &sizeOut);
+
+    // data is NOT null-terminated.... Sigh...
+    char * dataOutCStr = MemAlloc(sizeOut+1);
+    memcpy(dataOutCStr, dataOut, sizeOut);
+    dataOutCStr[sizeOut] = 0;
+    MemFree(dataOut);
+    
+    
+    matteValue_t val = native_to_value_string(vm, dataOutCStr);
+    MemFree(dataOutCStr);
+    return val;
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_DecodeDataBase64,
+    MATTE_VALUE_TYPE_STRING
+)
+
+    unsigned int sizeOut;
+    unsigned char * dataOut = DecodeDataBase64(
+        native_from_value_string_unsafe(vm, args[0]), // ok! 
+        &sizeOut);
+
+
+    matteValue_t output = matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        dataOut,
+        sizeOut
+    );    
+    
+    MemFree(dataOut);
+    return output;
+  L_END:
+RAYLIB_FN__END
+
+
+
+
+// input keyboard
+RAYLIB_FN__ARG1(raylib_IsKeyPressed,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsKeyPressed(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_IsKeyDown,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsKeyDown(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_IsKeyReleased,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsKeyReleased(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_IsKeyUp,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsKeyUp(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_SetExitKey,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetExitKey(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetKeyPressed
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetKeyPressed(
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetCharPressed
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetCharPressed(
+            )
+        );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+
+
+// input: gamepads
+
+
+RAYLIB_FN__ARG1(raylib_IsGamepadAvailable,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsGamepadAvailable(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_GetGamepadName,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_string(
+            vm,
+            GetGamepadName(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_IsGamepadButtonPressed,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsGamepadButtonPressed(
+                args[0].value.number,
+                args[1].value.number
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_IsGamepadButtonDown,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsGamepadButtonDown(
+                args[0].value.number,
+                args[1].value.number
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_IsGamepadButtonReleased,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsGamepadButtonReleased(
+                args[0].value.number,
+                args[1].value.number
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_IsGamepadButtonUp,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsGamepadButtonUp(
+                args[0].value.number,
+                args[1].value.number
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetGamepadButtonPressed
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetGamepadButtonPressed(
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetGamepadAxisCount,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetGamepadAxisCount(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetGamepadAxisMovement,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_float(
+            vm,
+            GetGamepadAxisMovement(
+                args[0].value.number,
+                args[1].value.number
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_SetGamepadMappings,
+    MATTE_VALUE_TYPE_STRING
+)
+    return 
+        native_to_value_int(
+            vm,
+            SetGamepadMappings(
+                native_from_value_string_unsafe(vm, args[0]) // ok!
+            )
+        );
+RAYLIB_FN__END
+
+
+
+
+// input: mouse
+
+RAYLIB_FN__ARG1(raylib_IsMouseButtonPressed,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsMouseButtonPressed(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_IsMouseButtonDown,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsMouseButtonDown(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_IsMouseButtonReleased,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsMouseButtonReleased(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_IsMouseButtonUp,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsMouseButtonUp(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+RAYLIB_FN__ARG0(raylib_GetMouseX
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetMouseX(
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetMouseY
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetMouseY(
+            )
+        );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG0(raylib_GetMousePosition
+)
+    return 
+        native_to_value_vector2(
+            vm,
+            GetMousePosition(
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetMouseDelta
+)
+    return 
+        native_to_value_vector2(
+            vm,
+            GetMouseDelta(
+            )
+        );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_SetMousePosition,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetMousePosition(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_SetMouseOffset,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetMouseOffset(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_SetMouseScale,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetMouseScale(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetMouseWheelMove
+)
+    return 
+        native_to_value_float(
+            vm,
+            GetMouseWheelMove(
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetMouseWheelMoveV
+)
+    return 
+        native_to_value_vector2(
+            vm,
+            GetMouseWheelMoveV(
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_SetMouseCursor,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetMouseCursor(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+// input: touch
+RAYLIB_FN__ARG0(raylib_GetTouchX
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetTouchX(
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetTouchY
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetTouchY(
+            )
+        );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_GetTouchPosition,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_vector2(
+            vm,
+            GetTouchPosition(
+                args[0].value.number
+            )
+        );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_GetTouchPointId,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetTouchPointId(
+                args[0].value.number
+            )
+        );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetTouchPointCount
+)
+    return 
+        native_to_value_int(
+            vm,
+            GetTouchPointCount(
+            )
+        );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+// input gestures
+
+RAYLIB_FN__ARG1(raylib_SetGesturesEnabled,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetGesturesEnabled(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_IsGestureDetected,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        IsGestureDetected(
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetGestureDetected
+)
+    return native_to_value_int(
+        vm,
+        GetGestureDetected(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetGestureHoldDuration
+)
+    return native_to_value_float(
+        vm,
+        GetGestureHoldDuration(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetGestureDragVector
+)
+    return native_to_value_vector2(
+        vm,
+        GetGestureDragVector(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_GetGestureDragAngle
+)
+    return native_to_value_float(
+        vm,
+        GetGestureDragAngle(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetGesturePinchVector
+)
+    return native_to_value_vector2(
+        vm,
+        GetGesturePinchVector(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_GetGesturePinchAngle
+)
+    return native_to_value_float(
+        vm,
+        GetGesturePinchAngle(
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+RAYLIB_FN__ARG2(raylib_UpdateCamera,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    UpdateCamera(
+        &cam,
+        args[1].value.number
+    );
+    
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG4(raylib_UpdateCameraPro,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    UpdateCameraPro(
+        &cam,   
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_vector3(vm, args[2]),
+        args[3].value.number
+    );
+    
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -1501,6 +2196,66 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_IsFileDropped", raylib_IsFileDropped, NULL, NULL);
     matte_add_external_function(m, "raylib_LoadDroppedFiles", raylib_LoadDroppedFiles, NULL, NULL);
     matte_add_external_function(m, "raylib_GetFileModTime", raylib_GetFileModTime, NULL, "fileName", NULL);
+    
+    
+    matte_add_external_function(m, "raylib_CompressData", raylib_CompressData, NULL,"bytes", NULL);
+    matte_add_external_function(m, "raylib_DecompressData", raylib_DecompressData, NULL, "bytes", NULL);
+    matte_add_external_function(m, "raylib_EncodeDataBase64", raylib_EncodeDataBase64, NULL, "bytes", NULL);
+    matte_add_external_function(m, "raylib_DecodeDataBase64", raylib_DecodeDataBase64, NULL, "data", NULL);
+
+    matte_add_external_function(m, "raylib_IsKeyPressed", raylib_IsKeyPressed, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_IsKeyDown", raylib_IsKeyDown, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_IsKeyReleased", raylib_IsKeyReleased, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_IsKeyUp", raylib_IsKeyUp, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_SetExitKey", raylib_SetExitKey, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_GetKeyPressed", raylib_GetKeyPressed, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetCharPressed", raylib_GetCharPressed, NULL, NULL);
+
+    matte_add_external_function(m, "raylib_IsGamepadAvailable", raylib_IsGamepadAvailable, NULL, "gamepad", NULL);
+    matte_add_external_function(m, "raylib_GetGamepadName", raylib_GetGamepadName, NULL, "gamepad",NULL);
+    matte_add_external_function(m, "raylib_IsGamepadButtonPressed", raylib_IsGamepadButtonPressed, NULL, "gamepad", "button", NULL);
+    matte_add_external_function(m, "raylib_IsGamepadButtonDown", raylib_IsGamepadButtonDown, NULL, "gamepad", "button", NULL);
+    matte_add_external_function(m, "raylib_IsGamepadButtonReleased", raylib_IsGamepadButtonReleased, NULL, "gamepad", "button", NULL);
+    matte_add_external_function(m, "raylib_IsGamepadButtonUp", raylib_IsGamepadButtonUp, NULL, "gamepad", "button", NULL);
+    matte_add_external_function(m, "raylib_GetGamepadButtonPressed", raylib_GetGamepadButtonPressed, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGamepadAxisCount", raylib_GetGamepadAxisCount, NULL, "gamepad", NULL);
+    matte_add_external_function(m, "raylib_GetGamepadAxisMovement", raylib_GetGamepadAxisMovement, NULL, "gamepad", "axis", NULL);
+    matte_add_external_function(m, "raylib_SetGamepadMappings", raylib_SetGamepadMappings, NULL, "mapps", NULL);
+
+
+    matte_add_external_function(m, "raylib_IsMouseButtonPressed", raylib_IsMouseButtonPressed, NULL, "button", NULL);
+    matte_add_external_function(m, "raylib_IsMouseButtonDown", raylib_IsMouseButtonDown, NULL, "button", NULL);
+    matte_add_external_function(m, "raylib_IsMouseButtonReleased", raylib_IsMouseButtonReleased, NULL, "button",  NULL);
+    matte_add_external_function(m, "raylib_IsMouseButtonUp", raylib_IsMouseButtonUp, NULL,"button",  NULL);
+    matte_add_external_function(m, "raylib_GetMouseX", raylib_GetMouseX, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetMouseY", raylib_GetMouseY, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetMousePosition", raylib_GetMousePosition, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetMouseDelta", raylib_GetMouseDelta, NULL, NULL);
+    matte_add_external_function(m, "raylib_SetMousePosition", raylib_SetMousePosition, NULL, "x", "y",  NULL);
+    matte_add_external_function(m, "raylib_SetMouseOffset", raylib_SetMouseOffset, NULL, "offsetX", "offsetY", NULL);
+    matte_add_external_function(m, "raylib_SetMouseScale", raylib_SetMouseScale, NULL, "scaleX", "scaleY", NULL);
+    matte_add_external_function(m, "raylib_GetMouseWheelMove", raylib_GetMouseWheelMove, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetMouseWheelMoveV", raylib_GetMouseWheelMoveV, NULL, NULL);
+    matte_add_external_function(m, "raylib_SetMouseCursor", raylib_SetMouseCursor, NULL, "cursor", NULL);
+
+
+    matte_add_external_function(m, "raylib_GetTouchX", raylib_GetTouchX, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetTouchY", raylib_GetTouchY, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetTouchPosition", raylib_GetTouchPosition, NULL, "index", NULL);
+    matte_add_external_function(m, "raylib_GetTouchPointId", raylib_GetTouchPointId, NULL, "index", NULL);
+    matte_add_external_function(m, "raylib_GetTouchPointCount", raylib_GetTouchPointCount, NULL, NULL);
+
+    matte_add_external_function(m, "raylib_SetGesturesEnabled", raylib_SetGesturesEnabled, NULL, "flags", NULL);
+    matte_add_external_function(m, "raylib_IsGestureDetected", raylib_IsGestureDetected, NULL, "gesture", NULL);
+    matte_add_external_function(m, "raylib_GetGestureDetected", raylib_GetGestureDetected, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGestureHoldDuration", raylib_GetGestureHoldDuration, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGestureDragVector", raylib_GetGestureDragVector, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGestureDragAngle", raylib_GetGestureDragAngle, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGesturePinchVector", raylib_GetGesturePinchVector, NULL, NULL);
+    matte_add_external_function(m, "raylib_GetGesturePinchAngle", raylib_GetGesturePinchAngle, NULL, NULL);
+
+    matte_add_external_function(m, "raylib_UpdateCamera", raylib_UpdateCamera, NULL, "camera", "mode", NULL);
+    matte_add_external_function(m, "raylib_UpdateCameraPro", raylib_UpdateCameraPro, NULL, "camera", "movement", "rotation", "zoom", NULL);
     
 } 
 
