@@ -46,6 +46,8 @@ These changes are listed here:
           `UnloadTextData` (Not needed. MemoryBuffer can either be freed manually or will auto-free on GC)
           `UnloadDirectoryFiles` (Not needed)
           `UnloadDroppedFiles` (Not needed)
+          `UnloadImageColors` (Not needed)
+          `UnloadImagePalette` (Not needed)
         
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
@@ -63,6 +65,7 @@ These changes are listed here:
     `RenderTexture` / `RenderTexture2D`
     `Texture` / `Texture2D`
     `Shader` (no getters)
+    `Font`
 
   Such objects are NOT able to be produced "by hand" and need to be 
   sourced from raylib functions on some level. 
@@ -144,6 +147,7 @@ These changes are listed here:
   
 - LoadImageAnim will return an image object with an extra public member called "frames",
   which contains the output frame count
+  
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.

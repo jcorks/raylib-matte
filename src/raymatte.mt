@@ -405,7 +405,12 @@
         TextureGetFormat : getExternalFunction(name:"raylib_TextureGetFormat"),
 
         
-
+        FontGetBaseSize : getExternalFunction(name:"raylib_FontGetBaseSize"),
+        FontGetGlyphCount : getExternalFunction(name:"raylib_FontGetGlyphCount"),
+        FontGetGlyphPadding : getExternalFunction(name:"raylib_FontGetGlyphPadding"),
+        FontGetTexture : getExternalFunction(name:"raylib_FontGetTexture"),
+        FontGetRectangle : getExternalFunction(name:"raylib_FontGetRectangle"),
+        FontGetGlyphInfo : getExternalFunction(name:"raylib_FontGetGlyphInfo"),
 
 
 
@@ -736,8 +741,40 @@
     GenImageWhiteNoise : getExternalFunction(name: "raylib_GenImageWhiteNoise"),
     GenImagePerlinNoise : getExternalFunction(name: "raylib_GenImagePerlinNoise"),
     GenImageCellular : getExternalFunction(name: "raylib_GenImageCellular"),
-    GenImageText : getExternalFunction(name: "raylib_GenImageText") 
-    
+    GenImageText : getExternalFunction(name: "raylib_GenImageText"),
+  
+    ImageCopy : getExternalFunction(name:"raylib_ImageCopy"),
+    ImageFromImage : getExternalFunction(name:"raylib_ImageFromImage"),
+    ImageText : getExternalFunction(name:"raylib_ImageText"),
+    ImageTextEx : getExternalFunction(name:"raylib_ImageTextEx"),
+    ImageFormat : getExternalFunction(name:"raylib_ImageFormat"),
+    ImageToPOT : getExternalFunction(name:"raylib_ImageToPOT"),
+    ImageCrop : getExternalFunction(name:"raylib_ImageCrop"),
+    ImageAlphaCrop : getExternalFunction(name:"raylib_ImageAlphaCrop"),
+    ImageAlphaClear : getExternalFunction(name:"raylib_ImageAlphaClear"),
+    ImageAlphaMask : getExternalFunction(name:"raylib_ImageAlphaMask"),
+    ImageAlphaPremultiply : getExternalFunction(name:"raylib_ImageAlphaPremultiply"),
+    ImageBlurGaussian : getExternalFunction(name:"raylib_ImageBlurGaussian"),
+    ImageResize : getExternalFunction(name:"raylib_ImageResize"),
+    ImageResizeNN : getExternalFunction(name:"raylib_ImageResizeNN"),
+    ImageResizeCanvas : getExternalFunction(name:"raylib_ImageResizeCanvas"),
+    ImageMipmaps : getExternalFunction(name:"raylib_ImageMipmaps"),
+    ImageDither : getExternalFunction(name:"raylib_ImageDither"),
+    ImageFlipVertical : getExternalFunction(name:"raylib_ImageFlipVertical"),
+    ImageFlipHorizontal : getExternalFunction(name:"raylib_ImageFlipHorizontal"),
+    ImageRotate : getExternalFunction(name:"raylib_ImageRotate"),
+    ImageRotateCW : getExternalFunction(name:"raylib_ImageRotateCW"),    
+    ImageRotateCCW : getExternalFunction(name:"raylib_ImageRotateCCW"),    
+    ImageColorTint : getExternalFunction(name:"raylib_ImageColorTint"),
+    ImageColorInvert : getExternalFunction(name:"raylib_ImageColorInvert"),
+    ImageColorGrayscale : getExternalFunction(name:"raylib_ImageColorGrayscale"),
+    ImageColorContrast : getExternalFunction(name:"raylib_ImageColorContrast"),
+    ImageColorBrightness : getExternalFunction(name:"raylib_ImageColorBrightness"),
+    ImageColorReplace : getExternalFunction(name:"raylib_ImageColorReplace"),
+    LoadImageColors : getExternalFunction(name:"raylib_LoadImageColors"),
+    LoadImagePalette : getExternalFunction(name:"raylib_LoadImagePalette"),
+    GetImageAlphaBorder : getExternalFunction(name:"raylib_GetImageAlphaBorder"),
+    GetImageColor : getExternalFunction(name:"raylib_GetImageColor"),
 };  
 
 

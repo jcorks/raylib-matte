@@ -142,6 +142,10 @@ RAYLIB_FN__ARG1(raylib_RenderTextureGetDepthTexture, MATTE_VALUE_TYPE_OBJECT)
 RAYLIB_FN__END
 
 
+
+
+
+
 RAYLIB_FN__ARG1(raylib_TextureGetFormat, MATTE_VALUE_TYPE_OBJECT) 
     return native_to_value_int(vm, native_from_value_texture(vm, args[0]).format);  
 RAYLIB_FN__END
@@ -160,6 +164,51 @@ RAYLIB_FN__END
 
 
 
+
+
+RAYLIB_FN__ARG1(raylib_FontGetBaseSize, MATTE_VALUE_TYPE_OBJECT) 
+    return native_to_value_int(vm, native_from_value_font(vm, args[0]).baseSize);  
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_FontGetGlyphCount, MATTE_VALUE_TYPE_OBJECT) 
+    return native_to_value_int(vm, native_from_value_font(vm, args[0]).glyphCount);  
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_FontGetGlyphPadding, MATTE_VALUE_TYPE_OBJECT) 
+    return native_to_value_int(vm, native_from_value_font(vm, args[0]).glyphPadding);  
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_FontGetTexture, MATTE_VALUE_TYPE_OBJECT) 
+    return native_to_value_texture(vm, native_from_value_font(vm, args[0]).texture);  
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_FontGetGlyphInfo, MATTE_VALUE_TYPE_OBJECT, MATTE_VALUE_TYPE_NUMBER) 
+    int index = args[1].value.number;
+    Font font = native_from_value_font(vm, args[0]);
+    
+    if (index < 0 || index > font.glyphCount) {
+        matte_vm_raise_error_cstring(vm, "FontGetGlyphInfo: invalid glyph index");
+        goto L_END;
+    }
+    
+    return native_to_value_glyphInfo(vm, font.glyphs[index]);  
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_FontGetRectangle, MATTE_VALUE_TYPE_OBJECT, MATTE_VALUE_TYPE_NUMBER) 
+    int index = args[1].value.number;
+    Font font = native_from_value_font(vm, args[0]);
+    
+    if (index < 0 || index > font.glyphCount) {
+        matte_vm_raise_error_cstring(vm, "FontGetRectangle: invalid glyph index");
+        goto L_END;
+    }
+    
+    return native_to_value_rectangle(vm, font.recs[index]);  
+  L_END:
+RAYLIB_FN__END
 
 
 
@@ -3209,6 +3258,442 @@ RAYLIB_FN__END
 
 
 
+
+
+RAYLIB_FN__ARG1(raylib_ImageCopy,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        ImageCopy(  
+            native_from_value_image(vm, args[0])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ImageFromImage,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        ImageFromImage(  
+            native_from_value_image(vm, args[0]),
+            native_from_value_rectangle(vm, args[1])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ImageText,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,    
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        ImageText(  
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            args[1].value.number,
+            native_from_value_color(vm, args[2])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_ImageTextEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,    
+    MATTE_VALUE_TYPE_NUMBER,    
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_image(
+        vm,
+        ImageTextEx(  
+            native_from_value_font(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            args[2].value.number,
+            args[3].value.number,
+            native_from_value_color(vm, args[4])
+        )        
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ImageFormat,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER  
+)
+
+    ImageFormat(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_ImageToPOT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageToPOT(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ImageCrop,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageCrop(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_rectangle(vm, args[1])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ImageAlphaCrop,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageAlphaCrop(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_ImageAlphaClear,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageAlphaClear(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_color(vm, args[1]),
+        args[2].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ImageAlphaMask,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageAlphaMask(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_image(vm, args[1])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ImageAlphaPremultiply,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageAlphaPremultiply(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ImageBlurGaussian,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageBlurGaussian(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ImageResize,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageResize(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_ImageResizeNN,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageResizeNN(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_ImageResizeCanvas,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageResizeCanvas(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ImageMipmaps,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageMipmaps(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_ImageDither,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageDither(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ImageFlipHorizontal,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageFlipHorizontal(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ImageFlipVertical,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageFlipVertical(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ImageRotate,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageRotate(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ImageRotateCW,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageRotateCW(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ImageRotateCCW,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageRotateCCW(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ImageColorTint,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageColorTint(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ImageColorInvert,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageColorInvert(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ImageColorGrayscale,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageColorGrayscale(
+        native_from_value_image_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ImageColorContrast,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageColorContrast(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ImageColorBrightness,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    ImageColorBrightness(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ImageColorReplace,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    ImageColorReplace(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_color(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_LoadImageColors,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Image img = native_from_value_image(vm, args[0]);
+    uint32_t len = img.width * img.height;
+    matteValue_t * vals = MemAlloc(sizeof(matteValue_t)*len);
+       
+    Color * colors = LoadImageColors(
+        img
+    );
+    
+    uint32_t i;
+    for(i = 0; i < len; ++i) {
+        vals[i] = native_to_value_color(vm, colors[i]);
+    }
+    
+    UnloadImageColors(colors);
+    matteValue_t v = matte_store_new_value(store);
+    matteArray_t arr = MATTE_ARRAY_CAST(vals, matteValue_t, len);
+    matte_value_into_new_object_array_ref(store, &v, &arr);
+    MemFree(vals);
+    return v;
+    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_LoadImagePalette,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Image img = native_from_value_image(vm, args[0]);
+    int len;
+    Color * colors = LoadImagePalette(
+        img,
+        args[1].value.number,
+        &len
+    );
+
+    matteValue_t * vals = MemAlloc(sizeof(matteValue_t)*len);
+       
+    
+    uint32_t i;
+    for(i = 0; i < len; ++i) {
+        vals[i] = native_to_value_color(vm, colors[i]);
+    }
+    UnloadImagePalette(colors);
+    
+    matteValue_t v = matte_store_new_value(store);
+    matteArray_t arr = MATTE_ARRAY_CAST(vals, matteValue_t, len);
+    matte_value_into_new_object_array_ref(store, &v, &arr);
+    MemFree(vals);
+    return v;
+    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetImageAlphaBorder,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_rectangle(
+        vm,
+        GetImageAlphaBorder(
+            native_from_value_image(vm, args[0]),
+            args[1].value.number
+        )
+    );
+    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_GetImageColor,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        GetImageColor(
+            native_from_value_image(vm, args[0]),
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+    
+RAYLIB_FN__END
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -3226,6 +3711,17 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_TextureGetHeight", raylib_TextureGetHeight, NULL, "texture", NULL);
     matte_add_external_function(m, "raylib_TextureGetMipmaps", raylib_TextureGetMipmaps, NULL, "texture", NULL);
     matte_add_external_function(m, "raylib_TextureGetWidth", raylib_TextureGetWidth, NULL, "texture", NULL);
+
+
+    matte_add_external_function(m, "raylib_FontGetGlyphCount", raylib_FontGetGlyphCount, NULL, "font", NULL);
+    matte_add_external_function(m, "raylib_FontGetGlyphPadding", raylib_FontGetGlyphPadding, NULL, "font", NULL);
+    matte_add_external_function(m, "raylib_FontGetBaseSize", raylib_FontGetBaseSize, NULL, "font", NULL);
+    matte_add_external_function(m, "raylib_FontGetGlyphInfo", raylib_FontGetGlyphInfo, NULL, "font", "index", NULL);
+    matte_add_external_function(m, "raylib_FontGetTexture", raylib_FontGetTexture, NULL, "font", NULL);
+    matte_add_external_function(m, "raylib_FontGetRectangle", raylib_FontGetGlyphCount, NULL, "font", "index", NULL);
+
+
+
 
 
     //rcore: windowing
@@ -3504,6 +4000,41 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_GenImagePerlinNoise", raylib_GenImagePerlinNoise, NULL, "width", "height", "offsetX", "offsetY", "scale", NULL);
     matte_add_external_function(m, "raylib_GenImageCellular", raylib_GenImageCellular, NULL, "width", "height", "tileSize", NULL);
     matte_add_external_function(m, "raylib_GenImageText", raylib_GenImageText, NULL, "width", "height", "text", NULL);
+
+
+
+    matte_add_external_function(m, "raylib_ImageCopy", raylib_ImageCopy, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageFromImage", raylib_ImageFromImage, NULL, "image", "rec", NULL);
+    matte_add_external_function(m, "raylib_ImageText", raylib_ImageText, NULL, "text", "fontSize", "color", NULL);
+    matte_add_external_function(m, "raylib_ImageTextEx", raylib_ImageTextEx, NULL, "font", "text", "fontSize", "spacing", "tint", NULL);
+    matte_add_external_function(m, "raylib_ImageFormat", raylib_ImageFormat, NULL, "image", "newFormat", NULL);
+    matte_add_external_function(m, "raylib_ImageToPOT", raylib_ImageToPOT, NULL, "image", "fill", NULL);
+    matte_add_external_function(m, "raylib_ImageCrop", raylib_ImageCrop, NULL, "image", "crop", NULL);
+    matte_add_external_function(m, "raylib_ImageAlphaCrop", raylib_ImageAlphaCrop, NULL, "image", "threshold", NULL);
+    matte_add_external_function(m, "raylib_ImageAlphaClear", raylib_ImageAlphaClear, NULL, "image", "color", "threshold", NULL);
+    matte_add_external_function(m, "raylib_ImageAlphaMask", raylib_ImageAlphaMask, NULL, "image", "alphaMask", NULL);
+    matte_add_external_function(m, "raylib_ImageAlphaPremultiply", raylib_ImageAlphaPremultiply, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageBlurGaussian", raylib_ImageBlurGaussian, NULL, "image", "blurSize", NULL);
+    matte_add_external_function(m, "raylib_ImageResize", raylib_ImageResize, NULL, "image", "newWidth", "newHeight", NULL);
+    matte_add_external_function(m, "raylib_ImageResizeNN", raylib_ImageResizeNN, NULL, "image", "newWidth", "newHeight", NULL);
+    matte_add_external_function(m, "raylib_ImageResizeCanvas", raylib_ImageResizeCanvas, NULL, "image", "newWidth", "newHeight", "offsetX", "offsetY", "fill", NULL);
+    matte_add_external_function(m, "raylib_ImageMipmaps", raylib_ImageMipmaps, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageDither", raylib_ImageDither, NULL, "image", "rBpp", "gBpp", "bBpp", NULL);
+    matte_add_external_function(m, "raylib_ImageFlipVertical", raylib_ImageFlipVertical, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageFlipHorizontal", raylib_ImageFlipHorizontal, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageRotate", raylib_ImageRotate, NULL, "image", "degrees", NULL);
+    matte_add_external_function(m, "raylib_ImageRotateCW", raylib_ImageRotateCW, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageRotateCCW", raylib_ImageRotateCCW, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageColorTint", raylib_ImageColorTint, NULL, "image", "color", NULL);
+    matte_add_external_function(m, "raylib_ImageColorInvert", raylib_ImageColorInvert, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageColorGrayscale", raylib_ImageColorGrayscale, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_ImageColorContrast", raylib_ImageColorContrast, NULL, "image", "contrast", NULL);
+    matte_add_external_function(m, "raylib_ImageColorBrightness", raylib_ImageColorBrightness, NULL, "image", "brightness", NULL);
+    matte_add_external_function(m, "raylib_ImageColorReplace", raylib_ImageColorReplace, NULL, "image", "color", "replace", NULL);
+    matte_add_external_function(m, "raylib_LoadImageColors", raylib_LoadImageColors, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_LoadImagePalette", raylib_LoadImagePalette, NULL, "image", "maxPaletteSize", NULL);
+    matte_add_external_function(m, "raylib_GetImageAlphaBorder", raylib_GetImageAlphaBorder, NULL, "image", "threshold", NULL);
+    matte_add_external_function(m, "raylib_GetImageColor", raylib_GetImageColor, NULL, "image", "x", "y", NULL);
 
 } 
 

@@ -9,7 +9,8 @@ enum {
     RAYMATTE_NATIVE_TYPE__IMAGE = 866,
     RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE,
     RAYMATTE_NATIVE_TYPE__TEXTURE,
-    RAYMATTE_NATIVE_TYPE__SHADER
+    RAYMATTE_NATIVE_TYPE__SHADER,
+    RAYMATTE_NATIVE_TYPE__FONT
 };
 
 
@@ -137,6 +138,25 @@ matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3) {
 }   
 
 
+matteValue_t native_to_value_color(matteVM_t * vm, Color c) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t r = native_to_value_float(vm, c.r);
+    matteValue_t g = native_to_value_float(vm, c.g);
+    matteValue_t b = native_to_value_float(vm, c.b);
+    matteValue_t a = native_to_value_float(vm, c.a);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "r"), r);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "g"), g);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "b"), b);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "a"), a);
+
+    return v;
+}   
+
 matteValue_t native_to_value_rectangle(matteVM_t * vm, Rectangle r) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -152,6 +172,28 @@ matteValue_t native_to_value_rectangle(matteVM_t * vm, Rectangle r) {
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "width"), width);
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "height"), height);
+
+    return v;
+}   
+
+
+
+matteValue_t native_to_value_glyphInfo(matteVM_t * vm, GlyphInfo g) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t value = native_to_value_float(vm, g.value);
+    matteValue_t offsetX = native_to_value_float(vm, g.offsetX);
+    matteValue_t offsetY = native_to_value_float(vm, g.offsetY);
+    matteValue_t advanceX = native_to_value_float(vm, g.advanceX);
+    matteValue_t image = native_to_value_image(vm, g.image);
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "value"), value);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "offsetX"), offsetX);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "offsetY"), offsetY);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "advanceX"), advanceX);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "image"), image);
 
     return v;
 }   
@@ -347,6 +389,23 @@ Image native_from_value_image(matteVM_t * vm, matteValue_t img) {
     return *((Image*)object->data);
 }   
 
+
+Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t img) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (img.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Image: value is not an Image.");
+        return NULL;
+    }
+    
+    NativeEncodeData_t * object = matte_value_object_get_userdata(store, img);
+    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__IMAGE) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Image: value is not an Image.");
+        return NULL;
+    }
+
+    return (Image*)object->data;
+}   
 
 Vector2 native_from_value_vector2(matteVM_t * vm, matteValue_t v2) {
     matteStore_t * store = matte_vm_get_store(vm);    
@@ -590,6 +649,25 @@ Shader native_from_value_shader(matteVM_t * vm, matteValue_t shad) {
     return *((Shader*)object->data);
 }   
 
+
+Font native_from_value_font(matteVM_t * vm, matteValue_t shad) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (shad.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Font: value is not an Font.");
+        Font imgOut = {};
+        return imgOut;
+    }
+    
+    NativeEncodeData_t * object = matte_value_object_get_userdata(store, shad);
+    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__FONT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Font: value is not an Font.");
+        Font imgOut = {};
+        return imgOut;
+    }
+
+    return *((Font*)object->data);
+}   
 
 void native_unload(matteVM_t * vm, matteValue_t obj) {
     matteStore_t * store = matte_vm_get_store(vm);    
