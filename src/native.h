@@ -27,6 +27,7 @@ matteValue_t native_to_value_string(matteVM_t * vm, const char * value);
 matteValue_t native_to_value_image(matteVM_t * vm, Image img);
 matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2); 
 matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3);
+matteValue_t native_to_value_vector4(matteVM_t * vm, Vector4 v4);
 matteValue_t native_to_value_color(matteVM_t * vm, Color c);
 matteValue_t native_to_value_glyphInfo(matteVM_t * vm, GlyphInfo gl);
 matteValue_t native_to_value_rectangle(matteVM_t * vm, Rectangle v3);
@@ -52,6 +53,7 @@ Vector3 native_from_value_vector3(matteVM_t * vm, matteValue_t cl);
 Vector4 native_from_value_vector4(matteVM_t * vm, matteValue_t cl);
 Rectangle native_from_value_rectangle(matteVM_t * vm, matteValue_t cl);
 Camera2D native_from_value_camera2D(matteVM_t * vm, matteValue_t cam);
+NPatchInfo native_from_value_nPatchInfo(matteVM_t * vm, matteValue_t n);
 Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t cam);
 RenderTexture native_from_value_renderTexture(matteVM_t * vm, matteValue_t tex);
 Texture native_from_value_texture(matteVM_t * vm, matteValue_t tex);
@@ -61,6 +63,7 @@ Matrix native_from_value_matrix(matteVM_t * vm, matteValue_t cl);
 
 // for opaque objects, we can get an editable reference
 Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t img);
+Image * native_from_value_texture_ref(matteVM_t * vm, matteValue_t tex);
 
 
 void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);

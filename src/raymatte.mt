@@ -8,6 +8,9 @@
 @:base__DecompressData = getExternalFunction(name:"raylib_DecompressData");
 @:base__EncodeDataBase64 = getExternalFunction(name:"raylib_EncodeDataBase64");
 @:base__DecodeDataBase64 = getExternalFunction(name:"raylib_DecodeDataBase64");
+@:base__LoadImageFromMemory = getExternalFunction(name: "raylib_LoadImageFromMemory");
+@:base__GetPixelColor = getExternalFunction(name:"raylib_GetPixelColor");
+@:base__SetPixelColor = getExternalFunction(name:"raylib_SetPixelColor");
 
 @:raylib = {
     // Defines
@@ -724,7 +727,9 @@
     LoadImage : getExternalFunction(name: "raylib_LoadImage"),
     LoadImageRaw : getExternalFunction(name: "raylib_LoadImageRaw"),
     LoadImageAnim : getExternalFunction(name: "raylib_LoadImageAnim"),
-    LoadImageFromMemory : getExternalFunction(name: "raylib_LoadImageFromMemory"),
+    LoadImageFromMemory :: (fileType, bytes => MemoryBuffer.type) {
+        return LoadImageFromMemory(fileType, bytes:bytes.handle);
+    },
     LoadImageFromTexture : getExternalFunction(name: "raylib_LoadImageFromTexture"),
     LoadImageFromScreen : getExternalFunction(name: "raylib_LoadImageFromScreen"),
     IsImageReady : getExternalFunction(name: "raylib_IsImageReady"),
@@ -775,6 +780,394 @@
     LoadImagePalette : getExternalFunction(name:"raylib_LoadImagePalette"),
     GetImageAlphaBorder : getExternalFunction(name:"raylib_GetImageAlphaBorder"),
     GetImageColor : getExternalFunction(name:"raylib_GetImageColor"),
+    
+    
+    ImageClearBackground : getExternalFunction(name:"raylib_ImageClearBackground"),
+    ImageDrawPixel : getExternalFunction(name:"raylib_ImageDrawPixel"),
+    ImageDrawPixelV : getExternalFunction(name:"raylib_ImageDrawPixelV"),
+    ImageDrawLine : getExternalFunction(name:"raylib_ImageDrawLine"),
+    ImageDrawLineV : getExternalFunction(name:"raylib_ImageDrawLineV"),
+    ImageDrawCircle : getExternalFunction(name:"raylib_ImageDrawCircle"),
+    ImageDrawCircleV : getExternalFunction(name:"raylib_ImageDrawCircleV"),
+    ImageDrawCircleLines : getExternalFunction(name:"raylib_ImageDrawCircleLines"),
+    ImageDrawCircleLinesV : getExternalFunction(name:"raylib_ImageDrawCircleLinesV"),
+    ImageDrawRectangle : getExternalFunction(name:"raylib_ImageDrawRectangle"),
+    ImageDrawRectangleV : getExternalFunction(name:"raylib_ImageDrawRectangleV"),
+    ImageDrawRectangleRec : getExternalFunction(name:"raylib_ImageDrawRectangleRec"),
+    ImageDrawRectangleLines : getExternalFunction(name:"raylib_ImageDrawRectangleLines"),
+    ImageDraw : getExternalFunction(name:"raylib_ImageDraw"),
+    ImageDrawText : getExternalFunction(name:"raylib_ImageDrawText"),
+    ImageDrawTextEx : getExternalFunction(name:"raylib_ImageDrawTextEx"),
+
+
+
+    LoadTexture : getExternalFunction(name:"raylib_LoadTexture"),
+    LoadTextureFromImage : getExternalFunction(name:"raylib_LoadTextureFromImage"),
+    LoadTextureCubemap : getExternalFunction(name:"raylib_LoadTextureCubemap"),
+    LoadRenderTexture : getExternalFunction(name:"raylib_LoadRenderTexture"),
+    IsTextureReady : getExternalFunction(name:"raylib_IsTextureReady"),
+    UnloadTexture : getExternalFunction(name:"raylib_UnloadTexture"),
+    IsRenderTextureReady : getExternalFunction(name:"raylib_IsRenderTextureReady"),
+    UnloadRenderTexture : getExternalFunction(name:"raylib_UnloadRenderTexture"),
+    UpdateTexture : getExternalFunction(name:"raylib_UpdateTexture"),
+    UpdateTextureRec : getExternalFunction(name:"raylib_UpdateTextureRec"),
+
+
+    GenTextureMipmaps : getExternalFunction(name:"raylib_GenTextureMipmaps"),
+    SetTextureFilter : getExternalFunction(name:"raylib_SetTextureFilter"),
+    SetTextureWrap : getExternalFunction(name:"raylib_SetTextureWrap"),
+
+
+    DrawTexture : getExternalFunction(name:"raylib_DrawTexture"),
+    DrawTextureV : getExternalFunction(name:"raylib_DrawTextureV"),
+    DrawTextureEx : getExternalFunction(name:"raylib_DrawTextureEx"),
+    DrawTextureRec : getExternalFunction(name:"raylib_DrawTextureRec"),
+    DrawTexturePro : getExternalFunction(name:"raylib_DrawTexturePro"),
+    DrawTextureNPatch : getExternalFunction(name:"raylib_DrawTextureNPatch"),
+
+
+    Fade : getExternalFunction(name:"raylib_Fade"),
+    ColorToInt : getExternalFunction(name:"raylib_ColorToInt"),
+    ColorNormalize : getExternalFunction(name:"raylib_ColorNormalize"),
+    ColorFromNormalized : getExternalFunction(name:"raylib_ColorFromNormalized"),
+    ColorToHSV : getExternalFunction(name:"raylib_ColorToHSV"),
+    ColorFromHSV : getExternalFunction(name:"raylib_ColorFromHSV"),
+    ColorTint : getExternalFunction(name:"raylib_ColorTint"),
+    ColorBrightness : getExternalFunction(name:"raylib_ColorBrightness"),
+    ColorContrast : getExternalFunction(name:"raylib_ColorContrast"),
+    ColorAlpha : getExternalFunction(name:"raylib_ColorAlpha"),
+    ColorAlphaBlend : getExternalFunction(name:"raylib_ColorAlphaBlend"),
+    GetColor : getExternalFunction(name:"raylib_GetColor"),
+    GetPixelColor ::(bytes => MemoryBuffer.type, format) {
+        return base__GetPixelColor(bytes:bytes.handle, format);
+    },
+    SetPixelColor ::(bytes => MemoryBuffer.type, color, format) {
+        return base__SetPixelColor(bytes:bytes.handle, color, format);
+    },
+    GetPixelDataSize : getExternalFunction(name:"raylib_GetPixelDataSize"),
+
+
+    GetFontDefault : getExternalFunction(name:"raylib_GetFontDefault"),
+    LoadFont : getExternalFunction(name:"raylib_LoadFont"),
+    LoadFontEx : getExternalFunction(name:"raylib_LoadFontEx"),
+    LoadFontFromImage : getExternalFunction(name:"raylib_LoadFontFromImage"),
+    LoadFontFromMemory : getExternalFunction(name:"raylib_LoadFontFromMemory"),
+    IsFontReady : getExternalFunction(name:"raylib_IsFontReady"),
+    LoadFontData : getExternalFunction(name:"raylib_LoadFontData"),
+    GenImageFontAtlas : getExternalFunction(name:"raylib_GenImageFontAtlas"),
+    UnloadFontData : getExternalFunction(name:"raylib_UnloadFontData"),
+    UnloadFont : getExternalFunction(name:"raylib_UnloadFont"),
+    ExportFontAsCode : getExternalFunction(name:"raylib_ExportFontAsCode"),
+
+
+    DrawFPS : getExternalFunction(name:"raylib_DrawFPS"),
+    DrawText : getExternalFunction(name:"raylib_DrawText"),
+    DrawTextEx : getExternalFunction(name:"raylib_DrawTextEx"),
+    DrawTextPro : getExternalFunction(name:"raylib_DrawTextPro"),
+    DrawTextCodepoint : getExternalFunction(name:"raylib_DrawTextCodepoint"),
+    DrawTextCodepoints : getExternalFunction(name:"raylib_DrawTextCodepoints"),
+
+
+    MeasureText : getExternalFunction(name:"raylib_MeasureText"),
+    MeasureTextEx : getExternalFunction(name:"raylib_MeasureTextEx"),
+    GetGlyphIndex : getExternalFunction(name:"raylib_GetGlyphIndex"),
+    GetGlyphInfo : getExternalFunction(name:"raylib_GetGlyphInfo"),
+    GetGlyphAtlasRec : getExternalFunction(name:"raylib_GetGlyphAtlasRec"),
+
+
+
+
+
+    DrawLine3D : getExternalFunction(name:"raylib_DrawLine3D"),
+    DrawPoint3D : getExternalFunction(name:"raylib_DrawPoint3D"),
+    DrawCircle3D : getExternalFunction(name:"raylib_DrawCircle3D"),
+    DrawTriangle3D : getExternalFunction(name:"raylib_DrawTriangle3D"),
+    DrawTriangleStrip3D : getExternalFunction(name:"raylib_DrawTriangleStrip3D"),
+    DrawCube : getExternalFunction(name:"raylib_DrawCube"),
+    DrawCubeV : getExternalFunction(name:"raylib_DrawCubeV"),
+    DrawCubeWires : getExternalFunction(name:"raylib_DrawCubeWires"),
+    DrawCubeWiresV : getExternalFunction(name:"raylib_DrawCubeWiresV"),
+    DrawSphere : getExternalFunction(name:"raylib_DrawSphere"),
+    DrawSphereEx : getExternalFunction(name:"raylib_DrawSphereEx"),
+    DrawSphereWires : getExternalFunction(name:"raylib_DrawSphereWires"),
+    DrawCylinder : getExternalFunction(name:"raylib_DrawCylinder"),
+    DrawCylinderEx : getExternalFunction(name:"raylib_DrawCylinderEx"),
+    DrawCylinderWires : getExternalFunction(name:"raylib_DrawCylinderWires"),
+    DrawCylinderWiresEx : getExternalFunction(name:"raylib_DrawCylinderWiresEx"),
+    DrawCapsule : getExternalFunction(name:"raylib_DrawCapsule"),
+    DrawCapsuleWires : getExternalFunction(name:"raylib_DrawCapsuleWires"),
+    DrawPlane : getExternalFunction(name:"raylib_DrawPlane"),
+    DrawRay : getExternalFunction(name:"raylib_DrawRay"),
+    DrawGrid : getExternalFunction(name:"raylib_DrawGrid"),
+
+
+
+
+
+
+    LoadModel : getExternalFunction(name:"raylib_LoadModel"),
+    LoadModelFromMesh : getExternalFunction(name:"raylib_LoadModelFromMesh"),
+    IsModelReady : getExternalFunction(name:"raylib_IsModelReady"),
+    UnloadModel : getExternalFunction(name:"raylib_UnloadModel"),
+    GetModelBoundingBox : getExternalFunction(name:"raylib_GetModelBoundingBox"),
+
+
+    DrawModel : getExternalFunction(name:"raylib_DrawModel"),
+    DrawModelEx : getExternalFunction(name:"raylib_DrawModelEx"),
+    DrawModelWires : getExternalFunction(name:"raylib_DrawModelWires"),
+    DrawModelWiresEx : getExternalFunction(name:"raylib_DrawModelWiresEx"),
+    DrawBoundingBox : getExternalFunction(name:"raylib_DrawBoundingBox"),
+    DrawBillboard : getExternalFunction(name:"raylib_DrawBillboard"),
+    DrawBillboardRec : getExternalFunction(name:"raylib_DrawBillboardRec"),
+    DrawBillboardPro : getExternalFunction(name:"raylib_DrawBillboardPro"),
+
+
+    UploadMesh : getExternalFunction(name:"raylib_UploadMesh"),
+    UpdateMeshBuffer : getExternalFunction(name:"raylib_UpdateMeshBuffer"),
+    UnloadMesh : getExternalFunction(name:"raylib_UnloadMesh"),
+    DrawMesh : getExternalFunction(name:"raylib_DrawMesh"),
+    DrawMeshInstanced : getExternalFunction(name:"raylib_DrawMeshInstanced"),
+    ExportMesh : getExternalFunction(name:"raylib_ExportMesh"),
+    GetMeshBoundingBox : getExternalFunction(name:"raylib_GetMeshBoundingBox"),
+    GenMeshTangents : getExternalFunction(name:"raylib_GenMeshTangents"),
+
+
+    GenMeshPoly : getExternalFunction(name:"raylib_GenMeshPoly"),
+    GenMeshPlane : getExternalFunction(name:"raylib_GenMeshPlane"),
+    GenMeshCube : getExternalFunction(name:"raylib_GenMeshCube"),
+    GenMeshSphere : getExternalFunction(name:"raylib_GenMeshSphere"),
+    GenMeshHemiSphere : getExternalFunction(name:"raylib_GenMeshHemiSphere"),
+    GenMeshCylinder : getExternalFunction(name:"raylib_GenMeshCylinder"),
+    GenMeshCone : getExternalFunction(name:"raylib_GenMeshCone"),
+    GenMeshTorus : getExternalFunction(name:"raylib_GenMeshTorus"),
+    GenMeshKnot : getExternalFunction(name:"raylib_GenMeshKnot"),
+    GenMeshHeightmap : getExternalFunction(name:"raylib_GenMeshHeightmap"),
+    GenMeshCubicmap : getExternalFunction(name:"raylib_GenMeshCubicmap"),
+
+
+    LoadMaterials : getExternalFunction(name:"raylib_LoadMaterials"),
+    LoadMaterialDefault : getExternalFunction(name:"raylib_LoadMaterialDefault"),
+    IsMaterialReady : getExternalFunction(name:"raylib_IsMaterialReady"),
+    UnloadMaterial : getExternalFunction(name:"raylib_UnloadMaterial"),
+    SetMaterialTexture : getExternalFunction(name:"raylib_SetMaterialTexture"),
+    SetModelMeshMaterial : getExternalFunction(name:"raylib_SetModelMeshMaterial"),
+
+
+    LoadModelAnimations : getExternalFunction(name:"raylib_LoadModelAnimations"),
+    UpdateModelAnimation : getExternalFunction(name:"raylib_UpdateModelAnimation"),
+    UnloadModelAnimation : getExternalFunction(name:"raylib_UnloadModelAnimation"),
+    UnloadModelAnimations : getExternalFunction(name:"raylib_UnloadModelAnimations"),
+    IsModelAnimationValid : getExternalFunction(name:"raylib_IsModelAnimationValid"),
+
+
+    CheckCollisionSpheres : getExternalFunction(name:"raylib_CheckCollisionSpheres"),
+    CheckCollisionBoxes : getExternalFunction(name:"raylib_CheckCollisionBoxes"),
+    CheckCollisionBoxSphere : getExternalFunction(name:"raylib_CheckCollisionBoxSphere"),
+    GetRayCollisionSphere : getExternalFunction(name:"raylib_GetRayCollisionSphere"),
+    GetRayCollisionBox : getExternalFunction(name:"raylib_GetRayCollisionBox"),
+    GetRayCollisionMesh : getExternalFunction(name:"raylib_GetRayCollisionMesh"),
+    GetRayCollisionTriangle : getExternalFunction(name:"raylib_GetRayCollisionTriangle"),
+    GetRayCollisionQuad : getExternalFunction(name:"raylib_GetRayCollisionQuad"),
+
+    InitAudioDevice : getExternalFunction(name:"raylib_InitAudioDevice"),
+    CloseAudioDevice : getExternalFunction(name:"raylib_CloseAudioDevice"),
+    IsAudioDeviceReady : getExternalFunction(name:"raylib_IsAudioDeviceReady"),
+    SetMasterVolume : getExternalFunction(name:"raylib_SetMasterVolume"),
+
+
+    LoadWave : getExternalFunction(name:"raylib_LoadWave"),
+    LoadWaveFromMemory : getExternalFunction(name:"raylib_LoadWaveFromMemory"),
+    IsWaveReady : getExternalFunction(name:"raylib_IsWaveReady"),
+    LoadSound : getExternalFunction(name:"raylib_LoadSound"),
+    LoadSoundFromWave : getExternalFunction(name:"raylib_LoadSoundFromWave"),
+    IsSoundReady : getExternalFunction(name:"raylib_IsSoundReady"),
+    UpdateSound : getExternalFunction(name:"raylib_UpdateSound"),
+    UnloadWave : getExternalFunction(name:"raylib_UnloadWave"),
+    UnloadSound : getExternalFunction(name:"raylib_UnloadSound"),
+    ExportWave : getExternalFunction(name:"raylib_ExportWave"),
+    ExportWaveAsCode : getExternalFunction(name:"raylib_ExportWaveAsCode"),
+
+
+    PlaySound : getExternalFunction(name:"raylib_PlaySound"),
+    StopSound : getExternalFunction(name:"raylib_StopSound"),
+    PauseSound : getExternalFunction(name:"raylib_PauseSound"),
+    ResumeSound : getExternalFunction(name:"raylib_ResumeSound"),
+    IsSoundPlaying : getExternalFunction(name:"raylib_IsSoundPlaying"),
+    SetSoundVolume : getExternalFunction(name:"raylib_SetSoundVolume"),
+    SetSoundPitch : getExternalFunction(name:"raylib_SetSoundPitch"),
+    SetSoundPan : getExternalFunction(name:"raylib_SetSoundPan"),
+    WaveCopy : getExternalFunction(name:"raylib_WaveCopy"),
+    WaveCrop : getExternalFunction(name:"raylib_WaveCrop"),
+    WaveFormat : getExternalFunction(name:"raylib_WaveFormat"),
+    LoadWaveSamples : getExternalFunction(name:"raylib_LoadWaveSamples"),
+    UnloadWaveSamples : getExternalFunction(name:"raylib_UnloadWaveSamples"),
+
+
+    LoadMusicStream : getExternalFunction(name:"raylib_LoadMusicStream"),
+    LoadMusicStreamFromMemory : getExternalFunction(name:"raylib_LoadMusicStreamFromMemory"),
+    IsMusicReady : getExternalFunction(name:"raylib_IsMusicReady"),
+    UnloadMusicStream : getExternalFunction(name:"raylib_UnloadMusicStream"),
+    PlayMusicStream : getExternalFunction(name:"raylib_PlayMusicStream"),
+    IsMusicStreamPlaying : getExternalFunction(name:"raylib_IsMusicStreamPlaying"),
+    UpdateMusicStream : getExternalFunction(name:"raylib_UpdateMusicStream"),
+    StopMusicStream : getExternalFunction(name:"raylib_StopMusicStream"),
+    PauseMusicStream : getExternalFunction(name:"raylib_PauseMusicStream"),
+    ResumeMusicStream : getExternalFunction(name:"raylib_ResumeMusicStream"),
+    SeekMusicStream : getExternalFunction(name:"raylib_SeekMusicStream"),
+    SetMusicVolume : getExternalFunction(name:"raylib_SetMusicVolume"),
+    SetMusicPitch : getExternalFunction(name:"raylib_SetMusicPitch"),
+    SetMusicPan : getExternalFunction(name:"raylib_SetMusicPan"),
+    GetMusicTimeLength : getExternalFunction(name:"raylib_GetMusicTimeLength"),
+    GetMusicTimePlayed : getExternalFunction(name:"raylib_GetMusicTimePlayed"),
+
+
+    LoadAudioStream : getExternalFunction(name:"raylib_LoadAudioStream"),
+    IsAudioStreamReady : getExternalFunction(name:"raylib_IsAudioStreamReady"),
+    UnloadAudioStream : getExternalFunction(name:"raylib_UnloadAudioStream"),
+    UpdateAudioStream : getExternalFunction(name:"raylib_UpdateAudioStream"),
+    IsAudioStreamProcessed : getExternalFunction(name:"raylib_IsAudioStreamProcessed"),
+    PlayAudioStream : getExternalFunction(name:"raylib_PlayAudioStream"),
+    PauseAudioStream : getExternalFunction(name:"raylib_PauseAudioStream"),
+    ResumeAudioStream : getExternalFunction(name:"raylib_ResumeAudioStream"),
+    IsAudioStreamPlaying : getExternalFunction(name:"raylib_IsAudioStreamPlaying"),
+    StopAudioStream : getExternalFunction(name:"raylib_StopAudioStream"),
+    SetAudioStreamVolume : getExternalFunction(name:"raylib_SetAudioStreamVolume"),
+    SetAudioStreamPitch : getExternalFunction(name:"raylib_SetAudioStreamPitch"),
+    SetAudioStreamPan : getExternalFunction(name:"raylib_SetAudioStreamPan"),
+    SetAudioStreamBufferSizeDefault : getExternalFunction(name:"raylib_SetAudioStreamBufferSizeDefault"),
+    SetAudioStreamCallback : getExternalFunction(name:"raylib_SetAudioStreamCallback"),
+
+    AttachAudioStreamProcessor : getExternalFunction(name:"raylib_AttachAudioStreamProcessor"),
+    DetachAudioStreamProcessor : getExternalFunction(name:"raylib_DetachAudioStreamProcessor"),
+
+    AttachAudioMixedProcessor : getExternalFunction(name:"raylib_AttachAudioMixedProcessor"),
+    DetachAudioMixedProcessor : getExternalFunction(name:"raylib_DetachAudioMixedProcessor")
+    
+
+
+    // Math
+
+    Clamp : getExternalFunction(name:"raylib_Clamp"),
+    Lerp : getExternalFunction(name:"raylib_Lerp"),
+    Normalize : getExternalFunction(name:"raylib_Normalize"),
+    Remap : getExternalFunction(name:"raylib_Remap"),
+    Wrap : getExternalFunction(name:"raylib_Wrap"),
+    FloatEquals : getExternalFunction(name:"raylib_FloatEquals"),
+
+
+    Vector2Zero : getExternalFunction(name:"raylib_Vector2Zero"),
+    Vector2One : getExternalFunction(name:"raylib_Vector2One"),
+    Vector2Add : getExternalFunction(name:"raylib_Vector2Add"),
+    Vector2AddValue : getExternalFunction(name:"raylib_Vector2AddValue"),
+    Vector2Subtract : getExternalFunction(name:"raylib_Vector2Subtract"),
+    Vector2SubtractValue : getExternalFunction(name:"raylib_Vector2SubtractValue"),
+    Vector2Length : getExternalFunction(name:"raylib_Vector2Length"),
+    Vector2LengthSqr : getExternalFunction(name:"raylib_Vector2LengthSqr"),
+    Vector2DotProduct : getExternalFunction(name:"raylib_Vector2DotProduct"),
+    Vector2Distance : getExternalFunction(name:"raylib_Vector2Distance"),
+    Vector2DistanceSqr : getExternalFunction(name:"raylib_Vector2DistanceSqr"),
+    Vector2Angle : getExternalFunction(name:"raylib_Vector2Angle"),
+    Vector2Scale : getExternalFunction(name:"raylib_Vector2Scale"),
+    Vector2Multiply : getExternalFunction(name:"raylib_Vector2Multiply"),
+    Vector2Negate : getExternalFunction(name:"raylib_Vector2Negate"),
+    Vector2Divide : getExternalFunction(name:"raylib_Vector2Divide"),
+    Vector2Normalize : getExternalFunction(name:"raylib_Vector2Normalize"),
+    Vector2Transform : getExternalFunction(name:"raylib_Vector2Transform"),
+    Vector2Lerp : getExternalFunction(name:"raylib_Vector2Lerp"),
+    Vector2Reflect : getExternalFunction(name:"raylib_Vector2Reflect"),
+    Vector2Rotate : getExternalFunction(name:"raylib_Vector2Rotate"),
+    Vector2MoveTowards : getExternalFunction(name:"raylib_Vector2MoveTowards"),
+    Vector2Invert : getExternalFunction(name:"raylib_Vector2Invert"),
+    Vector2Clamp : getExternalFunction(name:"raylib_Vector2Clamp"),
+    Vector2ClampValue : getExternalFunction(name:"raylib_Vector2ClampValue"),
+    Vector2Equals : getExternalFunction(name:"raylib_Vector2Equals"),
+
+
+    Vector3Zero : getExternalFunction(name:"raylib_Vector3Zero"),
+    Vector3One : getExternalFunction(name:"raylib_Vector3One"),
+    Vector3Add : getExternalFunction(name:"raylib_Vector3Add"),
+    Vector3AddValue : getExternalFunction(name:"raylib_Vector3AddValue"),
+    Vector3Subtract : getExternalFunction(name:"raylib_Vector3Subtract"),
+    Vector3SubtractValue : getExternalFunction(name:"raylib_Vector3SubtractValue"),
+    Vector3Scale : getExternalFunction(name:"raylib_Vector3Scale"),
+    Vector3Multiply : getExternalFunction(name:"raylib_Vector3Multiply"),
+    Vector3CrossProduct : getExternalFunction(name:"raylib_Vector3CrossProduct"),
+    Vector3Perpendicular : getExternalFunction(name:"raylib_Vector3Perpendicular"),
+    Vector3Length : getExternalFunction(name:"raylib_Vector3Length"),
+    Vector3LengthSqr : getExternalFunction(name:"raylib_Vector3LengthSqr"),
+    Vector3DotProduct : getExternalFunction(name:"raylib_Vector3DotProduct"),
+    Vector3Distance : getExternalFunction(name:"raylib_Vector3Distance"),
+    Vector3DistanceSqr : getExternalFunction(name:"raylib_Vector3DistanceSqr"),
+    Vector3Angle : getExternalFunction(name:"raylib_Vector3Angle"),
+    Vector3Negate : getExternalFunction(name:"raylib_Vector3Negate"),
+    Vector3Divide : getExternalFunction(name:"raylib_Vector3Divide"),
+    Vector3Normalize : getExternalFunction(name:"raylib_Vector3Normalize"),
+    Vector3OrthoNormalize : getExternalFunction(name:"raylib_Vector3OrthoNormalize"),
+    Vector3Transform : getExternalFunction(name:"raylib_Vector3Transform"),
+    Vector3RotateByQuaternion : getExternalFunction(name:"raylib_Vector3RotateByQuaternion"),
+    Vector3RotateByAxisAngle : getExternalFunction(name:"raylib_Vector3RotateByAxisAngle"),
+    Vector3Lerp : getExternalFunction(name:"raylib_Vector3Lerp"),
+    Vector3Reflect : getExternalFunction(name:"raylib_Vector3Reflect"),
+    Vector3Min : getExternalFunction(name:"raylib_Vector3Min"),
+    Vector3Max : getExternalFunction(name:"raylib_Vector3Max"),
+    Vector3Barycenter : getExternalFunction(name:"raylib_Vector3Barycenter"),
+    Vector3Unproject : getExternalFunction(name:"raylib_Vector3Unproject"),
+    Vector3ToFloatV : getExternalFunction(name:"raylib_Vector3ToFloatV"),
+    Vector3Invert : getExternalFunction(name:"raylib_Vector3Invert"),
+    Vector3Clamp : getExternalFunction(name:"raylib_Vector3Clamp"),
+    Vector3ClampValue : getExternalFunction(name:"raylib_Vector3ClampValue"),
+    Vector3Equals : getExternalFunction(name:"raylib_Vector3Equals"),
+    Vector3Refract : getExternalFunction(name:"raylib_Vector3Refract"),
+
+
+    MatrixDeterminant : getExternalFunction(name:"raylib_MatrixDeterminant"),
+    MatrixTrace : getExternalFunction(name:"raylib_MatrixTrace"),
+    MatrixTranspose : getExternalFunction(name:"raylib_MatrixTranspose"),
+    MatrixInvert : getExternalFunction(name:"raylib_MatrixInvert"),
+    MatrixIdentity : getExternalFunction(name:"raylib_MatrixIdentity"),
+    MatrixAdd : getExternalFunction(name:"raylib_MatrixAdd"),
+    MatrixSubtract : getExternalFunction(name:"raylib_MatrixSubtract"),
+    MatrixMultiply : getExternalFunction(name:"raylib_MatrixMultiply"),
+    MatrixTranslate : getExternalFunction(name:"raylib_MatrixTranslate"),
+    MatrixRotate : getExternalFunction(name:"raylib_MatrixRotate"),
+    MatrixRotateX : getExternalFunction(name:"raylib_MatrixRotateX"),
+    MatrixRotateY : getExternalFunction(name:"raylib_MatrixRotateY"),
+    MatrixRotateZ : getExternalFunction(name:"raylib_MatrixRotateZ"),
+    MatrixRotateXYZ : getExternalFunction(name:"raylib_MatrixRotateXYZ"),
+    MatrixRotateZYX : getExternalFunction(name:"raylib_MatrixRotateZYX"),
+    MatrixScale : getExternalFunction(name:"raylib_MatrixScale"),
+    MatrixFrustum : getExternalFunction(name:"raylib_MatrixFrustum"),
+    MatrixPerspective : getExternalFunction(name:"raylib_MatrixPerspective"),
+    MatrixOrtho : getExternalFunction(name:"raylib_MatrixOrtho"),
+    MatrixLookAt : getExternalFunction(name:"raylib_MatrixLookAt"),
+    MatrixToFloatV : getExternalFunction(name:"raylib_MatrixToFloatV"),
+
+
+    QuaternionAdd : getExternalFunction(name:"raylib_QuaternionAdd"),
+    QuaternionAddValue : getExternalFunction(name:"raylib_QuaternionAddValue"),
+    QuaternionSubtract : getExternalFunction(name:"raylib_QuaternionSubtract"),
+    QuaternionSubtractValue : getExternalFunction(name:"raylib_QuaternionSubtractValue"),
+    QuaternionIdentity : getExternalFunction(name:"raylib_QuaternionIdentity"),
+    QuaternionLength : getExternalFunction(name:"raylib_QuaternionLength"),
+    QuaternionNormalize : getExternalFunction(name:"raylib_QuaternionNormalize"),
+    QuaternionInvert : getExternalFunction(name:"raylib_QuaternionInvert"),
+    QuaternionMultiply : getExternalFunction(name:"raylib_QuaternionMultiply"),
+    QuaternionScale : getExternalFunction(name:"raylib_QuaternionScale"),
+    QuaternionDivide : getExternalFunction(name:"raylib_QuaternionDivide"),
+    QuaternionLerp : getExternalFunction(name:"raylib_QuaternionLerp"),
+    QuaternionNlerp : getExternalFunction(name:"raylib_QuaternionNlerp"),
+    QuaternionSlerp : getExternalFunction(name:"raylib_QuaternionSlerp"),
+    QuaternionFromVector3ToVector3 : getExternalFunction(name:"raylib_QuaternionFromVector3ToVector3"),
+    QuaternionFromMatrix : getExternalFunction(name:"raylib_QuaternionFromMatrix"),
+    QuaternionToMatrix : getExternalFunction(name:"raylib_QuaternionToMatrix"),
+    QuaternionFromAxisAngle : getExternalFunction(name:"raylib_QuaternionFromAxisAngle"),
+    QuaternionToAxisAngle : getExternalFunction(name:"raylib_QuaternionToAxisAngle"),
+    QuaternionFromEuler : getExternalFunction(name:"raylib_QuaternionFromEuler"),
+    QuaternionToEuler : getExternalFunction(name:"raylib_QuaternionToEuler"),
+    QuaternionTransform : getExternalFunction(name:"raylib_QuaternionTransform"),
+    QuaternionEquals : getExternalFunction(name:"raylib_QuaternionEquals") 
+
+    
 };  
 
 

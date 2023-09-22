@@ -1,10 +1,11 @@
 # Raylib-Matte (raymatte)
-Raylib bindings for Matte with some extra goodies.
+raylib bindings for Matte with some extra goodies and an emphasis 
+on reducing potential undefined behavior.
 
 
 **STILL A WORK IN PROGRESS.**
 
-*Progress: 20%*
+*Progress: 60%*
 
 
 ## Differences vs. the C API
@@ -12,8 +13,8 @@ Raylib bindings for Matte with some extra goodies.
 A number of strict changes exist between the original C/C++ API 
 and the Matte bindings. Many of the changes are to leverage
 the higher-level nature of the environment, such as replacing 
-C-string inputs with Matte strings, "pointer + length" input 
-sets with Matte arrays, "byte pointer + length" with 
+C-string inputs with Matte strings, replacing "pointer + length" input 
+sets with Matte arrays, replacing "byte pointer + length" with 
 Matte MemoryBuffer objects, and avoiding use of direct pointers.
 
 These changes are listed here:
@@ -37,17 +38,18 @@ These changes are listed here:
           `MemAlloc` (Not needed. Can just use MemoryBuffer)
           `MemRealloc` (Not needed. Can just use MemoryBuffer)
           `MemFree` (Not needed. Can just use MemoryBuffer)
-          `SetTraceLogCallback` (Used by the raylib-matte)
-          `SetLoadFileDataCallback` (Used by the raylib-matte, unavailable)
-          `SetSaveFileDataCallback` (Used by the raylib-matte, unavailable)
-          `SetLoadTextDataCallback` (Used by the raylib-matte, unavailable)
-          `SetSaveTextDataCallback` (Used by the raylib-matte, unavailable)
+          `SetTraceLogCallback` (Used by the raylib-matte implementation)
+          `SetLoadFileDataCallback` (Used by the raylib-matte implementation, unavailable)
+          `SetSaveFileDataCallback` (Used by the raylib-matte implementation, unavailable)
+          `SetLoadTextDataCallback` (Used by the raylib-matte implementation, unavailable)
+          `SetSaveTextDataCallback` (Used by the raylib-matte implementation, unavailable)
           `UnloadFileData` (Not needed. MemoryBuffer can either be freed manually or will auto-free on GC)
-          `UnloadTextData` (Not needed. MemoryBuffer can either be freed manually or will auto-free on GC)
-          `UnloadDirectoryFiles` (Not needed)
-          `UnloadDroppedFiles` (Not needed)
-          `UnloadImageColors` (Not needed)
-          `UnloadImagePalette` (Not needed)
+          `UnloadTextData` (Not needed.)
+          `UnloadDirectoryFiles` (Not needed.)
+          `UnloadDroppedFiles` (Not needed.)
+          `UnloadImageColors` (Not needed.)
+          `UnloadImagePalette` (Not needed.)
+          All `Text*`, `UTF8`, and `Codepoint` functions (Not needed. Can be handled at the Matte level with the Matte string type, functions, and querries)
         
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
@@ -124,9 +126,9 @@ These changes are listed here:
 - Functions that return byte arrays and require byte arrays 
   as arguments are represented as MemoryBuffer objects 
   (import(module:"Matte.Core.MemoryBuffer")). Inputs will always 
-  by called "bytes"
+  be called "bytes"
   
-- Matrix is implemented as an array of Numbers in Matte in OpenGL 
+- Matrix is represented as an array of Numbers in Matte in OpenGL 
   (column-major) order.
   
 - TraceLog only takes logLevel and text, since built-in string 
@@ -147,6 +149,22 @@ These changes are listed here:
   
 - LoadImageAnim will return an image object with an extra public member called "frames",
   which contains the output frame count
+  
+- UpdateTexture and UpdateTextureRec do not take a raw buffer of pixels to 
+  update the texture, instead they take an image. They behave as follows:
+    UpdateTexture(
+        Texture2D texture,
+        Image image
+    )
+
+    UpdateTextureRec(
+        Texture2D texture,
+        Vector2 position, // the top-left to place the Image
+        Image image
+    )
+- GetPixelColor and SetPixelColor use a MemoryBuffer object to 
+  facilitate byte access.
+   
   
 ## Additional Notes
 

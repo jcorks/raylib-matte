@@ -137,6 +137,24 @@ matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 v3) {
     return v;
 }   
 
+matteValue_t native_to_value_vector4(matteVM_t * vm, Vector4 v4) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    matteValue_t x = native_to_value_float(vm, v4.x);
+    matteValue_t y = native_to_value_float(vm, v4.y);
+    matteValue_t z = native_to_value_float(vm, v4.z);
+    matteValue_t w = native_to_value_float(vm, v4.w);
+
+
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"), x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "z"), z);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "w"), w);
+
+    return v;
+}   
 
 matteValue_t native_to_value_color(matteVM_t * vm, Color c) {
     matteStore_t * store = matte_vm_get_store(vm);    
@@ -586,6 +604,26 @@ Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t cam) {
 }  
 
 
+NPatchInfo native_from_value_nPatchInfo(matteVM_t * vm, matteValue_t n) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (n.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode NPatchInfo: value is not an NPatchInfo.");
+        NPatchInfo errOut = {};
+        return errOut;
+    }
+
+
+    NPatchInfo v = {};
+    v.source  = native_from_value_rectangle(vm, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "source")));
+    v.left    = matte_value_as_number(store, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "left")));
+    v.top     = matte_value_as_number(store, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "top")));
+    v.right   = matte_value_as_number(store, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "right")));
+    v.bottom  = matte_value_as_number(store, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "bottom")));
+    v.layout  = matte_value_as_number(store, matte_value_object_access_string(store, cam, MATTE_VM_STR_CAST(vm, "layout")));
+    return v;
+}  
+
 
 
 
@@ -626,6 +664,25 @@ Texture native_from_value_texture(matteVM_t * vm, matteValue_t img) {
     }
 
     return *((Texture*)object->data);
+}   
+
+Texture native_from_value_texture_ref(matteVM_t * vm, matteValue_t img) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (img.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Texture/Texture2D: value is not an Object.");
+        Texture imgOut = {};
+        return imgOut;
+    }
+    
+    NativeEncodeData_t * object = matte_value_object_get_userdata(store, img);
+    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE) {
+        matte_vm_raise_error_cstring(vm, "Could not decode Texture/Texture2D: value is not an Texture/Texture2D.");
+        Texture imgOut = {};
+        return imgOut;
+    }
+
+    return object->data;
 }   
 
 

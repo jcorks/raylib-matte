@@ -3694,6 +3694,774 @@ RAYLIB_FN__END
 
 
 
+
+
+
+
+
+RAYLIB_FN__ARG2(raylib_ImageClearBackground,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageClearBackground(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG4(raylib_ImageDrawPixel,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawPixel(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ImageDrawPixelV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawPixelV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_vector2(vm, args[1])
+        native_from_value_color(vm, args[2])
+    );    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_ImageDrawLine,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawLine(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_ImageDrawLineV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawLineV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_ImageDrawCircle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawCircle(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_ImageDrawCircleV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawCircleV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_ImageDrawCircleLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawCircleLines(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_ImageDrawCircleLinesV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawCircleLinesV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_ImageDrawRectangle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawRectangle(
+        native_from_value_image_ref(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_ImageDrawRectangleV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawRectangleV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ImageDrawRectangleRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawRectangleV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_rectangle(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_ImageDrawRectangleLines,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawRectangleV(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_rectangle(vm, args[1]),
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raylib_ImageDraw,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDraw(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_image(vm, args[1]),
+        native_from_value_rectangle(vm, args[2]),
+        native_from_value_rectangle(vm, args[3]),
+        native_from_value_color(vm, args[4])
+    );    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_ImageDrawText,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawText(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_string_unsafe(vm, args[1]), // ok!
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG7(raylib_ImageDrawTextEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    ImageDrawTextEx(
+        native_from_value_image_ref(vm, args[0]),
+        native_from_value_font(vm, args[1]),
+        native_from_value_string_unsafe(vm, args[2]), // ok!
+        native_from_value_vector2(vm, args[3]),
+        args[4].value.number,
+        args[5].value.number,
+        native_from_value_color(vm, args[6])
+    );    
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG1(raylib_LoadTexture,
+    MATTE_VALUE_TYPE_STRING
+)
+
+    return native_to_value_texture(
+        vm,
+        LoadTexture(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_LoadTextureFromImage,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    return native_to_value_texture(
+        vm,
+        LoadTextureFromImage(
+            native_from_value_image(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_LoadTextureCubemap,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    return native_to_value_texture(
+        vm,
+        LoadTextureCubemap(
+            native_from_value_image(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_LoadRenderTexture,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    return native_to_value_texture(
+        vm,
+        LoadRenderTexture(
+            args[0].value.number,
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_IsTextureReady,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    return native_to_value_boolean(
+        vm,
+        IsTextureReady(
+            native_from_value_image(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_UnloadTexture,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Image img = native_from_value_image(vm, args[0]);
+    UnloadTexture(
+        img
+    );
+    native_unload(img, args[0]);
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_IsRenderTextureReady,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    return native_to_value_boolean(
+        vm,
+        IsRenderTextureReady(
+            native_from_value_image(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_UnloadRenderTexture,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Image img = native_from_value_image(vm, args[0]);
+    UnloadRenderTexture(
+        img
+    );
+    native_unload(img, args[0]);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_UpdateTexture,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Texture tex = native_from_value_texture(vm, args[0]),
+    Image img = native_from_value_image(vm args[1]),
+    
+    img = ImageCopy(img);
+    ImageFormat(&img, tex.format);
+    
+    UpdateTexture(tex, img.data);
+   
+    UnloadImage(img);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG3(raylib_UpdateTextureRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Texture tex = native_from_value_texture(vm, args[0]);
+    Vector2 pos = native_from_value_vector2(vm, args[1]);
+    Image img = native_from_value_image(vm args[2]);
+    
+    img = ImageCopy(img);
+    Rectangle rec;
+    rec.x = pos.x;
+    rec.y = pos.y;
+    rec.width = img.width;
+    rec.height = img.height;
+    ImageFormat(&img, tex.format);
+    
+    UpdateTextureRec(tex, rec, img.data);
+   
+    UnloadImage(img);
+RAYLIB_FN__END
+
+
+
+
+
+RAYLIB_FN__ARG1(raylib_GenTextureMipmaps,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    GenTextureMipmaps(
+        native_from_value_texture_ref(vm, args[0])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_SetTextureFilter,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetTextureFilter(
+        native_from_value_texture(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_SetTextureWrap,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetTextureWrap(
+        native_from_value_texture(vm, args[0]),
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+RAYLIB_FN__ARG4(raylib_DrawTexture,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTexture(
+        native_from_value_texture(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawTextureV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextureV(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_DrawTextureEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextureEx(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_vector2(vm, args[1]),
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_DrawTextureRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextureRec(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_rectangle(vm, args[1]),
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_DrawTexturePro,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTexturePro(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_rectangle(vm, args[1]),
+        native_from_value_rectangle(vm, args[2]),
+        native_from_value_vector2(vm, args[3]),
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_DrawTextureNPatch,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextureNPatch(
+        native_from_value_texture(vm, args[0]),
+        native_from_value_nPatchInfo(vm, args[1]),
+        native_from_value_rectangle(vm, args[2]),
+        native_from_value_vector2(vm, args[3]),
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+RAYLIB_FN__ARG2(raylib_Fade,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        Fade(
+            native_from_value_color(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ColorToInt,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_int(
+        vm,
+        ColorToInt(
+            native_from_value_color(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ColorNormalize,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        ColorNormalize(
+            native_from_value_color(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ColorFromNormalized,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_color(
+        vm,
+        ColorFromNormalized(
+            native_from_value_vector4(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ColorToHSV,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        ColorToHSV(
+            native_from_value_color(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG3(raylib_ColorFromHSV,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        ColorFromHSV(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ColorTint,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_color(
+        vm,
+        ColorTint(
+            native_from_value_color(vm, args[0]),
+            native_from_value_color(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ColorBrightness,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        ColorBrightness(
+            native_from_value_color(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ColorContrast,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        ColorContrast(
+            native_from_value_color(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_ColorAlpha,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_color(
+        vm,
+        ColorAlpha(
+            native_from_value_color(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_ColorAlphaBlend,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_color(
+        vm,
+        ColorAlphaBlend(
+            native_from_value_color(vm, args[0]),
+            native_from_value_color(vm, args[1]),
+            native_from_value_color(vm, args[2])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_GetColor,
+    MATTE_VALUE_TYPE_NUMBER,
+)
+    return native_to_value_color(
+        vm,
+        GetColor(
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetPixelColor,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    uint32_t size = 0;
+    const uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+    
+    if (size < GetPixelDataSize(1, 1, args[1].value.number)) {
+        matte_vm_raise_error_cstring(vm, "GetPixelColor: received buffer of insufficient size.");
+        goto L_END;
+    }
+
+    return native_to_value_color(
+        vm,
+        GetPixelColor(
+            data       
+            args[1].value.number
+        )
+    );
+  L_END:
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG3(raylib_SetPixelColor,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    uint32_t size = 0;
+    uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+    
+    if (size < GetPixelDataSize(1, 1, args[1].value.number)) {
+        matte_vm_raise_error_cstring(vm, "SetPixelColor: received buffer of insufficient size.");
+        goto L_END;
+    }
+
+    SetPixelColor(
+        data,
+        native_from_value_color(vm, args[1]),        
+        args[2].value.number
+    );
+  L_END:
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_GetPixelDataSize,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_int(
+        vm,
+        GetPixelDataSize(
+            args[0].value.number,
+            args[0].value.number,
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -4035,6 +4803,387 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_LoadImagePalette", raylib_LoadImagePalette, NULL, "image", "maxPaletteSize", NULL);
     matte_add_external_function(m, "raylib_GetImageAlphaBorder", raylib_GetImageAlphaBorder, NULL, "image", "threshold", NULL);
     matte_add_external_function(m, "raylib_GetImageColor", raylib_GetImageColor, NULL, "image", "x", "y", NULL);
+
+    matte_add_external_function(m, "raylib_ImageClearBackground", raylib_ImageClearBackground, NULL, "dst", "color",  NULL);                                                
+    matte_add_external_function(m, "raylib_ImageDrawPixel", raylib_ImageDrawPixel, NULL, "dst", "posX",  "posY", "color", NULL);                                  
+    matte_add_external_function(m, "raylib_ImageDrawPixelV", raylib_ImageDrawPixelV, NULL, "dst", "position",  "color", NULL);                                   
+    matte_add_external_function(m, "raylib_ImageDrawLine", raylib_ImageDrawLine, NULL, "dst", "startPosX", "startPosY", "endPosX", "endPosY", "color", NULL); 
+    matte_add_external_function(m, "raylib_ImageDrawLineV", raylib_ImageDrawLineV, NULL, "dst", "start",  "end", "color", NULL);                          
+    matte_add_external_function(m, "raylib_ImageDrawCircle", raylib_ImageDrawCircle, NULL, "dst", "centerX",  "centerY", "radius", "color",  NULL);               
+    matte_add_external_function(m, "raylib_ImageDrawCircleV", raylib_ImageDrawCircleV, NULL, "dst", "center",  "radius", "color", NULL);                        
+    matte_add_external_function(m, "raylib_ImageDrawCircleLines", raylib_ImageDrawCircleLines, NULL, "dst", "centerX",  "centerY", "radius", "color",  NULL);          
+    matte_add_external_function(m, "raylib_ImageDrawCircleLinesV", raylib_ImageDrawCircleLinesV, NULL, "dst", "center",  "radius", "color", NULL);                   
+    matte_add_external_function(m, "raylib_ImageDrawRectangle", raylib_ImageDrawRectangle, NULL, "dst", "posX", "posY", "width", "height", "color", NULL);       
+    matte_add_external_function(m, "raylib_ImageDrawRectangleV", raylib_ImageDrawRectangleV, NULL, "dst", "position",  "size", "color", NULL);                 
+    matte_add_external_function(m, "raylib_ImageDrawRectangleRec", raylib_ImageDrawRectangleRec, NULL, "dst", "rec",  "color", NULL);                                
+    matte_add_external_function(m, "raylib_ImageDrawRectangleLines", raylib_ImageDrawRectangleLines, NULL, "dst", "rec",  "thick", "color", NULL);                   
+    matte_add_external_function(m, "raylib_ImageDraw", raylib_ImageDraw, NULL, "dst", "src",  "srcRec", "dstRec", "tint",  NULL);             
+    matte_add_external_function(m, "raylib_ImageDrawText", raylib_ImageDrawText, NULL, "dst", "text", "posX", "posY", "fontSize", "color", NULL);   
+    matte_add_external_function(m, "raylib_ImageDrawTextEx", raylib_ImageDrawTextEx, NULL, "dst", "font", "text", "position", "fontSize", "spacing", "tint", NULL); 
+
+
+
+    matte_add_external_function(m, "raylib_LoadTexture", raylib_LoadTexture, NULL, "fileName",  NULL);                                                       
+    matte_add_external_function(m, "raylib_LoadTextureFromImage", raylib_LoadTextureFromImage, NULL, "image", NULL);                                                       
+    matte_add_external_function(m, "raylib_LoadTextureCubemap", raylib_LoadTextureCubemap, NULL, "image", "layout",  NULL);                                        
+    matte_add_external_function(m, "raylib_LoadRenderTexture", raylib_LoadRenderTexture, NULL, "width", "height",  NULL);                                          
+    matte_add_external_function(m, "raylib_IsTextureReady", raylib_IsTextureReady, NULL, "texture", NULL);                                                            
+    matte_add_external_function(m, "raylib_UnloadTexture", raylib_UnloadTexture, NULL, "texture", NULL);                                                             
+    matte_add_external_function(m, "raylib_IsRenderTextureReady", raylib_IsRenderTextureReady, NULL, "target", NULL);                                                       
+    matte_add_external_function(m, "raylib_UnloadRenderTexture", raylib_UnloadRenderTexture, NULL, "target", NULL);                                                  
+    matte_add_external_function(m, "raylib_UpdateTexture", raylib_UpdateTexture, NULL, "texture", "pixels", NULL);                                         
+    matte_add_external_function(m, "raylib_UpdateTextureRec", raylib_UpdateTextureRec, NULL, "texture", "rec", "pixels", NULL);                       
+
+
+    matte_add_external_function(m, "raylib_GenTextureMipmaps", raylib_GenTextureMipmaps, NULL, "texture",  NULL);                                                        
+    matte_add_external_function(m, "raylib_SetTextureFilter", raylib_SetTextureFilter, NULL, "texture", "filter",  NULL);                                              
+    matte_add_external_function(m, "raylib_SetTextureWrap", raylib_SetTextureWrap, NULL, "texture", "wrap",  NULL);                                                  
+
+
+    matte_add_external_function(m, "raylib_DrawTexture", raylib_DrawTexture, NULL, "texture", "posX",  "posY", "tint", NULL);                               
+    matte_add_external_function(m, "raylib_DrawTextureV", raylib_DrawTextureV, NULL, "texture", "position",  "tint", NULL);                                
+    matte_add_external_function(m, "raylib_DrawTextureEx", raylib_DrawTextureEx, NULL, "texture", "position",  "rotation", "scale", "tint",  NULL);  
+    matte_add_external_function(m, "raylib_DrawTextureRec", raylib_DrawTextureRec, NULL, "texture", "source",  "position", "tint", NULL);            
+    matte_add_external_function(m, "raylib_DrawTexturePro", raylib_DrawTexturePro, NULL, "texture", "source", "dest", "origin", "rotation", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawTextureNPatch", raylib_DrawTextureNPatch, NULL, "texture", "nPatchInfo", "dest", "origin", "rotation", "tint", NULL); 
+
+
+    matte_add_external_function(m, "raylib_Fade", raylib_Fade, NULL, "color", "alpha",  NULL);                                 
+    matte_add_external_function(m, "raylib_ColorToInt", raylib_ColorToInt, NULL, "color", NULL);                                          
+    matte_add_external_function(m, "raylib_ColorNormalize", raylib_ColorNormalize, NULL, "color", NULL);                                  
+    matte_add_external_function(m, "raylib_ColorFromNormalized", raylib_ColorFromNormalized, NULL, "normalized", NULL);                        
+    matte_add_external_function(m, "raylib_ColorToHSV", raylib_ColorToHSV, NULL, "color", NULL);                                      
+    matte_add_external_function(m, "raylib_ColorFromHSV", raylib_ColorFromHSV, NULL, "hue", "saturation",  "value", NULL);         
+    matte_add_external_function(m, "raylib_ColorTint", raylib_ColorTint, NULL, "color", "tint",  NULL);                             
+    matte_add_external_function(m, "raylib_ColorBrightness", raylib_ColorBrightness, NULL, "color", "factor",  NULL);                     
+    matte_add_external_function(m, "raylib_ColorContrast", raylib_ColorContrast, NULL, "color", "contrast",  NULL);                     
+    matte_add_external_function(m, "raylib_ColorAlpha", raylib_ColorAlpha, NULL, "color", "alpha",  NULL);                           
+    matte_add_external_function(m, "raylib_ColorAlphaBlend", raylib_ColorAlphaBlend, NULL, "dst", "src",  "tint", NULL);              
+    matte_add_external_function(m, "raylib_GetColor", raylib_GetColor, NULL, "hexValue", NULL);                                
+    matte_add_external_function(m, "raylib_GetPixelColor", raylib_GetPixelColor, NULL, "srcPtr", "format",  NULL);                        
+    matte_add_external_function(m, "raylib_SetPixelColor", raylib_SetPixelColor, NULL, "dstPtr", "color",  "format", NULL);            
+    matte_add_external_function(m, "raylib_GetPixelDataSize", raylib_GetPixelDataSize, NULL, "width", "height",  "format", NULL);              
+
+
+    matte_add_external_function(m, "raylib_GetFontDefault", raylib_GetFontDefault, NULL, NULL);                                                            
+    matte_add_external_function(m, "raylib_LoadFont", raylib_LoadFont, NULL, "fileName",  NULL);                                                  
+    matte_add_external_function(m, "raylib_LoadFontEx", raylib_LoadFontEx, NULL, "fileName", "fontSize", "fontChars", "glyphCount", NULL);  
+    matte_add_external_function(m, "raylib_LoadFontFromImage", raylib_LoadFontFromImage, NULL, "image", "key",  "firstChar", NULL);                        
+    matte_add_external_function(m, "raylib_LoadFontFromMemory", raylib_LoadFontFromMemory, NULL, "fileType", "fileData", "dataSize", "fontSize", "fontChars", "glyphCount", NULL); 
+    matte_add_external_function(m, "raylib_IsFontReady", raylib_IsFontReady, NULL, "font", NULL);                                                          
+    matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "fileData", "dataSize", "fontSize", "fontChars", "glyphCount", "type", NULL); 
+    matte_add_external_function(m, "raylib_GenImageFontAtlas", raylib_GenImageFontAtlas, NULL, "chars", "recs", "glyphCount", "fontSize", "padding", "packMethod", NULL); 
+    matte_add_external_function(m, "raylib_UnloadFontData", raylib_UnloadFontData, NULL, "chars", "glyphCount",  NULL);                                
+    matte_add_external_function(m, "raylib_UnloadFont", raylib_UnloadFont, NULL, "font", NULL);                                                           
+    matte_add_external_function(m, "raylib_ExportFontAsCode", raylib_ExportFontAsCode, NULL, "font", "fileName", NULL);                               
+
+
+    matte_add_external_function(m, "raylib_DrawFPS", raylib_DrawFPS, NULL, "posX", "posY",  NULL);                                                     
+    matte_add_external_function(m, "raylib_DrawText", raylib_DrawText, NULL, "text", "posX", "posY", "fontSize", "color", NULL);       
+    matte_add_external_function(m, "raylib_DrawTextEx", raylib_DrawTextEx, NULL, "font", "text", "position", "fontSize", "spacing", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawTextPro", raylib_DrawTextPro, NULL, "font", "text", "position", "origin", "rotation", "fontSize", "spacing", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawTextCodepoint", raylib_DrawTextCodepoint, NULL, "font", "codepoint",  "position", "fontSize", "tint",  NULL); 
+    matte_add_external_function(m, "raylib_DrawTextCodepoints", raylib_DrawTextCodepoints, NULL, "font", "codepoints", "count", "position", "fontSize", "spacing", "tint", NULL); 
+
+
+    matte_add_external_function(m, "raylib_MeasureText", raylib_MeasureText, NULL, "text", "fontSize", NULL);                                      
+    matte_add_external_function(m, "raylib_MeasureTextEx", raylib_MeasureTextEx, NULL, "font", "text", "fontSize", "spacing", NULL);    
+    matte_add_external_function(m, "raylib_GetGlyphIndex", raylib_GetGlyphIndex, NULL, "font", "codepoint",  NULL);                                          
+    matte_add_external_function(m, "raylib_GetGlyphInfo", raylib_GetGlyphInfo, NULL, "font", "codepoint",  NULL);                                     
+    matte_add_external_function(m, "raylib_GetGlyphAtlasRec", raylib_GetGlyphAtlasRec, NULL, "font", "codepoint",  NULL);                                 
+
+
+
+
+
+    matte_add_external_function(m, "raylib_DrawLine3D", raylib_DrawLine3D, NULL, "startPos", "endPos",  "color", NULL);                                    
+    matte_add_external_function(m, "raylib_DrawPoint3D", raylib_DrawPoint3D, NULL, "position", "color",  NULL);                                                   
+    matte_add_external_function(m, "raylib_DrawCircle3D", raylib_DrawCircle3D, NULL, "center", "radius",  "rotationAxis", "rotationAngle", "color",  NULL); 
+    matte_add_external_function(m, "raylib_DrawTriangle3D", raylib_DrawTriangle3D, NULL, "v1", "v2",  "v3", "color", NULL);                              
+    matte_add_external_function(m, "raylib_DrawTriangleStrip3D", raylib_DrawTriangleStrip3D, NULL, "points", "pointCount",  "color", NULL);                            
+    matte_add_external_function(m, "raylib_DrawCube", raylib_DrawCube, NULL, "position", "width",  "height", "length", "color",  NULL);             
+    matte_add_external_function(m, "raylib_DrawCubeV", raylib_DrawCubeV, NULL, "position", "size",  "color", NULL);                                       
+    matte_add_external_function(m, "raylib_DrawCubeWires", raylib_DrawCubeWires, NULL, "position", "width",  "height", "length", "color",  NULL);        
+    matte_add_external_function(m, "raylib_DrawCubeWiresV", raylib_DrawCubeWiresV, NULL, "position", "size",  "color", NULL);                                  
+    matte_add_external_function(m, "raylib_DrawSphere", raylib_DrawSphere, NULL, "centerPos", "radius",  "color", NULL);                                     
+    matte_add_external_function(m, "raylib_DrawSphereEx", raylib_DrawSphereEx, NULL, "centerPos", "radius",  "rings", "slices", "color",  NULL);            
+    matte_add_external_function(m, "raylib_DrawSphereWires", raylib_DrawSphereWires, NULL, "centerPos", "radius",  "rings", "slices", "color",  NULL);         
+    matte_add_external_function(m, "raylib_DrawCylinder", raylib_DrawCylinder, NULL, "position", "radiusTop", "radiusBottom", "height", "slices", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawCylinderEx", raylib_DrawCylinderEx, NULL, "startPos", "endPos", "startRadius", "endRadius", "sides", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawCylinderWires", raylib_DrawCylinderWires, NULL, "position", "radiusTop", "radiusBottom", "height", "slices", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawCylinderWiresEx", raylib_DrawCylinderWiresEx, NULL, "startPos", "endPos", "startRadius", "endRadius", "sides", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawCapsule", raylib_DrawCapsule, NULL, "startPos", "endPos", "radius", "slices", "rings", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawCapsuleWires", raylib_DrawCapsuleWires, NULL, "startPos", "endPos", "radius", "slices", "rings", "color", NULL); 
+    matte_add_external_function(m, "raylib_DrawPlane", raylib_DrawPlane, NULL, "centerPos", "size",  "color", NULL);                                      
+    matte_add_external_function(m, "raylib_DrawRay", raylib_DrawRay, NULL, "ray", "color",  NULL);                                                                
+    matte_add_external_function(m, "raylib_DrawGrid", raylib_DrawGrid, NULL, "slices", "spacing",  NULL);                                                          
+
+
+
+
+
+
+    matte_add_external_function(m, "raylib_LoadModel", raylib_LoadModel, NULL, "fileName",  NULL);                                                
+    matte_add_external_function(m, "raylib_LoadModelFromMesh", raylib_LoadModelFromMesh, NULL, "mesh", NULL);                                                   
+    matte_add_external_function(m, "raylib_IsModelReady", raylib_IsModelReady, NULL, "model", NULL);                                                       
+    matte_add_external_function(m, "raylib_UnloadModel", raylib_UnloadModel, NULL, "model", NULL);                                                        
+    matte_add_external_function(m, "raylib_GetModelBoundingBox", raylib_GetModelBoundingBox, NULL, "model", NULL);                                         
+
+
+    matte_add_external_function(m, "raylib_DrawModel", raylib_DrawModel, NULL, "model", "position",  "scale", "tint", NULL);               
+    matte_add_external_function(m, "raylib_DrawModelEx", raylib_DrawModelEx, NULL, "model", "position", "rotationAxis", "rotationAngle", "scale", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawModelWires", raylib_DrawModelWires, NULL, "model", "position",  "scale", "tint", NULL);          
+    matte_add_external_function(m, "raylib_DrawModelWiresEx", raylib_DrawModelWiresEx, NULL, "model", "position", "rotationAxis", "rotationAngle", "scale", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawBoundingBox", raylib_DrawBoundingBox, NULL, "box", "color",  NULL);                                   
+    matte_add_external_function(m, "raylib_DrawBillboard", raylib_DrawBillboard, NULL, "camera", "texture",  "position", "size", "tint",  NULL);   
+    matte_add_external_function(m, "raylib_DrawBillboardRec", raylib_DrawBillboardRec, NULL, "camera", "texture", "source", "position", "size", "tint", NULL); 
+    matte_add_external_function(m, "raylib_DrawBillboardPro", raylib_DrawBillboardPro, NULL, "camera", "texture", "source", "position", "up", "size", "origin", "rotation", "tint", NULL); 
+
+
+    matte_add_external_function(m, "raylib_UploadMesh", raylib_UploadMesh, NULL, "mesh", "dynamic",  NULL);                                            
+    matte_add_external_function(m, "raylib_UpdateMeshBuffer", raylib_UpdateMeshBuffer, NULL, "mesh", "index", "data", "dataSize", "offset", NULL); 
+    matte_add_external_function(m, "raylib_UnloadMesh", raylib_UnloadMesh, NULL, "mesh", NULL);                                                           
+    matte_add_external_function(m, "raylib_DrawMesh", raylib_DrawMesh, NULL, "mesh", "material",  "transform", NULL);                        
+    matte_add_external_function(m, "raylib_DrawMeshInstanced", raylib_DrawMeshInstanced, NULL, "mesh", "material", "transforms", "instances", NULL); 
+    matte_add_external_function(m, "raylib_ExportMesh", raylib_ExportMesh, NULL, "mesh", "fileName", NULL);                                     
+    matte_add_external_function(m, "raylib_GetMeshBoundingBox", raylib_GetMeshBoundingBox, NULL, "mesh", NULL);                                            
+    matte_add_external_function(m, "raylib_GenMeshTangents", raylib_GenMeshTangents, NULL, "mesh",  NULL);                                                     
+
+
+    matte_add_external_function(m, "raylib_GenMeshPoly", raylib_GenMeshPoly, NULL, "sides", "radius",  NULL);                                            
+    matte_add_external_function(m, "raylib_GenMeshPlane", raylib_GenMeshPlane, NULL, "width", "length",  "resX", "resZ", NULL);                     
+    matte_add_external_function(m, "raylib_GenMeshCube", raylib_GenMeshCube, NULL, "width", "height",  "length", NULL);                            
+    matte_add_external_function(m, "raylib_GenMeshSphere", raylib_GenMeshSphere, NULL, "radius", "rings",  "slices", NULL);                              
+    matte_add_external_function(m, "raylib_GenMeshHemiSphere", raylib_GenMeshHemiSphere, NULL, "radius", "rings",  "slices", NULL);                          
+    matte_add_external_function(m, "raylib_GenMeshCylinder", raylib_GenMeshCylinder, NULL, "radius", "height",  "slices", NULL);                         
+    matte_add_external_function(m, "raylib_GenMeshCone", raylib_GenMeshCone, NULL, "radius", "height",  "slices", NULL);                             
+    matte_add_external_function(m, "raylib_GenMeshTorus", raylib_GenMeshTorus, NULL, "radius", "size",  "radSeg", "sides", NULL);                   
+    matte_add_external_function(m, "raylib_GenMeshKnot", raylib_GenMeshKnot, NULL, "radius", "size",  "radSeg", "sides", NULL);                    
+    matte_add_external_function(m, "raylib_GenMeshHeightmap", raylib_GenMeshHeightmap, NULL, "heightmap", "size",  NULL);                                 
+    matte_add_external_function(m, "raylib_GenMeshCubicmap", raylib_GenMeshCubicmap, NULL, "cubicmap", "cubeSize",  NULL);                               
+
+
+    matte_add_external_function(m, "raylib_LoadMaterials", raylib_LoadMaterials, NULL, "fileName", "materialCount", NULL);                    
+    matte_add_external_function(m, "raylib_LoadMaterialDefault", raylib_LoadMaterialDefault, NULL, NULL);                                                   
+    matte_add_external_function(m, "raylib_IsMaterialReady", raylib_IsMaterialReady, NULL, "material", NULL);                                              
+    matte_add_external_function(m, "raylib_UnloadMaterial", raylib_UnloadMaterial, NULL, "material", NULL);                                               
+    matte_add_external_function(m, "raylib_SetMaterialTexture", raylib_SetMaterialTexture, NULL, "material", "mapType",  "texture", NULL);          
+    matte_add_external_function(m, "raylib_SetModelMeshMaterial", raylib_SetModelMeshMaterial, NULL, "model", "meshId",  "materialId", NULL);                  
+
+
+    matte_add_external_function(m, "raylib_LoadModelAnimations", raylib_LoadModelAnimations, NULL, "fileName", "animCount", NULL);   
+    matte_add_external_function(m, "raylib_UpdateModelAnimation", raylib_UpdateModelAnimation, NULL, "model", "anim",  "frame", NULL);               
+    matte_add_external_function(m, "raylib_UnloadModelAnimation", raylib_UnloadModelAnimation, NULL, "anim", NULL);                                       
+    matte_add_external_function(m, "raylib_UnloadModelAnimations", raylib_UnloadModelAnimations, NULL, "animations", "count", NULL);           
+    matte_add_external_function(m, "raylib_IsModelAnimationValid", raylib_IsModelAnimationValid, NULL, "model", "anim",  NULL);                         
+
+
+    matte_add_external_function(m, "raylib_CheckCollisionSpheres", raylib_CheckCollisionSpheres, NULL, "center1", "radius1",  "center2", "radius2", NULL);   
+    matte_add_external_function(m, "raylib_CheckCollisionBoxes", raylib_CheckCollisionBoxes, NULL, "box1", "box2",  NULL);                                 
+    matte_add_external_function(m, "raylib_CheckCollisionBoxSphere", raylib_CheckCollisionBoxSphere, NULL, "box", "center",  "radius", NULL);                  
+    matte_add_external_function(m, "raylib_GetRayCollisionSphere", raylib_GetRayCollisionSphere, NULL, "ray", "center",  "radius", NULL);                    
+    matte_add_external_function(m, "raylib_GetRayCollisionBox", raylib_GetRayCollisionBox, NULL, "ray", "box",  NULL);                                    
+    matte_add_external_function(m, "raylib_GetRayCollisionMesh", raylib_GetRayCollisionMesh, NULL, "ray", "mesh",  "transform", NULL);                       
+    matte_add_external_function(m, "raylib_GetRayCollisionTriangle", raylib_GetRayCollisionTriangle, NULL, "ray", "p1",  "p2", "p3", NULL);            
+    matte_add_external_function(m, "raylib_GetRayCollisionQuad", raylib_GetRayCollisionQuad, NULL, "ray", "p1",  "p2", "p3", "p4",  NULL);    
+
+    matte_add_external_function(m, "raylib_InitAudioDevice", raylib_InitAudioDevice, NULL, NULL);                                     
+    matte_add_external_function(m, "raylib_CloseAudioDevice", raylib_CloseAudioDevice, NULL, NULL);                                    
+    matte_add_external_function(m, "raylib_IsAudioDeviceReady", raylib_IsAudioDeviceReady, NULL, NULL);                                  
+    matte_add_external_function(m, "raylib_SetMasterVolume", raylib_SetMasterVolume, NULL, "volume", NULL);                             
+
+
+    matte_add_external_function(m, "raylib_LoadWave", raylib_LoadWave, NULL, "fileName",  NULL);                            
+    matte_add_external_function(m, "raylib_LoadWaveFromMemory", raylib_LoadWaveFromMemory, NULL, "fileType", "fileData", "dataSize", NULL); 
+    matte_add_external_function(m, "raylib_IsWaveReady", raylib_IsWaveReady, NULL, "wave", NULL);                                    
+    matte_add_external_function(m, "raylib_LoadSound", raylib_LoadSound, NULL, "fileName",  NULL);                          
+    matte_add_external_function(m, "raylib_LoadSoundFromWave", raylib_LoadSoundFromWave, NULL, "wave", NULL);                             
+    matte_add_external_function(m, "raylib_IsSoundReady", raylib_IsSoundReady, NULL, "sound", NULL);                                 
+    matte_add_external_function(m, "raylib_UpdateSound", raylib_UpdateSound, "sound", "data", "sampleCount", NULL); 
+    matte_add_external_function(m, "raylib_UnloadWave", raylib_UnloadWave, NULL, "wave", NULL);                                     
+    matte_add_external_function(m, "raylib_UnloadSound", raylib_UnloadSound, NULL, "sound", NULL);                                  
+    matte_add_external_function(m, "raylib_ExportWave", raylib_ExportWave, NULL, "wave", "fileName);               
+    matte_add_external_function(m, "raylib_ExportWaveAsCode", raylib_ExportWaveAsCode, "NULL", "wave", "fileName", NULL);         
+
+
+    matte_add_external_function(m, "raylib_PlaySound", raylib_PlaySound, NULL, "sound", NULL);                                    
+    matte_add_external_function(m, "raylib_StopSound", raylib_StopSound, NULL, "sound", NULL);                                    
+    matte_add_external_function(m, "raylib_PauseSound", raylib_PauseSound, NULL, "sound", NULL);                                   
+    matte_add_external_function(m, "raylib_ResumeSound", raylib_ResumeSound, NULL, "sound", NULL);                                  
+    matte_add_external_function(m, "raylib_IsSoundPlaying", raylib_IsSoundPlaying, NULL, "sound", NULL);                               
+    matte_add_external_function(m, "raylib_SetSoundVolume", raylib_SetSoundVolume, NULL, "sound", "volume",  NULL);                 
+    matte_add_external_function(m, "raylib_SetSoundPitch", raylib_SetSoundPitch, NULL, "sound", "pitch",  NULL);                   
+    matte_add_external_function(m, "raylib_SetSoundPan", raylib_SetSoundPan, NULL, "sound", "pan",  NULL);                       
+    matte_add_external_function(m, "raylib_WaveCopy", raylib_WaveCopy, NULL, "wave", NULL);                                       
+    matte_add_external_function(m, "raylib_WaveCrop", raylib_WaveCrop, NULL, "wave", "initSample",  "finalSample", NULL);     
+    matte_add_external_function(m, "raylib_WaveFormat", raylib_WaveFormat, NULL, "wave", "sampleRate",  "sampleSize", "channels", NULL); 
+    matte_add_external_function(m, "raylib_LoadWaveSamples", raylib_LoadWaveSamples, NULL, "wave", NULL);                              
+    matte_add_external_function(m, "raylib_UnloadWaveSamples", raylib_UnloadWaveSamples, NULL, "samples",  NULL);                         
+
+
+    matte_add_external_function(m, "raylib_LoadMusicStream", raylib_LoadMusicStream, NULL, "fileName",  NULL);                    
+    matte_add_external_function(m, "raylib_LoadMusicStreamFromMemory", raylib_LoadMusicStreamFromMemory, NULL, "fileType", "data", "dataSize", NULL); 
+    matte_add_external_function(m, "raylib_IsMusicReady", raylib_IsMusicReady, NULL, "music", NULL);                                 
+    matte_add_external_function(m, "raylib_UnloadMusicStream", raylib_UnloadMusicStream, NULL, "music", NULL);                            
+    matte_add_external_function(m, "raylib_PlayMusicStream", raylib_PlayMusicStream, NULL, "music", NULL);                              
+    matte_add_external_function(m, "raylib_IsMusicStreamPlaying", raylib_IsMusicStreamPlaying, NULL, "music", NULL);                         
+    matte_add_external_function(m, "raylib_UpdateMusicStream", raylib_UpdateMusicStream, NULL, "music", NULL);                            
+    matte_add_external_function(m, "raylib_StopMusicStream", raylib_StopMusicStream, NULL, "music", NULL);                              
+    matte_add_external_function(m, "raylib_PauseMusicStream", raylib_PauseMusicStream, NULL, "music", NULL);                             
+    matte_add_external_function(m, "raylib_ResumeMusicStream", raylib_ResumeMusicStream, NULL, "music", NULL);                            
+    matte_add_external_function(m, "raylib_SeekMusicStream", raylib_SeekMusicStream, NULL, "music", "position",  NULL);              
+    matte_add_external_function(m, "raylib_SetMusicVolume", raylib_SetMusicVolume, NULL, "music", "volume",  NULL);                 
+    matte_add_external_function(m, "raylib_SetMusicPitch", raylib_SetMusicPitch, NULL, "music", "pitch",  NULL);                   
+    matte_add_external_function(m, "raylib_SetMusicPan", raylib_SetMusicPan, NULL, "music", "pan",  NULL);                       
+    matte_add_external_function(m, "raylib_GetMusicTimeLength", raylib_GetMusicTimeLength, NULL, "music", NULL);                          
+    matte_add_external_function(m, "raylib_GetMusicTimePlayed", raylib_GetMusicTimePlayed, NULL, "music", NULL);                          
+
+
+    matte_add_external_function(m, "raylib_LoadAudioStream", raylib_LoadAudioStream, NULL, "sampleRate", "sampleSize", "channels", NULL); 
+    matte_add_external_function(m, "raylib_IsAudioStreamReady", raylib_IsAudioStreamReady, NULL, "stream", NULL);                    
+    matte_add_external_function(m, "raylib_UnloadAudioStream", raylib_UnloadAudioStream, NULL, "stream", NULL);                     
+    matte_add_external_function(m, "raylib_UpdateAudioStream", raylib_UpdateAudioStream, NULL, "stream", "data", "frameCount", NULL); 
+    matte_add_external_function(m, "raylib_IsAudioStreamProcessed", raylib_IsAudioStreamProcessed, NULL, "stream", NULL);                
+    matte_add_external_function(m, "raylib_PlayAudioStream", raylib_PlayAudioStream, NULL, "stream", NULL);                       
+    matte_add_external_function(m, "raylib_PauseAudioStream", raylib_PauseAudioStream, NULL, "stream", NULL);                      
+    matte_add_external_function(m, "raylib_ResumeAudioStream", raylib_ResumeAudioStream, NULL, "stream", NULL);                     
+    matte_add_external_function(m, "raylib_IsAudioStreamPlaying", raylib_IsAudioStreamPlaying, NULL, "stream", NULL);                  
+    matte_add_external_function(m, "raylib_StopAudioStream", raylib_StopAudioStream, NULL, "stream", NULL);                       
+    matte_add_external_function(m, "raylib_SetAudioStreamVolume", raylib_SetAudioStreamVolume, NULL, "stream", "volume",  NULL);    
+    matte_add_external_function(m, "raylib_SetAudioStreamPitch", raylib_SetAudioStreamPitch, NULL, "stream", "pitch",  NULL);      
+    matte_add_external_function(m, "raylib_SetAudioStreamPan", raylib_SetAudioStreamPan, NULL, "stream", "pan",  NULL);          
+    matte_add_external_function(m, "raylib_SetAudioStreamBufferSizeDefault", raylib_SetAudioStreamBufferSizeDefault, NULL, "size", NULL);                 
+    matte_add_external_function(m, "raylib_SetAudioStreamCallback", raylib_SetAudioStreamCallback, NULL, "stream", "callback",  NULL);  
+
+    matte_add_external_function(m, "raylib_AttachAudioStreamProcessor", raylib_AttachAudioStreamProcessor, NULL, "stream", "processor",  NULL); 
+    matte_add_external_function(m, "raylib_DetachAudioStreamProcessor", raylib_DetachAudioStreamProcessor, NULL, "stream", "processor",  NULL); 
+
+    matte_add_external_function(m, "raylib_AttachAudioMixedProcessor", raylib_AttachAudioMixedProcessor, NULL, "processor", NULL); 
+    matte_add_external_function(m, "raylib_DetachAudioMixedProcessor", raylib_DetachAudioMixedProcessor, NULL, "processor", NULL); 
+
+
+    // raymath 
+
+    matte_add_external_function(m, "raylib_Clamp", raylib_Clamp, NULL, "value","min", "max",NULL);                             
+    matte_add_external_function(m, "raylib_Lerp", raylib_Lerp, NULL, "start","end", "amount",NULL);                           
+    matte_add_external_function(m, "raylib_Normalize", raylib_Normalize, NULL, "value","start", "end",NULL);                       
+    matte_add_external_function(m, "raylib_Remap", raylib_Remap, NULL, "value","inputStart", "inputEnd","outputStart", "outputEnd",NULL); 
+    matte_add_external_function(m, "raylib_Wrap", raylib_Wrap, NULL, "value","min", "max",NULL);                              
+    matte_add_external_function(m, "raylib_FloatEquals", raylib_FloatEquals, NULL, "x","y", NULL);                                          
+
+
+    matte_add_external_function(m, "raylib_Vector2Zero", raylib_Vector2Zero, NULL, NULL);                                                  
+    matte_add_external_function(m, "raylib_Vector2One", raylib_Vector2One, NULL, NULL);                                                   
+    matte_add_external_function(m, "raylib_Vector2Add", raylib_Vector2Add, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector2AddValue", raylib_Vector2AddValue, NULL, "v","add", NULL);                              
+    matte_add_external_function(m, "raylib_Vector2Subtract", raylib_Vector2Subtract, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector2SubtractValue", raylib_Vector2SubtractValue, NULL, "v","sub", NULL);                         
+    matte_add_external_function(m, "raylib_Vector2Length", raylib_Vector2Length, NULL, "v", NULL);                                             
+    matte_add_external_function(m, "raylib_Vector2LengthSqr", raylib_Vector2LengthSqr, NULL, "v", NULL);                                          
+    matte_add_external_function(m, "raylib_Vector2DotProduct", raylib_Vector2DotProduct, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector2Distance", raylib_Vector2Distance, NULL, "v1","v2", NULL);                              
+    matte_add_external_function(m, "raylib_Vector2DistanceSqr", raylib_Vector2DistanceSqr, NULL, "v1","v2", NULL);                           
+    matte_add_external_function(m, "raylib_Vector2Angle", raylib_Vector2Angle, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector2Scale", raylib_Vector2Scale, NULL, "v","scale", NULL);                               
+    matte_add_external_function(m, "raylib_Vector2Multiply", raylib_Vector2Multiply, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector2Negate", raylib_Vector2Negate, NULL, "v", NULL);                                           
+    matte_add_external_function(m, "raylib_Vector2Divide", raylib_Vector2Divide, NULL, "v1","v2", NULL);                              
+    matte_add_external_function(m, "raylib_Vector2Normalize", raylib_Vector2Normalize, NULL, "v", NULL);                                        
+    matte_add_external_function(m, "raylib_Vector2Transform", raylib_Vector2Transform, NULL, "v","mat", NULL);                            
+    matte_add_external_function(m, "raylib_Vector2Lerp", raylib_Vector2Lerp, NULL, "v1","v2", "amount",NULL);                  
+    matte_add_external_function(m, "raylib_Vector2Reflect", raylib_Vector2Reflect, NULL, "v","normal", NULL);                          
+    matte_add_external_function(m, "raylib_Vector2Rotate", raylib_Vector2Rotate, NULL, "v","angle", NULL);                              
+    matte_add_external_function(m, "raylib_Vector2MoveTowards", raylib_Vector2MoveTowards, NULL, "v","target", "maxDistance",NULL);   
+    matte_add_external_function(m, "raylib_Vector2Invert", raylib_Vector2Invert, NULL, "v", NULL);                                           
+    matte_add_external_function(m, "raylib_Vector2Clamp", raylib_Vector2Clamp, NULL, "v","min", "max",NULL);                  
+    matte_add_external_function(m, "raylib_Vector2ClampValue", raylib_Vector2ClampValue, NULL, "v","min", "max",NULL);                 
+    matte_add_external_function(m, "raylib_Vector2Equals", raylib_Vector2Equals, NULL, "p","q", NULL);                                    
+
+
+    matte_add_external_function(m, "raylib_Vector3Zero", raylib_Vector3Zero, NULL, NULL);                                                  
+    matte_add_external_function(m, "raylib_Vector3One", raylib_Vector3One, NULL, NULL);                                                   
+    matte_add_external_function(m, "raylib_Vector3Add", raylib_Vector3Add, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector3AddValue", raylib_Vector3AddValue, NULL, "v","add", NULL);                              
+    matte_add_external_function(m, "raylib_Vector3Subtract", raylib_Vector3Subtract, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector3SubtractValue", raylib_Vector3SubtractValue, NULL, "v","sub", NULL);                         
+    matte_add_external_function(m, "raylib_Vector3Scale", raylib_Vector3Scale, NULL, "v","scalar", NULL);                              
+    matte_add_external_function(m, "raylib_Vector3Multiply", raylib_Vector3Multiply, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector3CrossProduct", raylib_Vector3CrossProduct, NULL, "v1","v2", NULL);                        
+    matte_add_external_function(m, "raylib_Vector3Perpendicular", raylib_Vector3Perpendicular, NULL, "v", NULL);                                    
+    matte_add_external_function(m, "raylib_Vector3Length", raylib_Vector3Length, NULL, "v", NULL);                                       
+    matte_add_external_function(m, "raylib_Vector3LengthSqr", raylib_Vector3LengthSqr, NULL, "v", NULL);                                    
+    matte_add_external_function(m, "raylib_Vector3DotProduct", raylib_Vector3DotProduct, NULL, "v1","v2", NULL);                            
+    matte_add_external_function(m, "raylib_Vector3Distance", raylib_Vector3Distance, NULL, "v1","v2", NULL);                              
+    matte_add_external_function(m, "raylib_Vector3DistanceSqr", raylib_Vector3DistanceSqr, NULL, "v1","v2", NULL);                           
+    matte_add_external_function(m, "raylib_Vector3Angle", raylib_Vector3Angle, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector3Negate", raylib_Vector3Negate, NULL, "v", NULL);                                           
+    matte_add_external_function(m, "raylib_Vector3Divide", raylib_Vector3Divide, NULL, "v1","v2", NULL);                              
+    matte_add_external_function(m, "raylib_Vector3Normalize", raylib_Vector3Normalize, NULL, "v", NULL);                                        
+    matte_add_external_function(m, "raylib_Vector3OrthoNormalize", raylib_Vector3OrthoNormalize, NULL, "v1","v2", NULL);                       
+    matte_add_external_function(m, "raylib_Vector3Transform", raylib_Vector3Transform, NULL, "v","mat", NULL);                            
+    matte_add_external_function(m, "raylib_Vector3RotateByQuaternion", raylib_Vector3RotateByQuaternion, NULL, "v","q", NULL);                 
+    matte_add_external_function(m, "raylib_Vector3RotateByAxisAngle", raylib_Vector3RotateByAxisAngle, NULL, "v","axis", "angle",NULL);     
+    matte_add_external_function(m, "raylib_Vector3Lerp", raylib_Vector3Lerp, NULL, "v1","v2", "amount",NULL);                  
+    matte_add_external_function(m, "raylib_Vector3Reflect", raylib_Vector3Reflect, NULL, "v","normal", NULL);                          
+    matte_add_external_function(m, "raylib_Vector3Min", raylib_Vector3Min, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector3Max", raylib_Vector3Max, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector3Barycenter", raylib_Vector3Barycenter, NULL, "p","a", "b","c",NULL);      
+    matte_add_external_function(m, "raylib_Vector3Unproject", raylib_Vector3Unproject, NULL, "source","projection", "view",NULL);   
+    matte_add_external_function(m, "raylib_Vector3ToFloatV", raylib_Vector3ToFloatV, NULL, "v", NULL);                                          
+    matte_add_external_function(m, "raylib_Vector3Invert", raylib_Vector3Invert, NULL, "v", NULL);                                           
+    matte_add_external_function(m, "raylib_Vector3Clamp", raylib_Vector3Clamp, NULL, "v","min", "max",NULL);                  
+    matte_add_external_function(m, "raylib_Vector3ClampValue", raylib_Vector3ClampValue, NULL, "v","min", "max",NULL);                 
+    matte_add_external_function(m, "raylib_Vector3Equals", raylib_Vector3Equals, NULL, "p","q", NULL);                                    
+    matte_add_external_function(m, "raylib_Vector3Refract", raylib_Vector3Refract, NULL, "v","n", "r",NULL);                      
+
+
+    matte_add_external_function(m, "raylib_MatrixDeterminant", raylib_MatrixDeterminant, NULL, "mat", NULL);                                        
+    matte_add_external_function(m, "raylib_MatrixTrace", raylib_MatrixTrace, NULL, "mat", NULL);                                              
+    matte_add_external_function(m, "raylib_MatrixTranspose", raylib_MatrixTranspose, NULL, "mat", NULL);                                         
+    matte_add_external_function(m, "raylib_MatrixInvert", raylib_MatrixInvert, NULL, "mat", NULL);                                            
+    matte_add_external_function(m, "raylib_MatrixIdentity", raylib_MatrixIdentity, NULL, NULL);                                                
+    matte_add_external_function(m, "raylib_MatrixAdd", raylib_MatrixAdd, NULL, "left","right", NULL);                                
+    matte_add_external_function(m, "raylib_MatrixSubtract", raylib_MatrixSubtract, NULL, "left","right", NULL);                           
+    matte_add_external_function(m, "raylib_MatrixMultiply", raylib_MatrixMultiply, NULL, "left","right", NULL);                           
+    matte_add_external_function(m, "raylib_MatrixTranslate", raylib_MatrixTranslate, NULL, "x","y", "z",NULL);                          
+    matte_add_external_function(m, "raylib_MatrixRotate", raylib_MatrixRotate, NULL, "axis","angle", NULL);                             
+    matte_add_external_function(m, "raylib_MatrixRotateX", raylib_MatrixRotateX, NULL, "angle", NULL);                                          
+    matte_add_external_function(m, "raylib_MatrixRotateY", raylib_MatrixRotateY, NULL, "angle", NULL);                                          
+    matte_add_external_function(m, "raylib_MatrixRotateZ", raylib_MatrixRotateZ, NULL, "angle", NULL);                                          
+    matte_add_external_function(m, "raylib_MatrixRotateXYZ", raylib_MatrixRotateXYZ, NULL, "angle", NULL);                                      
+    matte_add_external_function(m, "raylib_MatrixRotateZYX", raylib_MatrixRotateZYX, NULL, "angle", NULL);                                      
+    matte_add_external_function(m, "raylib_MatrixScale", raylib_MatrixScale, NULL, "x","y", "z",NULL);                              
+    matte_add_external_function(m, "raylib_MatrixFrustum", raylib_MatrixFrustum, NULL, "left","right", "bottom","top", "near", "far",NULL); 
+    matte_add_external_function(m, "raylib_MatrixPerspective", raylib_MatrixPerspective, NULL, "fovy","aspect", "near","far",NULL); 
+    matte_add_external_function(m, "raylib_MatrixOrtho", raylib_MatrixOrtho, NULL, "left","right", "bottom","top", "near", "far",NULL); 
+    matte_add_external_function(m, "raylib_MatrixLookAt", raylib_MatrixLookAt, NULL, "eye","target", "up",NULL);               
+    matte_add_external_function(m, "raylib_MatrixToFloatV", raylib_MatrixToFloatV, NULL, "mat", NULL);                                         
+
+
+    matte_add_external_function(m, "raylib_QuaternionAdd", raylib_QuaternionAdd, NULL, "q1","q2", NULL);                     
+    matte_add_external_function(m, "raylib_QuaternionAddValue", raylib_QuaternionAddValue, NULL, "q","add", NULL);                     
+    matte_add_external_function(m, "raylib_QuaternionSubtract", raylib_QuaternionSubtract, NULL, "q1","q2", NULL);                
+    matte_add_external_function(m, "raylib_QuaternionSubtractValue", raylib_QuaternionSubtractValue, NULL, "q","sub", NULL);                
+    matte_add_external_function(m, "raylib_QuaternionIdentity", raylib_QuaternionIdentity, NULL, NULL);                                        
+    matte_add_external_function(m, "raylib_QuaternionLength", raylib_QuaternionLength, NULL, "q", NULL);                                       
+    matte_add_external_function(m, "raylib_QuaternionNormalize", raylib_QuaternionNormalize, NULL, "q", NULL);                               
+    matte_add_external_function(m, "raylib_QuaternionInvert", raylib_QuaternionInvert, NULL, "q", NULL);                                  
+    matte_add_external_function(m, "raylib_QuaternionMultiply", raylib_QuaternionMultiply, NULL, "q1","q2", NULL);                
+    matte_add_external_function(m, "raylib_QuaternionScale", raylib_QuaternionScale, NULL, "q","mul", NULL);                        
+    matte_add_external_function(m, "raylib_QuaternionDivide", raylib_QuaternionDivide, NULL, "q1","q2", NULL);                  
+    matte_add_external_function(m, "raylib_QuaternionLerp", raylib_QuaternionLerp, NULL, "q1","q2", "amount",NULL);      
+    matte_add_external_function(m, "raylib_QuaternionNlerp", raylib_QuaternionNlerp, NULL, "q1","q2", "amount",NULL);     
+    matte_add_external_function(m, "raylib_QuaternionSlerp", raylib_QuaternionSlerp, NULL, "q1","q2", "amount",NULL);     
+    matte_add_external_function(m, "raylib_QuaternionFromVector3ToVector3", raylib_QuaternionFromVector3ToVector3, NULL, "from","to", NULL);        
+    matte_add_external_function(m, "raylib_QuaternionFromMatrix", raylib_QuaternionFromMatrix, NULL, "mat", NULL);                                
+    matte_add_external_function(m, "raylib_QuaternionToMatrix", raylib_QuaternionToMatrix, NULL, "q", NULL);                                    
+    matte_add_external_function(m, "raylib_QuaternionFromAxisAngle", raylib_QuaternionFromAxisAngle, NULL, "axis","angle", NULL);              
+    matte_add_external_function(m, "raylib_QuaternionToAxisAngle", raylib_QuaternionToAxisAngle, NULL, "q","outAxis", "outAngle",NULL); 
+    matte_add_external_function(m, "raylib_QuaternionFromEuler", raylib_QuaternionFromEuler, NULL, "pitch","yaw", "roll",NULL);         
+    matte_add_external_function(m, "raylib_QuaternionToEuler", raylib_QuaternionToEuler, NULL, "q", NULL);                                    
+    matte_add_external_function(m, "raylib_QuaternionTransform", raylib_QuaternionTransform, NULL, "q","mat", NULL);                   
+    matte_add_external_function(m, "raylib_QuaternionEquals", raylib_QuaternionEquals, NULL, "p","q", NULL);                               
+
 
 } 
 
