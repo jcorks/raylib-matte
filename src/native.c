@@ -346,6 +346,23 @@ matteValue_t native_to_value_shader(matteVM_t * vm, Shader shad) {
 }
 
 
+matteValue_t native_to_value_font(matteVM_t * vm, Font f) {
+    matteStore_t * store = matte_vm_get_store(vm);
+    matteValue_t out = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &out);
+
+    NativeEncodeData_t * fd = calloc(1, sizeof(NativeEncodeData_t));
+    fd->data = calloc(1, sizeof(Font));
+    fd->typeTag = RAYMATTE_NATIVE_TYPE__FONT;
+    *((Font*)fd->data) = f;
+    
+    matte_value_object_set_userdata(store, out, fd);
+    matte_value_object_set_native_finalizer(store, out, native_to_value_finalizer, NULL);
+
+    return out;
+}
+
+
 matteValue_t native_to_value_filePathList(matteVM_t * vm, FilePathList list) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
@@ -499,6 +516,27 @@ Rectangle native_from_value_rectangle(matteVM_t * vm, matteValue_t rec) {
     v.y = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "y")));
     v.width = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "width")));
     v.height = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "height")));
+
+    return v;
+}   
+
+
+GlyphInfo native_from_value_glyphInfo(matteVM_t * vm, matteValue_t gl) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+    if (rec.binID != MATTE_VALUE_TYPE_OBJECT) {
+        matte_vm_raise_error_cstring(vm, "Could not decode GlyphInfo: value is not an Object.");
+        Rectangle errOut = {};
+        return errOut;
+    }
+
+
+    GlyphInfo v = {};
+    v.value = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "value")));
+    v.offsetX = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "offsetX")));
+    v.offsetY = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "offsetY")));
+    v.advanceX = matte_value_as_number(store, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "advanceX")));
+    v.image = native_from_value_image(vm, matte_value_object_access_string(store, rec, MATTE_VM_STR_CAST(vm, "image")));
 
     return v;
 }   

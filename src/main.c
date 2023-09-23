@@ -20,6 +20,7 @@
 #define RAYLIB_FN__ARG5(__T__, __T0__, __T1__, __T2__, __T3__, __T4__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types5(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__)) return matte_store_new_value(store);
 #define RAYLIB_FN__ARG6(__T__, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types6(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__)) return matte_store_new_value(store);
 #define RAYLIB_FN__ARG7(__T__, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types7(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__)) return matte_store_new_value(store);
+#define RAYLIB_FN__ARG7(__T__, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__, __T7__) matteValue_t __T__(matteVM_t * vm, matteValue_t fn, const matteValue_t * args, void * userData) { matteStore_t * store = matte_vm_get_store(vm); if (!ensure_arg_types8(vm, args, __T0__, __T1__, __T2__, __T3__, __T4__, __T5__, __T6__, __T7__)) return matte_store_new_value(store);
 #define RAYLIB_FN__END return matte_store_new_value(store);}
 
 
@@ -95,6 +96,21 @@ static int ensure_arg_types7(matteVM_t * vm, const matteValue_t * args, int bin0
         args[4].binID != bin4 ||
         args[5].binID != bin5 ||
         args[6].binID != bin6) {
+        matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static int ensure_arg_types8(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6, int bin7) {
+    if (args[0].binID != bin0 ||
+        args[1].binID != bin1 ||
+        args[2].binID != bin2 ||
+        args[3].binID != bin3 ||
+        args[4].binID != bin4 ||
+        args[5].binID != bin5 ||
+        args[6].binID != bin6 ||
+        args[7].binID != bin7) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -4462,6 +4478,451 @@ RAYLIB_FN__ARG3(raylib_GetPixelDataSize,
 RAYLIB_FN__END
 
 
+
+
+
+
+
+
+// r text
+
+RAYLIB_FN__ARG0(raylib_GetFontDefault
+)
+    return native_to_value_font(
+        vm,
+        GetFontDefault(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_LoadFont
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_font(
+        vm,
+        LoadFont(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+// free with MemFree when done.
+static int * get_codepoints(matteVM_t * vm, matteStore_t * store, matteValue_t v, int * glyphCount) {
+    int count = matte_value_object_get_number_key_count(store, args[2]);
+
+    int * codepoints = MemAlloc(sizeof(int)*count);
+    memset(codepoint, 0, sizeof(int)*count);
+    int i;
+    for(i = 0; i < count; ++i) {
+        matteValue_t str = matte_value_as_string(store, matte_value_object_access_index(store, args[2], i));
+        if (str.binID == MATTE_VALUE_TYPE_STRING) {
+            const matteString_t * strS = matte_value_string_get_string_unsafe(store, str);
+            if (matte_string_get_length(strS) > 0) {
+                codepoints[i] = matte_string_get_char(strS, 0);
+            }
+        }
+    }
+    *glyphCount = count;
+    return codepoints;
+    
+}
+
+
+RAYLIB_FN__ARG3(raylib_LoadFontEx
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    int count = 0;
+    int * codepoints = get_codepoints(
+        vm,
+        store,
+        args[2],
+        &glyphCount
+    );
+    
+    if (count <= 0) {
+        goto L_END;
+    }
+
+
+    Font out = native_to_value_font(
+        vm,
+        LoadFontEx(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+            args[1].value.number,
+            codepoints,
+            count
+        )
+    );
+    
+    MemFree(codepoints);
+    return out;
+  L_END:
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG3(raylib_LoadFontFromImage
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_font(
+        vm,
+        LoadFontFromImage(
+            native_from_value_image(vm, args[0]),
+            native_from_value_color(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG4(raylib_LoadFontFromMemory
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    uint32_t size = 0;
+    uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[1],
+        &size
+    );
+
+    int count = 0;
+    int * codepoints = get_codepoints(
+        vm,
+        store,
+        args[3],
+        &glyphCount
+    );
+
+
+    matteValue_t f = native_to_value_font(
+        vm,
+        LoadFontFromMemory(
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            data,
+            size,
+            args[2].value.number,
+            codepoints,
+            count
+        )
+    );
+    
+    MemFree(codepoints);
+    return f;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_IsFontReady
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        IsFontReady(
+            native_from_value_font(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raylib_LoadFontData
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    uint32_t size = 0;
+    uint8_t * data = matte_vm_get_memory_buffer_handle_raw_data(
+        vm,
+        args[0],
+        &size
+    );
+
+
+    int count = 0;
+    int * codepoints = get_codepoints(
+        vm,
+        store,
+        args[2],
+        &glyphCount
+    );
+
+    GlyphInfo * gs = LoadFontData(
+        data,
+        size,
+        args[1].value.number,
+        codepoints,
+        count,
+        args[3].value.number
+    );
+
+
+    matteValue_t * args = MemAlloc(sizeof(matteValue_t)*count);
+    int i;
+    for(i = 0; i < count; ++i) {
+        args[i] = native_to_value_glyphInfo(vm, gs[i]);
+    }
+    
+    matteValue_t v = matte_store_new_value(store);
+    matteArray_t arr = MATTE_ARRAY_CAST(args, matteValue_t, count);
+    matte_value_into_new_object_array_ref(store, &v, &arr);
+    MemFree(args);    
+
+    UnloadFontData(gs, count);
+
+    
+    MemFree(codepoints);
+    return v;
+RAYLIB_FN__END
+
+
+
+
+
+RAYLIB_FN__ARG4(raylib_GenImageFontAtlas,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+
+    uint32_t count = matte_value_object_get_number_key_count(store, args[0]);
+
+    Rectangle * recs = NULL;
+    GlyphInfo * glyphs = MemAlloc(sizeof(GlyphInfo), count);
+    
+    int i;
+    for(i = 0; i < count; ++i) {
+        glyphs[i] = native_from_value_glyphInfo(vm, matte_value_object_access_index(store, args[0], i));
+    }
+    
+    Image img = GenImageFontAtlas(
+        glyphs, 
+        &recs, 
+        count, 
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number
+    );
+    MemFree(glyphs);
+    
+    
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "image"), native_to_value_image(vm, img));
+
+
+    matteValue_t * args = MemAlloc(sizeof(matteValue_t) * count);    
+    for(i = 0; i < count; ++i) {
+        args[i] = native_to_value_rectangle(store, recs[i]);
+    }
+    matteValue_t arrV = matte_store_new_value(store);
+    matteArray_t arr = MATTE_ARRAY_CAST(args, matteValue_t, count);
+    matte_value_into_new_object_array_ref(store, &arrV, &arr);
+
+    MemFree(args);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "recs"), arrV);
+    
+
+    MemFree(recs);    
+    
+
+    return v;
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_UnloadFont
+    MATTE_VALUE_TYPE_OBJECT
+)
+    UnloadFont(
+        native_from_value_font(vm, args[0])
+    );
+    native_unload(vm, args[0]);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_ExportFontAsCode
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_boolean(
+        vm,
+        ExportFontAsCode(
+            native_from_value_font(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+RAYLIB_FN__ARG2(raylib_DrawFPS,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    DrawFPS(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawText,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawText(
+        native_from_value_string_unsafe(vm, args[0]), // ok!
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawTextEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextEx(
+        native_from_value_font(vm, args[0]),
+        native_from_value_string_unsafe(vm, args[1]), // ok!
+        native_from_value_vector2(vm, args[2]),
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG8(raylib_DrawTextPro,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTextPro(
+        native_from_value_font(vm, args[0]),
+        native_from_value_string_unsafe(vm, args[1]), // ok!
+        native_from_value_vector2(vm, args[2]),
+        native_from_value_vector2(vm, args[3]),
+        args[4].value.number,
+        args[5].value.number,
+        args[6].value.number,
+        native_from_value_color(vm, args[7])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_MeasureText,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_int(
+        vm,
+        MeasureText(
+            native_from_value_string_unsafe(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_MeasureTextEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        MeasureTextEx(
+            native_from_value_font(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]),
+            args[2].value.number,
+            args[3].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetGlyphIndex,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_int(
+        vm,
+        GetGlyphIndex(
+            native_from_value_font(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetGlyphInfo,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_glyphInfo(
+        vm,
+        GetGlyphInfo(
+            native_from_value_font(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_GetGlyphAtlasRec,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_rectangle(
+        vm,
+        GetGlyphAtlasRec(
+            native_from_value_font(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
 
@@ -4831,8 +5292,8 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_UnloadTexture", raylib_UnloadTexture, NULL, "texture", NULL);                                                             
     matte_add_external_function(m, "raylib_IsRenderTextureReady", raylib_IsRenderTextureReady, NULL, "target", NULL);                                                       
     matte_add_external_function(m, "raylib_UnloadRenderTexture", raylib_UnloadRenderTexture, NULL, "target", NULL);                                                  
-    matte_add_external_function(m, "raylib_UpdateTexture", raylib_UpdateTexture, NULL, "texture", "pixels", NULL);                                         
-    matte_add_external_function(m, "raylib_UpdateTextureRec", raylib_UpdateTextureRec, NULL, "texture", "rec", "pixels", NULL);                       
+    matte_add_external_function(m, "raylib_UpdateTexture", raylib_UpdateTexture, NULL, "texture", "image", NULL);                                         
+    matte_add_external_function(m, "raylib_UpdateTextureRec", raylib_UpdateTextureRec, NULL, "texture", "position", "image", NULL);                       
 
 
     matte_add_external_function(m, "raylib_GenTextureMipmaps", raylib_GenTextureMipmaps, NULL, "texture",  NULL);                                                        
@@ -4860,19 +5321,19 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_ColorAlpha", raylib_ColorAlpha, NULL, "color", "alpha",  NULL);                           
     matte_add_external_function(m, "raylib_ColorAlphaBlend", raylib_ColorAlphaBlend, NULL, "dst", "src",  "tint", NULL);              
     matte_add_external_function(m, "raylib_GetColor", raylib_GetColor, NULL, "hexValue", NULL);                                
-    matte_add_external_function(m, "raylib_GetPixelColor", raylib_GetPixelColor, NULL, "srcPtr", "format",  NULL);                        
-    matte_add_external_function(m, "raylib_SetPixelColor", raylib_SetPixelColor, NULL, "dstPtr", "color",  "format", NULL);            
+    matte_add_external_function(m, "raylib_GetPixelColor", raylib_GetPixelColor, NULL, "bytes", "format",  NULL);                        
+    matte_add_external_function(m, "raylib_SetPixelColor", raylib_SetPixelColor, NULL, "bytes", "color",  "format", NULL);            
     matte_add_external_function(m, "raylib_GetPixelDataSize", raylib_GetPixelDataSize, NULL, "width", "height",  "format", NULL);              
 
 
     matte_add_external_function(m, "raylib_GetFontDefault", raylib_GetFontDefault, NULL, NULL);                                                            
     matte_add_external_function(m, "raylib_LoadFont", raylib_LoadFont, NULL, "fileName",  NULL);                                                  
-    matte_add_external_function(m, "raylib_LoadFontEx", raylib_LoadFontEx, NULL, "fileName", "fontSize", "fontChars", "glyphCount", NULL);  
+    matte_add_external_function(m, "raylib_LoadFontEx", raylib_LoadFontEx, NULL, "fileName", "fontSize", "fontChars", NULL);  
     matte_add_external_function(m, "raylib_LoadFontFromImage", raylib_LoadFontFromImage, NULL, "image", "key",  "firstChar", NULL);                        
-    matte_add_external_function(m, "raylib_LoadFontFromMemory", raylib_LoadFontFromMemory, NULL, "fileType", "fileData", "dataSize", "fontSize", "fontChars", "glyphCount", NULL); 
+    matte_add_external_function(m, "raylib_LoadFontFromMemory", raylib_LoadFontFromMemory, NULL, "fileType", "bytes", "fontSize", "fontChars", NULL); 
     matte_add_external_function(m, "raylib_IsFontReady", raylib_IsFontReady, NULL, "font", NULL);                                                          
-    matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "fileData", "dataSize", "fontSize", "fontChars", "glyphCount", "type", NULL); 
-    matte_add_external_function(m, "raylib_GenImageFontAtlas", raylib_GenImageFontAtlas, NULL, "chars", "recs", "glyphCount", "fontSize", "padding", "packMethod", NULL); 
+    matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "bytes", "fontSize", "fontChars", "type", NULL); 
+    matte_add_external_function(m, "raylib_GenImageFontAtlas", raylib_GenImageFontAtlas, NULL, "chars", "fontSize", "padding", "packMethod", NULL); 
     matte_add_external_function(m, "raylib_UnloadFontData", raylib_UnloadFontData, NULL, "chars", "glyphCount",  NULL);                                
     matte_add_external_function(m, "raylib_UnloadFont", raylib_UnloadFont, NULL, "font", NULL);                                                           
     matte_add_external_function(m, "raylib_ExportFontAsCode", raylib_ExportFontAsCode, NULL, "font", "fileName", NULL);                               

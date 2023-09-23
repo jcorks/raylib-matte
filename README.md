@@ -49,6 +49,9 @@ These changes are listed here:
           `UnloadDroppedFiles` (Not needed.)
           `UnloadImageColors` (Not needed.)
           `UnloadImagePalette` (Not needed.)
+          `UnloadFontData` (Not needed.)
+          `DrawTextCodepoint` (Not especially needed with Matte string access.)
+          `DrawTextCodepoints` (Not especially needed with Matte strings access.)
           All `Text*`, `UTF8`, and `Codepoint` functions (Not needed. Can be handled at the Matte level with the Matte string type, functions, and querries)
         
 - Instances of output/input that call for char * (C-Strings) are replaced 
@@ -164,7 +167,15 @@ These changes are listed here:
     )
 - GetPixelColor and SetPixelColor use a MemoryBuffer object to 
   facilitate byte access.
+  
+- LoadFontEx and LoadFontData takes an array of single-character strings into "fontChars" argument,
+  removing the glyphCount argument.
+  
+- LoadFontData takes bytes (a MemoryBuffer), fontSize, fontChars (an array of single-character strings), and type.
    
+- GenImageFontAtlas has the "recs" argument removed, instead, the return value is changed: an object is returned with 2 members, 
+  "image" containing the output Image, and "recs" containing an array of recs that would have been output.
+  In addition, "chars" input will be an array of GlyphInfo, removing the need for glyphCount.
   
 ## Additional Notes
 

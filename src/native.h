@@ -35,6 +35,7 @@ matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix m);
 matteValue_t native_to_value_renderTexture(matteVM_t * vm, RenderTexture img);
 matteValue_t native_to_value_texture(matteVM_t * vm, Texture img);
 matteValue_t native_to_value_shader(matteVM_t * vm, Shader img);
+matteValue_t native_to_value_font(matteVM_t * vm, Font font);
 matteValue_t native_to_value_ray(matteVM_t * vm, Ray ray);
 matteValue_t native_to_value_filePathList(matteVM_t * vm, FilePathList list);
 
@@ -60,6 +61,7 @@ Texture native_from_value_texture(matteVM_t * vm, matteValue_t tex);
 Shader native_from_value_shader(matteVM_t * vm, matteValue_t shad);
 Font native_from_value_font(matteVM_t * vm, matteValue_t font);
 Matrix native_from_value_matrix(matteVM_t * vm, matteValue_t cl);
+GlyphInfo native_from_value_glyphInfo(matteVM_t * vm, matteValue_t gi);
 
 // for opaque objects, we can get an editable reference
 Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t img);

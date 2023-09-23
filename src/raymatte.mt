@@ -11,6 +11,8 @@
 @:base__LoadImageFromMemory = getExternalFunction(name: "raylib_LoadImageFromMemory");
 @:base__GetPixelColor = getExternalFunction(name:"raylib_GetPixelColor");
 @:base__SetPixelColor = getExternalFunction(name:"raylib_SetPixelColor");
+@:base__LoadFontFromMemory = getExternalFunction(name:"raylib_LoadFontFromMemory");
+@:base__LoadFontData = getExternalFunction(name:"raylib_LoadFontData");
 
 @:raylib = {
     // Defines
@@ -851,9 +853,13 @@
     LoadFont : getExternalFunction(name:"raylib_LoadFont"),
     LoadFontEx : getExternalFunction(name:"raylib_LoadFontEx"),
     LoadFontFromImage : getExternalFunction(name:"raylib_LoadFontFromImage"),
-    LoadFontFromMemory : getExternalFunction(name:"raylib_LoadFontFromMemory"),
+    LoadFontFromMemory ::(fileType, bytes => MemoryBuffer.type, fontSize, fontChars) {
+        return base__LoadFontFromMemory(fileType, bytes:bytes.handle, fontSize, fontChars);
+    },
     IsFontReady : getExternalFunction(name:"raylib_IsFontReady"),
-    LoadFontData : getExternalFunction(name:"raylib_LoadFontData"),
+    LoadFontData :: (bytes, fontSize, fontChars, type) {
+        return base__LoadFontData(bytes:bytes.handle, fontSize, fontChars, type);
+    }, 
     GenImageFontAtlas : getExternalFunction(name:"raylib_GenImageFontAtlas"),
     UnloadFontData : getExternalFunction(name:"raylib_UnloadFontData"),
     UnloadFont : getExternalFunction(name:"raylib_UnloadFont"),
