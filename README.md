@@ -25,6 +25,9 @@ These changes are listed here:
   
 - Enums are layed out flat within the raylib namespace
 
+- Enum values were added for UpdateMeshBuffer: `MESH_BUFFER_ID_*`
+  which contain values for each buffer index.
+
 - Some functions are not implemented or supported:
 
      Functions which are currently NOT implemented
@@ -57,23 +60,50 @@ These changes are listed here:
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
           
-- Some structs are designated as "read-only".
-  "read-only structs" are where the object is maintained by raylib 
-  and isnt meant to be modified by usercode. As such members are retrieved
-  using Getters from the Read-Only Member Accessor functions. They follow 
-  the syntax [StructName]Get[MemberName] using PascalCase. I.e.:
-  ImageGetWidth().
+- Some structs contain members which point to managed references 
+  or arrays. These members have specialized getter functions that generate 
+  copies of results that can be worked with.
   
-  The objects that are read-only structs are:
+  The following functions were added to facilitate these changes:
+    `ImageGetData(Image)` (returns a MemoryBuffer copy of the "data" of the image.)
 
-    `Image` 
-    `RenderTexture` / `RenderTexture2D`
-    `Texture` / `Texture2D`
-    `Shader` (no getters)
-    `Font`
+    `FontGetRecs(Font)` (returns an array copy of "recs" as Rectangle objects)
+    `FontGetGlyphs(Font)` (returns an array copy of "glyphs" as GlyphInfo objects)
+
+    `MeshGetVertices(Mesh)` (returns a MemoryBuffer copy of "vertices")
+    `MeshGetTexCoords(Mesh)` (returns a MemoryBuffer copy of "texcoords")
+    `MeshGetTexCoords2(Mesh)` (returns a MemoryBuffer copy of "texcoords2")
+    `MeshGetNormals(Mesh)` (returns a MemoryBuffer copy of "normals")
+    `MeshGetTangents(Mesh)` (returns a MemoryBuffer copy of "tangents")
+    `MeshGetColors(Mesh)` (returns a MemoryBuffer copy of "colors")
+    `MeshGetIndices(Mesh)` (returns a MemoryBuffer copy of "vertices")
+    `MeshGetAnimVertices(Mesh)` (returns a MemoryBuffer copy of "animVertices")
+    `MeshGetAnimNormals(Mesh)` (returns a MemoryBuffer copy of "animNormals")
+    `MeshGetBoneIDs(Mesh)` (returns a MemoryBuffer copy of "boneIds")
+    `MeshGetBoneWeights(Mesh)` (returns a MemoryBuffer copy of "boneIds")
+
+    `ModelGetMeshes(Model)` (returns an array of Mesh, a copy of "meshes")
+    `ModelGetMaterials(Model)` (returns an array of Material, a copy of "materials")
+    `ModelGetMaterialNumbers(Model)` (returns an array of numbers, a copy of "meshMaterial")
+    `ModelGetBones(Model)` (returns an array of BoneInfo, a copy of "bones")
+    `ModelGetBindPoses(Model)` (returns an array of Transform, a copy of "bindPose")
+    
+    `ModelAnimationGetBones(ModelAnimation)` (returns an array of BoneInfo, a copy of "bones")
+    `ModelAnimationGetFramePoses(ModelAnimation)` (returns an array of array of Transforms, a deep copy "framePoses", which is indexed by frame, then by bone)
+    
+    
+    `WaveGetData(Wave)` (returns a MemoryBuffer copy of "data")
+
+
 
   Such objects are NOT able to be produced "by hand" and need to be 
-  sourced from raylib functions on some level. 
+  sourced from raylib functions on some level. Many of these objects 
+  also contain OpenGL primitives or other external primitives. The getters 
+  to these are inaccessible.
+
+- The Material struct replaces accessible "params[4]" with serially defined 
+  "param0" "param1", "param2", and "param3". Similarly, "maps" is serially
+  defined with "map0", "map1", etc.
   
 - Members of structs that point to native objects, such as OpenGL 
   texture IDs are not made available.
@@ -131,8 +161,7 @@ These changes are listed here:
   (import(module:"Matte.Core.MemoryBuffer")). Inputs will always 
   be called "bytes"
   
-- Matrix is represented as an array of Numbers in Matte in OpenGL 
-  (column-major) order.
+
   
 - TraceLog only takes logLevel and text, since built-in string 
   operations for Matte cover the text utilities provided.
@@ -176,6 +205,9 @@ These changes are listed here:
 - GenImageFontAtlas has the "recs" argument removed, instead, the return value is changed: an object is returned with 2 members, 
   "image" containing the output Image, and "recs" containing an array of recs that would have been output.
   In addition, "chars" input will be an array of GlyphInfo, removing the need for glyphCount.
+  
+- DrawTriangleStrip3D takes an array of points and a color.
+  
   
 ## Additional Notes
 

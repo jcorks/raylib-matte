@@ -126,106 +126,290 @@ static int ensure_arg_types8(matteVM_t * vm, const matteValue_t * args, int bin0
 
 
 */
-RAYLIB_FN__ARG1(raylib_IsObjectReadOnly, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_boolean(vm, native_is_value_closed(vm, args[0]));  
-RAYLIB_FN__END
-
-
-RAYLIB_FN__ARG1(raylib_ImageGetWidth, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_image(vm, args[0]).width);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_ImageGetHeight, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_image(vm, args[0]).height);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_ImageGetMipmaps, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_image(vm, args[0]).mipmaps);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_ImageGetFormat, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_image(vm, args[0]).format);  
-RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG1(raylib_RenderTextureGetColorTexture, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_texture(vm, native_from_value_renderTexture(vm, args[0]).texture);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_RenderTextureGetDepthTexture, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_texture(vm, native_from_value_renderTexture(vm, args[0]).depth);  
-RAYLIB_FN__END
+#define VARIABLE_TO_ARRAY(__ACCESS__,__COUNT__,__CONV__,__OUTPUT__)\
+matteValue_t __OUTPUT__ = matte_store_new_value(store);\
+{\
+    uint32_t i;\
+    matteValue_t * vals = MemAlloc(sizeof(matteValue_t) * (__COUNT__));\
+    for(i = 0; i < (__COUNT__); ++i) {\
+        vals[i] = __CONV__(vm, (__ACCESS__)[i]);\
+    }\
+    matteArray_t arrC = MATTE_ARRAY_CAST(vals, matteValue_t, __COUNT__);\
+    matte_value_into_new_object_array_ref(store, &__OUTPUT__, &arrC);\
+    MemFree(vals);\
+}\
 
 
 
 
-
-
-RAYLIB_FN__ARG1(raylib_TextureGetFormat, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_texture(vm, args[0]).format);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_TextureGetMipmaps, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_texture(vm, args[0]).mipmaps);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_TextureGetWidth, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_texture(vm, args[0]).width);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_TextureGetHeight, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_texture(vm, args[0]).height);  
+RAYLIB_FN__ARG1(raylib_ImageGetData, MATTE_VALUE_TYPE_OBJECT)
+    Image img = native_from_value_image(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        img.data,
+        GetPixelDataSize(img.height, img.width, img.format)
+    );
 RAYLIB_FN__END
 
 
 
 
-
-RAYLIB_FN__ARG1(raylib_FontGetBaseSize, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_font(vm, args[0]).baseSize);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_FontGetGlyphCount, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_font(vm, args[0]).glyphCount);  
-RAYLIB_FN__END
-
-RAYLIB_FN__ARG1(raylib_FontGetGlyphPadding, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_int(vm, native_from_value_font(vm, args[0]).glyphPadding);  
-RAYLIB_FN__END
-
-
-RAYLIB_FN__ARG1(raylib_FontGetTexture, MATTE_VALUE_TYPE_OBJECT) 
-    return native_to_value_texture(vm, native_from_value_font(vm, args[0]).texture);  
+RAYLIB_FN__ARG1(raylib_FontGetRecs, MATTE_VALUE_TYPE_OBJECT)
+    Font f = native_from_value_font(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        f.recs,
+        f.glyphCount,
+        native_from_value_rectangle,
+        output
+    );
+    return output;
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG2(raylib_FontGetGlyphInfo, MATTE_VALUE_TYPE_OBJECT, MATTE_VALUE_TYPE_NUMBER) 
-    int index = args[1].value.number;
-    Font font = native_from_value_font(vm, args[0]);
-    
-    if (index < 0 || index > font.glyphCount) {
-        matte_vm_raise_error_cstring(vm, "FontGetGlyphInfo: invalid glyph index");
-        goto L_END;
+RAYLIB_FN__ARG1(raylib_FontGetGlyphs, MATTE_VALUE_TYPE_OBJECT)
+    Font f = native_from_value_font(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        f.glyphs,
+        f.glyphCount,
+        native_from_value_glyphInfo,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+
+
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetVertices, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.vertices,
+        mesh.vertexCount * sizeof(Vector3)
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MeshGetTexCoords, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.texcoords,
+        mesh.vertexCount * sizeof(Vector2)
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetTexCoords2, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.texcoords2,
+        mesh.vertexCount * sizeof(Vector2)
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MeshGetNormals, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.normals,
+        mesh.vertexCount * sizeof(Vector3)
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MeshGetTangents, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.tangents,
+        mesh.vertexCount * sizeof(Vector4)
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetColors, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.colors,
+        mesh.vertexCount * 4
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetColors, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.indices,
+        mesh.vertexCount * sizeof(uint32_t)
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetAnimVertices, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.animVertices,
+        mesh.vertexCount * sizeof(Vector3)
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MeshGetAnimNormals, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.animNormals,
+        mesh.vertexCount * sizeof(Vector3)
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetBoneIDs, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.boneIds,
+        mesh.vertexCount * 4
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MeshGetBoneWeights, MATTE_VALUE_TYPE_OBJECT)
+    Mesh mesh = native_from_value_mesh(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        mesh.boneWeights,
+        mesh.vertexCount * 4 * sizeof(float)
+    );
+RAYLIB_FN__END
+
+
+
+
+
+RAYLIB_FN__ARG1(raylib_ModelGetMeshes, MATTE_VALUE_TYPE_OBJECT)
+    Model model = native_from_value_model(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.meshes,
+        model.meshCount,
+        native_from_value_mesh,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ModelGetMaterials, MATTE_VALUE_TYPE_OBJECT)
+    Model model = native_from_value_model(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.materials,
+        model.materialCount,
+        native_from_value_material,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_ModelGetMaterialNumbers, MATTE_VALUE_TYPE_OBJECT)
+    Model model = native_from_value_model(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.meshMaterial,
+        model.materialCount,
+        native_from_value_int,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ModelGetBones, MATTE_VALUE_TYPE_OBJECT)
+    Model model = native_from_value_model(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.bones,
+        model.boneCount,
+        native_from_value_boneInfo,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_ModelGetBindPoses, MATTE_VALUE_TYPE_OBJECT)
+    Model model = native_from_value_model(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.bindPose,
+        model.boneCount,
+        native_from_value_transform,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+
+
+
+
+RAYLIB_FN__ARG1(raylib_ModelAnimationGetBones, MATTE_VALUE_TYPE_OBJECT)
+    ModelAnimation model = native_from_value_modelAnimation(vm, args[0]);
+    VARIABLE_TO_ARRAY(
+        model.bones,
+        model.boneCount,
+        native_from_value_boneInfo,
+        output
+    );
+    return output;
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_ModelAnimationGetFramePoses, MATTE_VALUE_TYPE_OBJECT)
+    ModelAnimation model = native_from_value_modelAnimation(vm, args[0]);
+
+    matteValue_t output = matte_store_new_value(store);
+    {
+        uint32_t i;
+        matteValue_t * vals = MemAlloc(sizeof(matteValue_t) * (model.frameCount));
+        for(i = 0; i < (model.frameCount); ++i) {
+            matteValue_t sub = matte_store_new_value(store);
+            {
+                uint32_t n;
+                matteValue_t * vals = MemAlloc(sizeof(matteValue_t) * (model.frameCount));
+                for(n = 0; n < (model.frameCount); ++n) {
+                    matteValue_t sub = matte_store_new_value(store);
+                    
+                    vals[n] = native_from_value_transform(vm, model.framePoses[i][n]);
+                }
+                matteArray_t arrC = MATTE_ARRAY_CAST(vals, matteValue_t, model.frameCount);
+                matte_value_into_new_object_array_ref(store, &sub, &arrC);
+                MemFree(vals);
+            }            
+            vals[i] = sub;
+        }
+        matteArray_t arrC = MATTE_ARRAY_CAST(vals, matteValue_t, model.frameCount);
+        matte_value_into_new_object_array_ref(store, &output, &arrC);
+        MemFree(vals);
     }
-    
-    return native_to_value_glyphInfo(vm, font.glyphs[index]);  
-  L_END:
+
+    return output;
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG2(raylib_FontGetRectangle, MATTE_VALUE_TYPE_OBJECT, MATTE_VALUE_TYPE_NUMBER) 
-    int index = args[1].value.number;
-    Font font = native_from_value_font(vm, args[0]);
-    
-    if (index < 0 || index > font.glyphCount) {
-        matte_vm_raise_error_cstring(vm, "FontGetRectangle: invalid glyph index");
-        goto L_END;
-    }
-    
-    return native_to_value_rectangle(vm, font.recs[index]);  
-  L_END:
-RAYLIB_FN__END
 
+
+
+RAYLIB_FN__ARG1(raylib_WaveGetData, MATTE_VALUE_TYPE_OBJECT)
+    Wave wave = native_from_value_wave(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        wave.data,
+        wave.frameCount * wave.channels * (wave.sampleSize / 8)
+    );
+RAYLIB_FN__END
 
 
 /*
@@ -1396,7 +1580,7 @@ RAYLIB_FN__ARG1(raylib_LoadDirectoryFiles,
     MATTE_VALUE_TYPE_STRING
 )
     FilePathList list = LoadDirectoryFiles(native_from_value_string_unsafe(vm, args[0]));
-    matteValue_t output = native_to_value_filePathList(vm, list);
+    matteValue_t output = native_to_value_filePathList_reduced(vm, list);
     UnloadDirectoryFiles(list);
     return output;
 RAYLIB_FN__END
@@ -1412,7 +1596,7 @@ RAYLIB_FN__ARG3(raylib_LoadDirectoryFilesEx,
         native_from_value_string_unsafe(vm, args[1]), // ok!
         args[0].value.boolean
     );
-    matteValue_t output = native_to_value_filePathList(vm, list);
+    matteValue_t output = native_to_value_filePathList_reduced(vm, list);
     UnloadDirectoryFiles(list);
     return output;
 RAYLIB_FN__END
@@ -1430,7 +1614,7 @@ RAYLIB_FN__ARG0(raylib_LoadDroppedFiles
 )
     FilePathList list = LoadDroppedFiles(
     );
-    matteValue_t output = native_to_value_filePathList(vm, list);
+    matteValue_t output = native_to_value_filePathList_reduced(vm, list);
     UnloadDroppedFiles(list);
     return output;
 RAYLIB_FN__END
@@ -4921,34 +5105,408 @@ RAYLIB_FN__END
 
 
 
+// rmodels
+
+RAYLIB_FN__ARG3(raylib_DrawLine3D,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawLine3D(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_DrawPoint3D,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPoint3D(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raylib_DrawCircle3D,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECTz
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCircle3D(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        native_from_value_vector3(vm, args[2]),
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_DrawTriangle3D,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawTriangle3D(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_vector3(vm, args[2]),
+        native_from_value_color(vm, args[3])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_DrawTriangleStrip3D,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    uint32_t count = matte_value_object_get_number_key_count(store, args[0]);
+    Vector3 * pts = MemAlloc(sizeof(Vector3)*count);
+    
+    int i;
+    for(i = 0; i < count; ++i) {
+        pts[i] = native_from_value_vector3(vm, matte_value_object_access_index(store, args[0], i));
+    }
+
+
+    DrawTriangleStrip3D(
+        pts,
+        count,
+        native_from_value_color(vm, args[3])
+    );
+    
+    MemFree(pts);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raylib_DrawCube,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCube(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawCubeV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCubeV(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raylib_DrawCubeWires,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCubeWires(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawCubeWiresV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCubeWiresV(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawSphere,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawSphere(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raylib_DrawSphereEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawSphereEx(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_DrawSphereWires,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawSphereWires(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCylinder,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCylinder(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCylinderEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCylinderEx(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCylinderWires,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCylinderWires(
+        native_from_value_vector3(vm, args[0]),
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCylinderWiresEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCylinderWiresEx(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCapsule,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCapsule(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raylib_DrawCapsuleWires,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawCapsuleWires(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        args[2].value.number,
+        args[3].value.number,
+        args[4].value.number,
+        native_from_value_color(vm, args[5])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawPlane,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawPlane(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_vector3(vm, args[1]),
+        native_from_value_color(vm, args[2])
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_DrawRay,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    DrawRay(
+        native_from_value_vector3(vm, args[0]),
+        native_from_value_color(vm, args[1])
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_DrawGrid,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    DrawGrid(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+RAYLIB_FN__ARG3(raylib_LoadModel,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_model(
+        vm,
+        LoadModel(
+            native_from_value_string_unsafe(vm, args[0]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
 
 
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
+    
+    matte_add_external_function(m, "raylib_ImageGetData", raylib_ImageGetData, NULL, NULL),
 
-    matte_add_external_function(m, "raylib_IsObjectReadOnly", raylib_IsObjectReadOnly, NULL, "object", NULL);
+    matte_add_external_function(m, "raylib_FontGetRecs", raylib_FontGetRecs, NULL, NULL),
+    matte_add_external_function(m, "raylib_FontGetGlyphs", raylib_FontGetGlyphs, NULL, NULL),
 
-    matte_add_external_function(m, "raylib_ImageGetWidth", raylib_ImageGetWidth, NULL, "image", NULL);
-    matte_add_external_function(m, "raylib_ImageGetHeight", raylib_ImageGetHeight, NULL, "image", NULL);
-    matte_add_external_function(m, "raylib_ImageGetMipmaps", raylib_ImageGetMipmaps, NULL, "image", NULL);
-    matte_add_external_function(m, "raylib_ImageGetFormat", raylib_ImageGetFormat, NULL, "image", NULL);
+    matte_add_external_function(m, "raylib_MeshGetVertices", raylib_MeshGetVertices, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetTexCoords", raylib_MeshGetTexCoords, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetTexCoords2", raylib_MeshGetTexCoords2, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetNormals", raylib_MeshGetNormals, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetTangents", raylib_MeshGetTangents, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetColors", raylib_MeshGetColors, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetIndices", raylib_MeshGetIndices, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetAnimVertices", raylib_MeshGetAnimVertices, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetAnimNormals", raylib_MeshGetAnimNormals, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetBoneIDs", raylib_MeshGetBoneIDs, NULL, NULL),
+    matte_add_external_function(m, "raylib_MeshGetBoneWeights", raylib_MeshGetBoneWeights, NULL, NULL),
 
-    matte_add_external_function(m, "raylib_RenderTextureGetColorTexture", raylib_RenderTextureGetColorTexture, NULL, "renderTexture", NULL);
-    matte_add_external_function(m, "raylib_RenderTextureGetDepthTexture", raylib_RenderTextureGetDepthTexture, NULL, "renderTexture", NULL);
+    matte_add_external_function(m, "raylib_ModelGetMeshes", raylib_ModelGetMeshes, NULL, NULL),
+    matte_add_external_function(m, "raylib_ModelGetMaterials", raylib_ModelGetMaterials, NULL, NULL),
+    matte_add_external_function(m, "raylib_ModelGetMaterialNumbers", raylib_ModelGetMaterialNumbers, NULL, NULL),
+    matte_add_external_function(m, "raylib_ModelGetBones", raylib_ModelGetBones, NULL, NULL),
+    matte_add_external_function(m, "raylib_ModelGetBindPoses", raylib_ModelGetBindPoses, NULL, NULL),
 
-    matte_add_external_function(m, "raylib_TextureGetFormat", raylib_TextureGetFormat, NULL, "texture", NULL);
-    matte_add_external_function(m, "raylib_TextureGetHeight", raylib_TextureGetHeight, NULL, "texture", NULL);
-    matte_add_external_function(m, "raylib_TextureGetMipmaps", raylib_TextureGetMipmaps, NULL, "texture", NULL);
-    matte_add_external_function(m, "raylib_TextureGetWidth", raylib_TextureGetWidth, NULL, "texture", NULL);
+    matte_add_external_function(m, "raylib_ModelAnimationGetBones", raylib_ModelAnimationGetBones, NULL, NULL),
+    matte_add_external_function(m, "raylib_ModelAnimationGetFramePoses", raylib_ModelAnimationGetFramePoses, NULL, NULL),
 
 
-    matte_add_external_function(m, "raylib_FontGetGlyphCount", raylib_FontGetGlyphCount, NULL, "font", NULL);
-    matte_add_external_function(m, "raylib_FontGetGlyphPadding", raylib_FontGetGlyphPadding, NULL, "font", NULL);
-    matte_add_external_function(m, "raylib_FontGetBaseSize", raylib_FontGetBaseSize, NULL, "font", NULL);
-    matte_add_external_function(m, "raylib_FontGetGlyphInfo", raylib_FontGetGlyphInfo, NULL, "font", "index", NULL);
-    matte_add_external_function(m, "raylib_FontGetTexture", raylib_FontGetTexture, NULL, "font", NULL);
-    matte_add_external_function(m, "raylib_FontGetRectangle", raylib_FontGetGlyphCount, NULL, "font", "index", NULL);
-
+    matte_add_external_function(m, "raylib_WaveGetData", raylib_WaveGetData, NULL, NULL),
 
 
 

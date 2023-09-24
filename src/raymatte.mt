@@ -1,6 +1,22 @@
 @:MemoryBuffer = import(module:'Matte.Core.MemoryBuffer');
 
 
+@:base__ImageGetData = getExternalFunction(name:"raylib_ImageGetData");
+@:base__MeshGetVertices = getExternalFunction(name:"raylib_MeshGetVertices");
+@:base__MeshGetTexCoords = getExternalFunction(name:"raylib_MeshGetTexCoords");
+@:base__MeshGetTexCoords2 = getExternalFunction(name:"raylib_MeshGetTexCoords2");
+@:base__MeshGetNormals = getExternalFunction(name:"raylib_MeshGetNormals");
+@:base__MeshGetTangents = getExternalFunction(name:"raylib_MeshGetTangents");
+@:base__MeshGetColors = getExternalFunction(name:"raylib_MeshGetColors");
+@:base__MeshGetIndices = getExternalFunction(name:"raylib_MeshGetIndices");
+@:base__MeshGetAnimVertices = getExternalFunction(name:"raylib_MeshGetAnimVertices");
+@:base__MeshGetAnimNormals = getExternalFunction(name:"raylib_MeshGetAnimNormals");
+@:base__MeshGetBoneIDs = getExternalFunction(name:"raylib_MeshGetBoneIDs");
+@:base__MeshGetBoneWeights = getExternalFunction(name:"raylib_MeshGetBoneWeights");
+@:base__WaveGetData = getExternalFunction(name:"raylib_WaveGetData");
+
+
+
 @:base__LoadFileData = getExternalFunction(name:"raylib_LoadFileData");
 @:base__SaveFileData = getExternalFunction(name:"raylib_SaveFileData");
 @:base__ExportDataAsCode = getExternalFunction(name:"raylib_ExportDataAsCode");
@@ -13,6 +29,8 @@
 @:base__SetPixelColor = getExternalFunction(name:"raylib_SetPixelColor");
 @:base__LoadFontFromMemory = getExternalFunction(name:"raylib_LoadFontFromMemory");
 @:base__LoadFontData = getExternalFunction(name:"raylib_LoadFontData");
+
+
 
 @:raylib = {
     // Defines
@@ -250,7 +268,13 @@
     MATERIAL_MAP_PREFILTER : 9,         // Prefilter material (NOTE: Uses GL_TEXTURE_CUBE_MAP)
     MATERIAL_MAP_BRDF  : 10,              // Brdf material
 
-
+    MESH_BUFFER_ID_POSITIONS : 0,
+    MESH_BUFFER_ID_TEXCOORDS : 1,
+    MESH_BUFFER_ID_NORMALS   : 2,
+    MESH_BUFFER_ID_COLORS    : 3,
+    MESH_BUFFER_ID_TANGENTS  : 4,
+    MESH_BUFFER_ID_TEXCOORDS2: 5,
+    MESH_BUFFER_ID_INDICES   : 6,
 
     SHADER_LOC_VERTEX_POSITION : 0, // Shader location: vertex attribute: position
     SHADER_LOC_VERTEX_TEXCOORD01 : 1,   // Shader location: vertex attribute: texcoord01
@@ -389,36 +413,89 @@
 
     // Read-only Struct Accessors 
 
+        ImageGetData ::(image) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__ImageGetData(image));
+            return m;
+        },
+        FontGetRecs : getExternalFunction(name:"raylib_FontGetRecs"),
+        FontGetGlyphs : getExternalFunction(name:"raylib_FontGetGlyphs"),
         
-        // returns whether the object is protected under the raylib implementation.
-        IsObjectReadOnly : getExternalFunction(name:"raylib_IsObjectReadOnly"),
-
-        // Image getters 
-        ImageGetWidth  : getExternalFunction(name:"raylib_ImageGetWidth"),
-        ImageGetHeight : getExternalFunction(name:"raylib_ImageGetHeight"),
-        ImageGetMipmaps: getExternalFunction(name:"raylib_ImageGetMipmaps"),
-        ImageGetFormat : getExternalFunction(name:"raylib_ImageGetFormat"),
-
-        // RenderTexture getters
-        RenderTextureGetDepthTexture : getExternalFunction(name:"raylib_RenderTextureGetDepthTexture"),
-        RenderTextureGetColorTexture : getExternalFunction(name:"raylib_RenderTextureGetColorTexture"),
-
-
-        TextureGetWidth : getExternalFunction(name:"raylib_TextureGetWidth"),
-        TextureGetHeight : getExternalFunction(name:"raylib_TextureGetHeight"),
-        TextureGetMipmaps : getExternalFunction(name:"raylib_TextureGetMipmaps"),
-        TextureGetFormat : getExternalFunction(name:"raylib_TextureGetFormat"),
-
         
-        FontGetBaseSize : getExternalFunction(name:"raylib_FontGetBaseSize"),
-        FontGetGlyphCount : getExternalFunction(name:"raylib_FontGetGlyphCount"),
-        FontGetGlyphPadding : getExternalFunction(name:"raylib_FontGetGlyphPadding"),
-        FontGetTexture : getExternalFunction(name:"raylib_FontGetTexture"),
-        FontGetRectangle : getExternalFunction(name:"raylib_FontGetRectangle"),
-        FontGetGlyphInfo : getExternalFunction(name:"raylib_FontGetGlyphInfo"),
+        MeshGetVertices :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetVertices(mesh));
+            return m;
+        },
+        MeshGetTexCoords :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetTexCoords(mesh));
+            return m;
+        },
+        MeshGetTexCoords2 :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetTexCoords2(mesh));
+            return m;
+        },
+        MeshGetNormals :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetNormals(mesh));
+            return m;
+        },
+        MeshGetTangents :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetTangents(mesh));
+            return m;
+        },
+        MeshGetColors :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetColors(mesh));
+            return m;
+        },
+        MeshGetIndices :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetIndices(mesh));
+            return m;
+        },
+        MeshGetAnimVertices :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetAnimVertices(mesh));
+            return m;
+        },
+        MeshGetAnimNormals :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetAnimNormals(mesh));
+            return m;
+        },
+        MeshGetBoneIDs :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetBoneIDs(mesh));
+            return m;
+        },
+        MeshGetBoneWeights :: (mesh) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MeshGetBoneWeights(mesh));
+            return m;
+        },
 
 
 
+        ModelGetMeshes : getExternalFunction(name:"raylib_ModelGetMeshes"),
+        ModelGetMaterials : getExternalFunction(name:"raylib_ModelGetMaterials"),
+        ModelGetMaterialNumbers : getExternalFunction(name:"raylib_ModelGetMaterialNumbers"),
+        ModelGetBones : getExternalFunction(name:"raylib_ModelGetBones"),
+        ModelGetBindPoses : getExternalFunction(name:"raylib_ModelGetBindPoses"),
+
+        ModelAnimationGetBones : getExternalFunction(name:"raylib_ModelAnimationGetBones"),
+        ModelAnimationGetFramePoses : getExternalFunction(name:"raylib_ModelAnimationGetFramePoses"),
+
+
+        WaveGetData :: (wave) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__WaveGetData(wave));
+            return m;
+        },        
+        
     // rcore: Windowing
     InitWindow : getExternalFunction(name:"raylib_InitWindow"),
     WindowShouldClose : getExternalFunction(name:"raylib_WindowShouldClose"),
