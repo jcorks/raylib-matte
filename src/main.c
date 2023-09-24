@@ -6208,7 +6208,7 @@ RAYLIB_FN__ARG3(raylib_GetRayCollisionSphere,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG3(raylib_GetRayCollisionBox,
+RAYLIB_FN__ARG2(raylib_GetRayCollisionBox,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT
 )
@@ -6276,6 +6276,1516 @@ RAYLIB_FN__ARG5(raylib_GetRayCollisionQuad,
     );
 RAYLIB_FN__END
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RAYLIB_FN__ARG3(raylib_Clamp,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_float(
+        vm,
+        Clamp(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Lerp,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_float(
+        vm,
+        Lerp(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Normalize,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_float(
+        vm,
+        Normalize(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raylib_Remap,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_float(
+        vm,
+        Normalize(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            args[4].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Wrap,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_float(
+        vm,
+        Wrap(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+RAYLIB_FN__ARG0(raylib_Vector2Zero,
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Zero(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_Vector2One,
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2One(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Add,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Add(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2AddValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2AddValue(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2Subtract,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Subtract(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2SubtractValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2SubtractValue(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_Vector2Length,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2Length(
+            native_from_value_vector2(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_Vector2LengthSqr,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2LengthSqr(
+            native_from_value_vector2(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2DotProduct,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2DotProduct(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Distance,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2Distance(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2DistanceSqr,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2DistanceSqr(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Angle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2Angle(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Scale,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Scale(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Multiply,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Multiply(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_Vector2Negate,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Negate(
+            native_from_value_vector2(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Divide,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Divide(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_Vector2Normalize,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Normalize(
+            native_from_value_vector2(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2Transform,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Transform(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_Vector2Lerp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Lerp(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector2Reflect,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Reflect(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector2Rotate,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Rotate(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Vector2MoveTowards,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2MoveTowards(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_Vector2Invert,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Invert(
+            native_from_value_vector2(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_Vector2Clamp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2Clamp(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1]),
+            native_from_value_vector2(vm, args[2])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Vector2ClampValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector2(
+        vm,
+        Vector2ClampValue(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG2(raylib_Vector2Equals,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        Vector2Equals(
+            native_from_value_vector2(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+RAYLIB_FN__ARG0(raylib_Vector3Zero,
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Zero(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_Vector3One,
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3One(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Add,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Add(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3AddValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3AddValue(
+            native_from_value_vector3(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Subtract,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Subtract(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3SubtractValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3SubtractValue(
+            native_from_value_vector3(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3Multiply,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Multiply(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3Scale,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Scale(
+            native_from_value_vector3(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3CrossProduct,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3CrossProduct(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_Vector3Perpendicular,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Perpendicular(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_Vector3Length,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3Length(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_Vector3LengthSqr,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3LengthSqr(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3DotProduct,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3DotProduct(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Distance,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3Distance(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3DistanceSqr,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3DistanceSqr(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Angle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector3Angle(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_Vector3Negate,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Negate(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Divide,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Divide(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_Vector3Normalize,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Normalize(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3OrthoNormalize,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 a = native_from_value_vector3(vm, args[0]);
+    Vector3 b = native_from_value_vector3(vm, args[1]);
+    Vector3OrthoNormalize(
+        &a,
+        &b
+    );
+    native_update_value_vector3(vm, args[0], a);
+    native_update_value_vector3(vm, args[1], b);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Transform,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Transform(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3RotateByQuaternion,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3RotateByQuaternion(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_Vector3RotateByAxisAngle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3RotateByAxisAngle(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_Vector3Lerp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Lerp(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Reflect,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Reflect(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3Min,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Min(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3Max,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Max(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG4(raylib_Vector3Barycenter,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Barycenter(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            native_from_value_vector3(vm, args[2]),
+            native_from_value_vector3(vm, args[3])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Vector3Unproject,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Unproject(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_matrix(vm, args[1]),
+            native_from_value_matrix(vm, args[2])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__(raylib_Vector3Invert,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Invert(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Vector3Clamp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Clamp(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            native_from_value_vector3(vm, args[2])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_Vector3ClampValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Clamp(
+            native_from_value_vector3(vm, args[0]),
+            args[1].value.number,
+            args[2].value.number,
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_Vector3Equals,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        Vector3Equals(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_Vector3Refract,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector3(
+        vm,
+        Vector3Refract(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+RAYLIB_FN__ARG1(raylib_MatrixDeterminant,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        MatrixDeterminant(
+            native_from_value_matrix(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_MatrixTrace,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        MatrixTrace(
+            native_from_value_matrix(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MatrixTranspose,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixTranspose(
+            native_from_value_matrix(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_MatrixInvert,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixInvert(
+            native_from_value_matrix(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raylib_MatrixIdentity,
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixIdentity(
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_MatrixAdd,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixAdd(
+            native_from_value_matrix(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_MatrixSubtract,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixSubtract(
+            native_from_value_matrix(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_MatrixMultiply,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixMultiply(
+            native_from_value_matrix(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_MatrixTranslate,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixTranslate(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_MatrixRotate,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotate(
+            native_from_value_vector3(vm, args[1]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_MatrixRotateX,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotateX(
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MatrixRotateY,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotateY(
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MatrixRotateZ,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotateZ(
+            args[0].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MatrixRotateXYZ,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotateXYZ(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_MatrixRotateZYX,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixRotateZYX(
+            native_from_value_vector3(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_MatrixScale,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixScale(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG6(raylib_MatrixFrustum,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixFrustum(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            args[4].value.number,
+            args[5].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG4(raylib_MatrixPerspective,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixPerspective(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raylib_MatrixOrtho,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixOrtho(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number,
+            args[3].value.number,
+            args[4].value.number,
+            args[5].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_MatrixLookAt,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        MatrixLookAt(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1]),
+            native_from_value_vector3(vm, args[2])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_QuaternionAdd,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionAdd(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_QuaternionAddValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionAddValue(
+            native_from_value_vector4(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_QuaternionSubtract,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionSubtract(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_QuaternionSubtractValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionSubtractValue(
+            native_from_value_vector4(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raylib_QuaternionIdentity,
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionIdentity(
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_QuaternionLength,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        QuaternionLength(
+            native_from_value_vector4(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_QuaternionNormalize,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionNormalize(
+            native_from_value_vector4(vm, args[0])            
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_QuaternionInvert,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionInvert(
+            native_from_value_vector4(vm, args[0])            
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_QuaternionMultiply,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionMultiply(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionDivide,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionDivide(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionScale,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionScale(
+            native_from_value_vector4(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_QuaternionLerp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionLerp(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG3(raylib_QuaternionNLerp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionNLerp(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_QuaternionSLerp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionSLerp(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1]),
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionFromVector3ToVector3,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionFromVector3ToVector3(
+            native_from_value_vector3(vm, args[0]),
+            native_from_value_vector3(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_QuaternionFromMatrix,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionFromMatrix(
+            native_from_value_matrix(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raylib_QuaternionToMatrix,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_matrix(
+        vm,
+        QuaternionToMatrix(
+            native_from_value_vector4(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionFromAxisAngle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionFromAxisAngle(
+            native_from_value_vector3(vm, args[0]),
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_QuaternionToAxisAngle,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 outAxis;
+    float outAngle;
+    
+    QuaternionToAxisAngle(
+        native_from_value_vector4(vm, args[0]),
+        &outAxis,
+        &outAngle
+    );
+    
+    matteValue_t v = matte_store_new_value(store);
+    matte_value_into_new_object_ref(store, &v);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "axis"), native_to_value_vector3(vm, outAxis));
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "angle"), native_to_value_float(vm, outAngle));
+    return v;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_QuaternionFromEuler,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionFromEuler(
+            args[0].value.number,
+            args[1].value.number,
+            args[2].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_QuaternionToEuler,
+    MATTE_VALUE_TYPE_OBJECT,
+)
+    return native_to_value_vector3(
+        vm,
+        QuaternionToEuler(
+            native_from_value_vector4(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionTransform,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_vector4(
+        vm,
+        QuaternionTransform(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_matrix(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_QuaternionEquals,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_boolean(
+        vm,
+        QuaternionEquals(
+            native_from_value_vector4(vm, args[0]),
+            native_from_value_vector4(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
 
 
 
@@ -6951,7 +8461,6 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_Vector3Max", raylib_Vector3Max, NULL, "v1","v2", NULL);                                 
     matte_add_external_function(m, "raylib_Vector3Barycenter", raylib_Vector3Barycenter, NULL, "p","a", "b","c",NULL);      
     matte_add_external_function(m, "raylib_Vector3Unproject", raylib_Vector3Unproject, NULL, "source","projection", "view",NULL);   
-    matte_add_external_function(m, "raylib_Vector3ToFloatV", raylib_Vector3ToFloatV, NULL, "v", NULL);                                          
     matte_add_external_function(m, "raylib_Vector3Invert", raylib_Vector3Invert, NULL, "v", NULL);                                           
     matte_add_external_function(m, "raylib_Vector3Clamp", raylib_Vector3Clamp, NULL, "v","min", "max",NULL);                  
     matte_add_external_function(m, "raylib_Vector3ClampValue", raylib_Vector3ClampValue, NULL, "v","min", "max",NULL);                 
@@ -6979,7 +8488,6 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_MatrixPerspective", raylib_MatrixPerspective, NULL, "fovy","aspect", "near","far",NULL); 
     matte_add_external_function(m, "raylib_MatrixOrtho", raylib_MatrixOrtho, NULL, "left","right", "bottom","top", "near", "far",NULL); 
     matte_add_external_function(m, "raylib_MatrixLookAt", raylib_MatrixLookAt, NULL, "eye","target", "up",NULL);               
-    matte_add_external_function(m, "raylib_MatrixToFloatV", raylib_MatrixToFloatV, NULL, "mat", NULL);                                         
 
 
     matte_add_external_function(m, "raylib_QuaternionAdd", raylib_QuaternionAdd, NULL, "q1","q2", NULL);                     
@@ -7000,7 +8508,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_QuaternionFromMatrix", raylib_QuaternionFromMatrix, NULL, "mat", NULL);                                
     matte_add_external_function(m, "raylib_QuaternionToMatrix", raylib_QuaternionToMatrix, NULL, "q", NULL);                                    
     matte_add_external_function(m, "raylib_QuaternionFromAxisAngle", raylib_QuaternionFromAxisAngle, NULL, "axis","angle", NULL);              
-    matte_add_external_function(m, "raylib_QuaternionToAxisAngle", raylib_QuaternionToAxisAngle, NULL, "q","outAxis", "outAngle",NULL); 
+    matte_add_external_function(m, "raylib_QuaternionToAxisAngle", raylib_QuaternionToAxisAngle, NULL, "q",NULL); 
     matte_add_external_function(m, "raylib_QuaternionFromEuler", raylib_QuaternionFromEuler, NULL, "pitch","yaw", "roll",NULL);         
     matte_add_external_function(m, "raylib_QuaternionToEuler", raylib_QuaternionToEuler, NULL, "q", NULL);                                    
     matte_add_external_function(m, "raylib_QuaternionTransform", raylib_QuaternionTransform, NULL, "q","mat", NULL);                   

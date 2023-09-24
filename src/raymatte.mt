@@ -1196,7 +1196,6 @@
     Vector3Max : getExternalFunction(name:"raylib_Vector3Max"),
     Vector3Barycenter : getExternalFunction(name:"raylib_Vector3Barycenter"),
     Vector3Unproject : getExternalFunction(name:"raylib_Vector3Unproject"),
-    Vector3ToFloatV : getExternalFunction(name:"raylib_Vector3ToFloatV"),
     Vector3Invert : getExternalFunction(name:"raylib_Vector3Invert"),
     Vector3Clamp : getExternalFunction(name:"raylib_Vector3Clamp"),
     Vector3ClampValue : getExternalFunction(name:"raylib_Vector3ClampValue"),
@@ -1224,7 +1223,6 @@
     MatrixPerspective : getExternalFunction(name:"raylib_MatrixPerspective"),
     MatrixOrtho : getExternalFunction(name:"raylib_MatrixOrtho"),
     MatrixLookAt : getExternalFunction(name:"raylib_MatrixLookAt"),
-    MatrixToFloatV : getExternalFunction(name:"raylib_MatrixToFloatV"),
 
 
     QuaternionAdd : getExternalFunction(name:"raylib_QuaternionAdd"),

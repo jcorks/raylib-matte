@@ -781,7 +781,19 @@ void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 vec) {
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
 }
 
+void native_update_value_vector3(matteVM_t * vm, matteValue_t v, Vector3 vec) {
+    matteStore_t * store = matte_vm_get_store(vm);    
 
+
+    matteValue_t x   = native_to_value_float(vm, vec.x);
+    matteValue_t y   = native_to_value_float(vm, vec.y);
+    matteValue_t z   = native_to_value_float(vm, vec.z);
+
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"), x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"), y);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "z"), z);
+}
 
 
 

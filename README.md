@@ -57,7 +57,9 @@ These changes are listed here:
           `DrawTextCodepoints` (Not especially needed with Matte strings access.)
           All `Text*`, `UTF8`, and `Codepoint` functions (Not needed. Can be handled at the Matte level with the Matte string type, functions, and querries)
           `UnloadModelAnimations` (Not needed.)
-        
+          `Vector3toFloatV` (Not needed.)
+          `MatrixToFloatV` (Not needed.)
+            
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
           
@@ -215,8 +217,15 @@ These changes are listed here:
 - LoadMaterials returns an array of Material instances and removes the 
   materialCount argument
 
-- 
+- Vector2Equals returns a boolean instead of an int.
+
+- Vector3Equals returns a boolean instead of an int.
+
+- QuaternionEquals returns a boolean instead of an int.
   
+- QuaternionToAxisAngle only takes the quaternion argument and, instead, returns 
+  an object containing an "axis" and "angle" member, representing the 
+  output of the function
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.

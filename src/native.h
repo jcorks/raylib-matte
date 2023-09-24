@@ -111,6 +111,7 @@ void native_update_value_model(matteVM_t * vm, matteValue_t in);
 
 void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);
 void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 cam);
+void native_update_value_vector3(matteVM_t * vm, matteValue_t v, Vector3 cam);
 
 
 // Unloads a native object safely.
