@@ -29,7 +29,7 @@
 @:base__SetPixelColor = getExternalFunction(name:"raylib_SetPixelColor");
 @:base__LoadFontFromMemory = getExternalFunction(name:"raylib_LoadFontFromMemory");
 @:base__LoadFontData = getExternalFunction(name:"raylib_LoadFontData");
-
+@:base__UpdateMeshBuffer = getExternalFunction(name:"raylib_UpdateMeshBuffer");
 
 
 @:raylib = {
@@ -1006,7 +1006,9 @@
 
 
     UploadMesh : getExternalFunction(name:"raylib_UploadMesh"),
-    UpdateMeshBuffer : getExternalFunction(name:"raylib_UpdateMeshBuffer"),
+    UpdateMeshBuffer ::(mesh, index, bytes, offset) {
+        base__UpdateMeshBuffer(mesh, index, bytes:bytes.handle, offset);
+    },
     UnloadMesh : getExternalFunction(name:"raylib_UnloadMesh"),
     DrawMesh : getExternalFunction(name:"raylib_DrawMesh"),
     DrawMeshInstanced : getExternalFunction(name:"raylib_DrawMeshInstanced"),
@@ -1039,7 +1041,6 @@
     LoadModelAnimations : getExternalFunction(name:"raylib_LoadModelAnimations"),
     UpdateModelAnimation : getExternalFunction(name:"raylib_UpdateModelAnimation"),
     UnloadModelAnimation : getExternalFunction(name:"raylib_UnloadModelAnimation"),
-    UnloadModelAnimations : getExternalFunction(name:"raylib_UnloadModelAnimations"),
     IsModelAnimationValid : getExternalFunction(name:"raylib_IsModelAnimationValid"),
 
 

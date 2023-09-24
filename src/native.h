@@ -47,6 +47,7 @@ matteValue_t native_to_value_model(matteVM_t * vm, Model in);
 matteValue_t native_to_value_modelAnimation(matteVM_t * vm, ModelAnimation in);
 matteValue_t native_to_value_ray(matteVM_t * vm, Ray in);
 matteValue_t native_to_value_rayCollision(matteVM_t * vm, RayCollision in);
+matteValue_t native_to_value_boundingBox(matteVM_t * vm, BoundingBox in);
 matteValue_t native_to_value_wave(matteVM_t * vm, Wave in);
 matteValue_t native_to_value_audioStream(matteVM_t * vm, AudioStream in);
 matteValue_t native_to_value_sound(matteVM_t * vm, Sound in);
@@ -99,7 +100,14 @@ VrStereoConfig native_from_value_vrStereoConfig(matteVM_t * vm, matteValue_t in)
 // for opaque objects, we can get an editable reference
 Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t img);
 Texture2D * native_from_value_texture_ref(matteVM_t * vm, matteValue_t tex);
-
+Mesh * native_from_value_mesh_ref(matteVM_t * vm, matteValue_t tex);
+Model * native_from_value_model_ref(matteVM_t * vm, matteValue_t tex);
+Material * native_from_value_material_ref(matteVM_t * vm, matteValue_t tex);
+void native_update_value_image(matteVM_t * vm, matteValue_t in);
+void native_update_value_texture(matteVM_t * vm, matteValue_t in);
+void native_update_value_mesh(matteVM_t * vm, matteValue_t in);
+void native_update_value_material(matteVM_t * vm, matteValue_t in);
+void native_update_value_model(matteVM_t * vm, matteValue_t in);
 
 void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);
 void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 cam);

@@ -343,7 +343,7 @@ matteValue_t native_to_value_boneInfo(matteVM_t * vm, BoneInfo in) {
 }
 matteValue_t native_to_value_model(matteVM_t * vm, Model in) {
     INIT_OUT();
-    NATIVIZE(Mesh, RAYMATTE_NATIVE_TYPE__MODEL);
+    NATIVIZE(Model, RAYMATTE_NATIVE_TYPE__MODEL);
     NEW_KEY(transform, transform);
     NEW_KEY(meshCount, int);
     NEW_KEY(materialCount, int);
@@ -376,6 +376,14 @@ matteValue_t native_to_value_rayCollision(matteVM_t * vm, RayCollision in) {
     return out;
 
 }
+
+matteValue_t native_to_value_boundingBox(matteVM_t * vm, BoundingBox in) {
+    INIT_OUT();
+    NEW_KEY(min, vector3);
+    NEW_KEY(max, vector3);
+    return out;
+}
+
 matteValue_t native_to_value_wave(matteVM_t * vm, Wave in) {
     INIT_OUT();
     NATIVIZE(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
@@ -465,7 +473,27 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         return out;\
     }\
+
+#define UPDATE_KEY(__name__, __type__)\
+    matte_value_object_set_key_string(store, in, MATTE_VM_STR_CAST(vm, "__name__"), native_to_value__type__(vm, object->__name__));
+
+#define RETRIEVE_NATIVE_OBJECT(__TYPE__,__TAG__)\
+    matteStore_t * store = matte_vm_get_store(vm);\
+    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
+        __TYPE__ dout = {};\
+        return dout;\
+    }\
+    NativeEncodeData_t * objectSrc = matte_value_object_get_userdata(store, img);\
+    if (objectSrc == NULL || objectSrc->typeTag != __TAG__) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an __TYPE__.");\
+        __TYPE__ dout = {};\
+        return dout;\
+    }\
+    __TYPE__ * object = (__TYPE__*)objectSrc->data;
     
+
+
 #define RETRIEVE_NATIVE(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
     if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
@@ -776,41 +804,121 @@ void native_unload(matteVM_t * vm, matteValue_t obj) {
     object->data = NULL; // free() ok!
 }
 
-Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t img) {
-    matteStore_t * store = matte_vm_get_store(vm);    
-
-    if (img.binID != MATTE_VALUE_TYPE_OBJECT) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Image: value is not an Image.");
-        return NULL;
-    }
-    
-    NativeEncodeData_t * object = matte_value_object_get_userdata(store, img);
-    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__IMAGE) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Image: value is not an Image.");
-        return NULL;
-    }
-
-    return (Image*)object->data;
+Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
+    return object;
 }   
 
+void native_update_value_image(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
+    UPDATE_KEY(width, int);
+    UPDATE_KEY(height, int);
+    UPDATE_KEY(mipmaps, int);
+    UPDATE_KEY(format, int);
+}
 
-Texture * native_from_value_texture_ref(matteVM_t * vm, matteValue_t img) {
-    matteStore_t * store = matte_vm_get_store(vm);    
 
-    if (img.binID != MATTE_VALUE_TYPE_OBJECT) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Texture/Texture2D: value is not an Object.");
-        Texture imgOut = {};
-        return imgOut;
-    }
-    
-    NativeEncodeData_t * object = matte_value_object_get_userdata(store, img);
-    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Texture/Texture2D: value is not an Texture/Texture2D.");
-        Texture imgOut = {};
-        return imgOut;
-    }
-
-    return object->data;
+Image * native_from_value_texture_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
+    return object;
 }   
+
+void native_update_value_texture(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
+    UPDATE_KEY(width, int);
+    UPDATE_KEY(height, int);
+    UPDATE_KEY(mipmaps, int);
+    UPDATE_KEY(format, int);
+} 
+
+
+
+Mesh * native_from_value_mesh_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
+    return object;
+}   
+
+void native_update_value_mesh(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
+    UPDATE_KEY(vertexCount, int);
+    UPDATE_KEY(triangleCount, int);
+} 
+
+Model * native_from_value_model_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    return object;
+}   
+
+void native_update_value_model(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    UPDATE_KEY(transform, transform);
+    UPDATE_KEY(meshCount, int);
+    UPDATE_KEY(materialCount, int);
+    UPDATE_KEY(boneCount, int);
+
+} 
+
+
+Material * native_from_value_material_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Material, RAYMATTE_NATIVE_TYPE__MATERIAL);
+    return object;
+}   
+
+void native_update_value_material(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Material, RAYMATTE_NATIVE_TYPE__MATERIAL);
+
+    typedef struct {
+        Shader shader;
+        MaterialMap maps0;
+        MaterialMap maps1;    
+        MaterialMap maps2;    
+        MaterialMap maps3;    
+
+        MaterialMap maps4;    
+        MaterialMap maps5;    
+        MaterialMap maps6;    
+        MaterialMap maps7;    
+
+        MaterialMap maps8;    
+        MaterialMap maps9;    
+        MaterialMap maps10;    
+        MaterialMap maps11;
+        
+        
+        float params0;    
+        float params1;    
+        float params2;    
+        float params3;    
+    } MaterialExt;
+    MaterialExt exp;
+    ext.shader = object->shader;
+    memcpy(&ext.maps0, object->maps, sizeof(MaterialMap)*MAX_MATERIAL_MAPS);
+    memcpy(&ext.params0, object->params, sizeof(float)*4);
+    
+    {
+        MaterialExt * object = &exp;
+        UPDATE_KEY(shader, shader);
+        UPDATE_KEY(maps0, materialMap);
+        UPDATE_KEY(maps1, materialMap);
+        UPDATE_KEY(maps2, materialMap);
+        UPDATE_KEY(maps3, materialMap);
+
+        UPDATE_KEY(maps4, materialMap);
+        UPDATE_KEY(maps5, materialMap);
+        UPDATE_KEY(maps6, materialMap);
+        UPDATE_KEY(maps7, materialMap);
+
+        UPDATE_KEY(maps8, materialMap);
+        UPDATE_KEY(maps9, materialMap);
+        UPDATE_KEY(maps10, materialMap);
+        UPDATE_KEY(maps11, materialMap);
+
+        UPDATE_KEY(params0, float);
+        UPDATE_KEY(params1, float);
+        UPDATE_KEY(params2, float);
+        UPDATE_KEY(params3, float);
+    }
+
+} 
 
 

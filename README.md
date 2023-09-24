@@ -56,6 +56,7 @@ These changes are listed here:
           `DrawTextCodepoint` (Not especially needed with Matte string access.)
           `DrawTextCodepoints` (Not especially needed with Matte strings access.)
           All `Text*`, `UTF8`, and `Codepoint` functions (Not needed. Can be handled at the Matte level with the Matte string type, functions, and querries)
+          `UnloadModelAnimations` (Not needed.)
         
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
@@ -208,6 +209,13 @@ These changes are listed here:
   
 - DrawTriangleStrip3D takes an array of points and a color.
   
+- DrawMeshInstanced takes 3 arguments, the last of which is an array of Matrix.
+  The size of the array determines the instance count
+  
+- LoadMaterials returns an array of Material instances and removes the 
+  materialCount argument
+
+- 
   
 ## Additional Notes
 
