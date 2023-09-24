@@ -856,6 +856,20 @@ void native_update_value_mesh(matteVM_t * vm, matteValue_t in) {
     UPDATE_KEY(triangleCount, int);
 } 
 
+
+Wave * native_from_value_wave_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
+    return object;
+}   
+
+void native_update_value_wave(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
+    UPDATE_KEY(frameCount, int);
+    UPDATE_KEY(sampleRate, int);
+    UPDATE_KEY(sampleSize, int);
+    UPDATE_KEY(channels, int);
+} 
+
 Model * native_from_value_model_ref(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Model, RAYMATTE_NATIVE_TYPE__MODEL);
     return object;

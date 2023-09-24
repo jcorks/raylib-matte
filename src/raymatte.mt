@@ -30,7 +30,11 @@
 @:base__LoadFontFromMemory = getExternalFunction(name:"raylib_LoadFontFromMemory");
 @:base__LoadFontData = getExternalFunction(name:"raylib_LoadFontData");
 @:base__UpdateMeshBuffer = getExternalFunction(name:"raylib_UpdateMeshBuffer");
-
+@:base__LoadWaveFromMemory = getExternalFunction(name:"raylib_LoadWaveFromMemory");
+@:base__UpdateSound = getExternalFunction(name:"raylib_UpdateSound");
+@:base__LoadWaveSamples = getExternalFunction(name:"raylib_LoadWaveSamples");
+@:base__LoadMusicStreamFromMemory = getExternalFunction(name:"raylib_LoadMusicStreamFromMemory");
+@:base__UpdateAudioStream = : getExternalFunction(name:"raylib_UpdateAudioStream");
 
 @:raylib = {
     // Defines
@@ -1060,12 +1064,16 @@
 
 
     LoadWave : getExternalFunction(name:"raylib_LoadWave"),
-    LoadWaveFromMemory : getExternalFunction(name:"raylib_LoadWaveFromMemory"),
+    LoadWaveFromMemory ::(fileType, bytes => MemoryBuffer.type) {
+        return base__LoadWaveFromMemory(fileType, bytes:bytes.handle);
+    },
     IsWaveReady : getExternalFunction(name:"raylib_IsWaveReady"),
     LoadSound : getExternalFunction(name:"raylib_LoadSound"),
     LoadSoundFromWave : getExternalFunction(name:"raylib_LoadSoundFromWave"),
     IsSoundReady : getExternalFunction(name:"raylib_IsSoundReady"),
-    UpdateSound : getExternalFunction(name:"raylib_UpdateSound"),
+    UpdateSound ::(sound, bytes => MemoryBuffer.type) {
+        base__UpdateSound(sound, bytes:bytes.handle);    
+    },
     UnloadWave : getExternalFunction(name:"raylib_UnloadWave"),
     UnloadSound : getExternalFunction(name:"raylib_UnloadSound"),
     ExportWave : getExternalFunction(name:"raylib_ExportWave"),
@@ -1083,12 +1091,17 @@
     WaveCopy : getExternalFunction(name:"raylib_WaveCopy"),
     WaveCrop : getExternalFunction(name:"raylib_WaveCrop"),
     WaveFormat : getExternalFunction(name:"raylib_WaveFormat"),
-    LoadWaveSamples : getExternalFunction(name:"raylib_LoadWaveSamples"),
-    UnloadWaveSamples : getExternalFunction(name:"raylib_UnloadWaveSamples"),
+    LoadWaveSamples ::(wave) {
+        @:m = MemoryBuffer.new();
+        m.bindNative(base__LoadWaveSamples(wave));
+        return m;
+    },
 
 
     LoadMusicStream : getExternalFunction(name:"raylib_LoadMusicStream"),
-    LoadMusicStreamFromMemory : getExternalFunction(name:"raylib_LoadMusicStreamFromMemory"),
+    LoadMusicStreamFromMemory :: (fileType, bytes => MemoryBuffer.type) {
+        return base__LoadMusicStreamFromMemory(fileType, bytes:bytes.handle);    
+    },
     IsMusicReady : getExternalFunction(name:"raylib_IsMusicReady"),
     UnloadMusicStream : getExternalFunction(name:"raylib_UnloadMusicStream"),
     PlayMusicStream : getExternalFunction(name:"raylib_PlayMusicStream"),
@@ -1108,7 +1121,9 @@
     LoadAudioStream : getExternalFunction(name:"raylib_LoadAudioStream"),
     IsAudioStreamReady : getExternalFunction(name:"raylib_IsAudioStreamReady"),
     UnloadAudioStream : getExternalFunction(name:"raylib_UnloadAudioStream"),
-    UpdateAudioStream : getExternalFunction(name:"raylib_UpdateAudioStream"),
+    UpdateAudioStream ::(stream, bytes => MemoryBuffer.type) {
+        base__UpdateAudioStream(stream, bytes:bytes.handle);
+    },
     IsAudioStreamProcessed : getExternalFunction(name:"raylib_IsAudioStreamProcessed"),
     PlayAudioStream : getExternalFunction(name:"raylib_PlayAudioStream"),
     PauseAudioStream : getExternalFunction(name:"raylib_PauseAudioStream"),
@@ -1119,6 +1134,7 @@
     SetAudioStreamPitch : getExternalFunction(name:"raylib_SetAudioStreamPitch"),
     SetAudioStreamPan : getExternalFunction(name:"raylib_SetAudioStreamPan"),
     SetAudioStreamBufferSizeDefault : getExternalFunction(name:"raylib_SetAudioStreamBufferSizeDefault"),
+    /*
     SetAudioStreamCallback : getExternalFunction(name:"raylib_SetAudioStreamCallback"),
 
     AttachAudioStreamProcessor : getExternalFunction(name:"raylib_AttachAudioStreamProcessor"),
@@ -1126,7 +1142,7 @@
 
     AttachAudioMixedProcessor : getExternalFunction(name:"raylib_AttachAudioMixedProcessor"),
     DetachAudioMixedProcessor : getExternalFunction(name:"raylib_DetachAudioMixedProcessor")
-    
+    */
 
 
     // Math

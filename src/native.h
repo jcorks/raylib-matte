@@ -103,11 +103,13 @@ Texture2D * native_from_value_texture_ref(matteVM_t * vm, matteValue_t tex);
 Mesh * native_from_value_mesh_ref(matteVM_t * vm, matteValue_t tex);
 Model * native_from_value_model_ref(matteVM_t * vm, matteValue_t tex);
 Material * native_from_value_material_ref(matteVM_t * vm, matteValue_t tex);
+Wave * native_from_value_wave_ref(matteVM_t * vm, matteValue_t in);
 void native_update_value_image(matteVM_t * vm, matteValue_t in);
 void native_update_value_texture(matteVM_t * vm, matteValue_t in);
 void native_update_value_mesh(matteVM_t * vm, matteValue_t in);
 void native_update_value_material(matteVM_t * vm, matteValue_t in);
 void native_update_value_model(matteVM_t * vm, matteValue_t in);
+void native_update_value_wave(matteVM_t * vm, matteValue_t in);
 
 void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);
 void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 cam);

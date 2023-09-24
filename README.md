@@ -28,15 +28,21 @@ These changes are listed here:
 - Enum values were added for UpdateMeshBuffer: `MESH_BUFFER_ID_*`
   which contain values for each buffer index.
 
-- Some functions are not implemented or supported:
+- Some functions are not implemented:
 
-     Functions which are currently NOT implemented
+     Functions which are currently NOT implemented, but may be in the future
           `BeginVrStereoMode`
           `EndVrStereoMode`
           `LoadVrStereoConfig`
           `UnloadVrStereoConfig`
-
-     Functions that are NOT supported (with reasons in parentheses)
+          `SetAudioStreamCallback`
+          `AttachAudioStreamProcessor`
+          `DetachAudioStreamProcessor`
+          `AttachAudioMixedProcessor`
+          `DetachAudioMixedProcessor`
+          
+          
+     Functions which do NOT have bindings (with reasons in parentheses)
           `GetWindowHandle` (No access to lower-level windowing functions to utilize)
           `MemAlloc` (Not needed. Can just use MemoryBuffer)
           `MemRealloc` (Not needed. Can just use MemoryBuffer)
@@ -59,6 +65,7 @@ These changes are listed here:
           `UnloadModelAnimations` (Not needed.)
           `Vector3toFloatV` (Not needed.)
           `MatrixToFloatV` (Not needed.)
+          `UnloadWaveSamples` (Not needed.)
             
 - Instances of output/input that call for char * (C-Strings) are replaced 
   with Matte strings.            
@@ -226,6 +233,14 @@ These changes are listed here:
 - QuaternionToAxisAngle only takes the quaternion argument and, instead, returns 
   an object containing an "axis" and "angle" member, representing the 
   output of the function
+  
+- UpdateSound takes a MemoryBuffer as input ("bytes")
+
+- LoadWaveFromMemory takes a MemoryBuffer as input ("bytes")
+
+- LoadWaveSamples returns a MemoryBuffer
+
+- LoadMusicStreamFromMemory takes a MemoryBuffer as input ("bytes")
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.
