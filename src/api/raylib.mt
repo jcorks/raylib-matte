@@ -61,7 +61,7 @@
     DARKBROWN  : {r:76,  g:63,  b:47,  a:255},      // Dark Brown
 
     WHITE      : {r:255, g:255, b:255, a:255},   // White
-    BLACK      : {r:0,   g:0,   a:0,   a:255},         // Black
+    BLACK      : {r:0,   g:0,   b:0,   a:255},         // Black
     BLANK      : {r:0,   g:0,   b:0,   a:0  },           // Blank (Transparent)
     MAGENTA    : {r:255, g:0,   b:255, a:255},     // Magenta
     RAYWHITE   : {r:245, g:245, b:245, a:255},   // My own White (raylib logo)

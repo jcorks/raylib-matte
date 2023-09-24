@@ -7,6 +7,7 @@
 #include "native.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "raylib.mt.h"
 
 
 
@@ -8803,7 +8804,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_DrawEllipseLines", raylib_DrawEllipseLines, NULL, "centerX", "centerY", "radiusH", "radiusB", "color", NULL);
     matte_add_external_function(m, "raylib_DrawRing", raylib_DrawRing, NULL, "center", "innerRadius", "outerRadius", "startAngle", "endAngle", "segments", "color", NULL);
     matte_add_external_function(m, "raylib_DrawRingLines", raylib_DrawRingLines, NULL, "center", "innerRadius", "outerRadius", "startAngle", "endAngle", "segments", "color", NULL);
-    matte_add_external_function(m, "raylib_DrawRectangle", raylib_DrawRectangle, NULL, "posX", "posY", "width", "height", NULL);
+    matte_add_external_function(m, "raylib_DrawRectangle", raylib_DrawRectangle, NULL, "posX", "posY", "width", "height", "color", NULL);
     matte_add_external_function(m, "raylib_DrawRectangleV", raylib_DrawRectangleV, NULL, "position", "size", "color", NULL);
     matte_add_external_function(m, "raylib_DrawRectangleRec", raylib_DrawRectangleRec, NULL, "rec", "color", NULL);
     matte_add_external_function(m, "raylib_DrawRectanglePro", raylib_DrawRectanglePro, NULL, "rec", "origin", "rotation", "color", NULL);
@@ -9283,31 +9284,45 @@ static void raymatte_load_main(matte_t * m) {
 
 
 int main(int argc, char ** argv) {
-    if (strcmp(argv[0], "--help") == 0 ||
-        strcmp(argv[0], "-h") == 0 ||
-        strcmp(argv[0], "-v") == 0) {
-        printf("raymatte v%s\n\n", RAYMATTE__VERSION);
-        printf("Johnathan Corkery\n");
-        printf("raylib https://github.com/raysan5/raylib\n");
-        printf("matte  https://github.com/jcorks/matte\n");
-        return 0;
-    } 
-
-
     int isDebug = FALSE;
-    if (strcmp(argv[0], "--debug") == 0 ||
-        strcmp(argv[0], "debug") == 0 ||
-        strcmp(argv[0], "-g") == 0) {
-        isDebug = TRUE;
-    } 
+    if (argc > 1) {
+        if (strcmp(argv[1], "--help") == 0 ||
+            strcmp(argv[1], "-h") == 0 ||
+            strcmp(argv[1], "-v") == 0) {
+            printf("raymatte v%s\n\n", RAYMATTE__VERSION);
+            printf("Johnathan Corkery\n");
+            printf("raylib https://github.com/raysan5/raylib\n");
+            printf("matte  https://github.com/jcorks/matte\n");
+            return 0;
+        } 
 
 
+        if (strcmp(argv[1], "--debug") == 0 ||
+            strcmp(argv[1], "debug") == 0 ||
+            strcmp(argv[1], "-g") == 0) {
+            isDebug = TRUE;
+        } 
+    }
 
 
 
     matte_t * m = matte_create();
     matte_set_io(m, NULL, NULL, NULL);
     matte_set_importer(m, NULL, NULL);
+
+    // defalt module
+    uint32_t bytecodeSize;
+    uint8_t * bytecode = matte_compile_source(
+        m,
+        &bytecodeSize,
+        (char*)RAYLIB_MT // nul-terminated!
+    );
+
+
+    matte_add_module(m, "raylib.mt", bytecode, bytecodeSize);
+    matte_deallocate(bytecode);
+
+
     if (isDebug)
         matte_debugging_enable(m);
 

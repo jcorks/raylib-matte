@@ -120,7 +120,7 @@ matteValue_t native_to_value_string(matteVM_t * vm, const char * value) {
     }
 
 #define NEW_KEY(__name__, __type__)\
-    matte_value_object_set_key_string(store, out, MATTE_VM_STR_CAST(vm, "__name__"), __type__(vm, in.__name__));
+    matte_value_object_set_key_string(store, out, MATTE_VM_STR_CAST(vm, #__name__), __type__(vm, in.__name__));
 
 
 matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2 in) {
@@ -490,7 +490,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
     }\
 
 #define UPDATE_KEY(__name__, __type__)\
-    matte_value_object_set_key_string(store, in, MATTE_VM_STR_CAST(vm, "__name__"), __type__(vm, object->__name__));
+    matte_value_object_set_key_string(store, in, MATTE_VM_STR_CAST(vm, #__name__), __type__(vm, object->__name__));
 
 #define RETRIEVE_NATIVE_OBJECT_PTR(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
@@ -536,10 +536,10 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
     return *((__TYPE__*)object->data);
 
 #define READ_NUMBER(__NAME__)\
-    out.__NAME__ = matte_value_as_number(store, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, "__NAME__")));
+    out.__NAME__ = matte_value_as_number(store, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, #__NAME__)));
     
 #define READ_KEY(__NAME__, __TYPE__)\
-    out.__NAME__ = __TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, "__NAME__")));
+    out.__NAME__ = __TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, #__NAME__)));
 
 
 
