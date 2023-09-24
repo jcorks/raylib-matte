@@ -4,6 +4,10 @@
 #include "../matte/src/matte_store.h"
 #include "../matte/src/matte_string.h"
 #include "../matte/src/matte_array.h"
+#include <string.h>
+
+
+#define MAX_MATERIAL_MAPS 12
 
 enum {
     //// Structs that have special getters
@@ -110,150 +114,150 @@ matteValue_t native_to_value_string(matteVM_t * vm, const char * value) {
     NativeEncodeData_t * fd = calloc(1, sizeof(NativeEncodeData_t));\
     fd->data = calloc(1, sizeof(__TYPE__));\
     fd->typeTag = __TAG__;\
-    *((__TYPE__*)fd->data) = f;    \
+    *((__TYPE__*)fd->data) = in;    \
     matte_value_object_set_userdata(store, out, fd);\
     matte_value_object_set_native_finalizer(store, out, native_to_value_finalizer, NULL);\
     }
 
-#define NEW_KEY(__name__,__type__)\
-    matte_value_object_set_key_string(store, out, MATTE_VM_STR_CAST(vm, "__name__"), native_to_value__type__(vm, in.__name__));
+#define NEW_KEY(__name__, __type__)\
+    matte_value_object_set_key_string(store, out, MATTE_VM_STR_CAST(vm, "__name__"), __type__(vm, in.__name__));
 
 
 matteValue_t native_to_value_vector2(matteVM_t * vm, Vector2 in) {
     INIT_OUT();
-    NEW_KEY(x, float);
-    NEW_KEY(y, float);
+    NEW_KEY(x, native_to_value_float);
+    NEW_KEY(y, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_vector3(matteVM_t * vm, Vector3 in) {
     INIT_OUT();
-    NEW_KEY(x, float);
-    NEW_KEY(y, float);
-    NEW_KEY(z, float);
+    NEW_KEY(x, native_to_value_float);
+    NEW_KEY(y, native_to_value_float);
+    NEW_KEY(z, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_vector4(matteVM_t * vm, Vector4 in) {
     INIT_OUT();
-    NEW_KEY(x, float);
-    NEW_KEY(y, float);
-    NEW_KEY(z, float);
-    NEW_KEY(w, float);
+    NEW_KEY(x, native_to_value_float);
+    NEW_KEY(y, native_to_value_float);
+    NEW_KEY(z, native_to_value_float);
+    NEW_KEY(w, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix in) {
     INIT_OUT();
-    NEW_KEY(m0, float);
-    NEW_KEY(m1, float);
-    NEW_KEY(m2, float);
-    NEW_KEY(m3, float);
+    NEW_KEY(m0, native_to_value_float);
+    NEW_KEY(m1, native_to_value_float);
+    NEW_KEY(m2, native_to_value_float);
+    NEW_KEY(m3, native_to_value_float);
 
-    NEW_KEY(m4, float);
-    NEW_KEY(m5, float);
-    NEW_KEY(m6, float);
-    NEW_KEY(m7, float);
+    NEW_KEY(m4, native_to_value_float);
+    NEW_KEY(m5, native_to_value_float);
+    NEW_KEY(m6, native_to_value_float);
+    NEW_KEY(m7, native_to_value_float);
 
-    NEW_KEY(m8, float);
-    NEW_KEY(m9, float);
-    NEW_KEY(m10, float);
-    NEW_KEY(m11, float);
+    NEW_KEY(m8, native_to_value_float);
+    NEW_KEY(m9, native_to_value_float);
+    NEW_KEY(m10, native_to_value_float);
+    NEW_KEY(m11, native_to_value_float);
 
-    NEW_KEY(m12, float);
-    NEW_KEY(m13, float);
-    NEW_KEY(m14, float);
-    NEW_KEY(m15, float);
+    NEW_KEY(m12, native_to_value_float);
+    NEW_KEY(m13, native_to_value_float);
+    NEW_KEY(m14, native_to_value_float);
+    NEW_KEY(m15, native_to_value_float);
     return out;
     
 }
 matteValue_t native_to_value_color(matteVM_t * vm, Color in) {
     INIT_OUT();
-    NEW_KEY(r, int);
-    NEW_KEY(g, int);
-    NEW_KEY(b, int);
-    NEW_KEY(a, int);
+    NEW_KEY(r, native_to_value_int);
+    NEW_KEY(g, native_to_value_int);
+    NEW_KEY(b, native_to_value_int);
+    NEW_KEY(a, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_rectangle(matteVM_t * vm, Rectangle in) {
     INIT_OUT();
-    NEW_KEY(x, float);
-    NEW_KEY(y, float);
-    NEW_KEY(width, float);
-    NEW_KEY(height, float);
+    NEW_KEY(x, native_to_value_float);
+    NEW_KEY(y, native_to_value_float);
+    NEW_KEY(width, native_to_value_float);
+    NEW_KEY(height, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_image(matteVM_t * vm, Image in) {
     INIT_OUT();
     NATIVIZE(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
-    NEW_KEY(width, int);
-    NEW_KEY(height, int);
-    NEW_KEY(mipmaps, int);
-    NEW_KEY(format, int);
+    NEW_KEY(width, native_to_value_int);
+    NEW_KEY(height, native_to_value_int);
+    NEW_KEY(mipmaps, native_to_value_int);
+    NEW_KEY(format, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_texture(matteVM_t * vm, Texture in) {
     INIT_OUT();
     NATIVIZE(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
-    NEW_KEY(width, int);
-    NEW_KEY(height, int);
-    NEW_KEY(mipmaps, int);
-    NEW_KEY(format, int);
+    NEW_KEY(width, native_to_value_int);
+    NEW_KEY(height, native_to_value_int);
+    NEW_KEY(mipmaps, native_to_value_int);
+    NEW_KEY(format, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_renderTexture(matteVM_t * vm, RenderTexture in) {
     INIT_OUT();
     NATIVIZE(RenderTexture, RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE);
-    NEW_KEY(texture, texture);
-    NEW_KEY(depth,   texture);
+    NEW_KEY(texture, native_to_value_texture);
+    NEW_KEY(depth, native_to_value_texture);
     return out;
 }
 matteValue_t native_to_value_nPatchInfo(matteVM_t * vm, NPatchInfo in) {
     INIT_OUT();
-    NEW_KEY(source, rectangle);
-    NEW_KEY(left, int);
-    NEW_KEY(top, int);
-    NEW_KEY(right, int);
-    NEW_KEY(bottom, int);
+    NEW_KEY(source, native_to_value_rectangle);
+    NEW_KEY(left, native_to_value_int);
+    NEW_KEY(top, native_to_value_int);
+    NEW_KEY(right, native_to_value_int);
+    NEW_KEY(bottom, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_glyphInfo(matteVM_t * vm, GlyphInfo in) {
     INIT_OUT();
-    NEW_KEY(image, image);
-    NEW_KEY(value, int);
-    NEW_KEY(offsetX, int);
-    NEW_KEY(offsetY, int);
-    NEW_KEY(advanceX, int);
+    NEW_KEY(image, native_to_value_image);
+    NEW_KEY(value, native_to_value_int);
+    NEW_KEY(offsetX, native_to_value_int);
+    NEW_KEY(offsetY, native_to_value_int);
+    NEW_KEY(advanceX, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_font(matteVM_t * vm, Font in) {
     INIT_OUT();
     NATIVIZE(Font, RAYMATTE_NATIVE_TYPE__FONT);
-    NEW_KEY(image, image);
-    NEW_KEY(baseSize, int);
-    NEW_KEY(glyphPadding, int);
-    NEW_KEY(texture, int);
+    NEW_KEY(glyphCount, native_to_value_int);
+    NEW_KEY(baseSize, native_to_value_int);
+    NEW_KEY(glyphPadding, native_to_value_int);
+    NEW_KEY(texture, native_to_value_texture);
     return out;
 }
 matteValue_t native_to_value_camera(matteVM_t * vm, Camera in) {
     INIT_OUT();
-    NEW_KEY(position, vector3);
-    NEW_KEY(target, vector3);
-    NEW_KEY(up, vector3);
-    NEW_KEY(fovy, float);
-    NEW_KEY(projection, int);
+    NEW_KEY(position, native_to_value_vector3);
+    NEW_KEY(target, native_to_value_vector3);
+    NEW_KEY(up, native_to_value_vector3);
+    NEW_KEY(fovy, native_to_value_float);
+    NEW_KEY(projection, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_camera2D(matteVM_t * vm, Camera2D in) {
     INIT_OUT();
-    NEW_KEY(offset, vector2);
-    NEW_KEY(target, vector2);
-    NEW_KEY(rotation, float);
-    NEW_KEY(zoom, float);
+    NEW_KEY(offset, native_to_value_vector2);
+    NEW_KEY(target, native_to_value_vector2);
+    NEW_KEY(rotation, native_to_value_float);
+    NEW_KEY(zoom, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_mesh(matteVM_t * vm, Mesh in) {
     INIT_OUT();
     NATIVIZE(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
-    NEW_KEY(vertexCount, int);
-    NEW_KEY(triangleCount, int);
+    NEW_KEY(vertexCount, native_to_value_int);
+    NEW_KEY(triangleCount, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_shader(matteVM_t * vm, Shader in) {
@@ -263,9 +267,9 @@ matteValue_t native_to_value_shader(matteVM_t * vm, Shader in) {
 }
 matteValue_t native_to_value_materialMap(matteVM_t * vm, MaterialMap in) {
     INIT_OUT();
-    NEW_KEY(texture, texture);
-    NEW_KEY(color, color);
-    NEW_KEY(value, float);
+    NEW_KEY(texture, native_to_value_texture);
+    NEW_KEY(color, native_to_value_color);
+    NEW_KEY(value, native_to_value_float);
     return out;
 }
 matteValue_t native_to_value_material(matteVM_t * vm, Material in_src) {
@@ -299,41 +303,52 @@ matteValue_t native_to_value_material(matteVM_t * vm, Material in_src) {
     
     
     INIT_OUT();
-    NATIVIZE(Material, RAYMATTE_NATIVE_TYPE__MATERIAL)
-    NEW_KEY(shader, shader);
-    NEW_KEY(maps0, materialMap);
-    NEW_KEY(maps1, materialMap);
-    NEW_KEY(maps2, materialMap);
-    NEW_KEY(maps3, materialMap);
 
-    NEW_KEY(maps4, materialMap);
-    NEW_KEY(maps5, materialMap);
-    NEW_KEY(maps6, materialMap);
-    NEW_KEY(maps7, materialMap);
+    {
+        NativeEncodeData_t * fd = calloc(1, sizeof(NativeEncodeData_t));
+        fd->data = calloc(1, sizeof(Material));
+        fd->typeTag = RAYMATTE_NATIVE_TYPE__MATERIAL;
+        *((Material*)fd->data) = in_src;    
+        matte_value_object_set_userdata(store, out, fd);
+        matte_value_object_set_native_finalizer(store, out, native_to_value_finalizer, NULL);
+    }
 
-    NEW_KEY(maps8, materialMap);
-    NEW_KEY(maps9, materialMap);
-    NEW_KEY(maps10, materialMap);
-    NEW_KEY(maps11, materialMap);
 
-    NEW_KEY(params0, float);
-    NEW_KEY(params1, float);
-    NEW_KEY(params2, float);
-    NEW_KEY(params3, float);
+
+    NEW_KEY(shader, native_to_value_shader);
+    NEW_KEY(maps0, native_to_value_materialMap);
+    NEW_KEY(maps1, native_to_value_materialMap);
+    NEW_KEY(maps2, native_to_value_materialMap);
+    NEW_KEY(maps3, native_to_value_materialMap);
+
+    NEW_KEY(maps4, native_to_value_materialMap);
+    NEW_KEY(maps5, native_to_value_materialMap);
+    NEW_KEY(maps6, native_to_value_materialMap);
+    NEW_KEY(maps7, native_to_value_materialMap);
+
+    NEW_KEY(maps8, native_to_value_materialMap);
+    NEW_KEY(maps9, native_to_value_materialMap);
+    NEW_KEY(maps10, native_to_value_materialMap);
+    NEW_KEY(maps11, native_to_value_materialMap);
+
+    NEW_KEY(params0, native_to_value_float);
+    NEW_KEY(params1, native_to_value_float);
+    NEW_KEY(params2, native_to_value_float);
+    NEW_KEY(params3, native_to_value_float);
 
 
     return out;        
 }
 matteValue_t native_to_value_transform(matteVM_t * vm, Transform in) {
     INIT_OUT();
-    NEW_KEY(translation, vector3);
-    NEW_KEY(rotation, vector4);
-    NEW_KEY(scale, vector3);
+    NEW_KEY(translation, native_to_value_vector3);
+    NEW_KEY(rotation, native_to_value_vector4);
+    NEW_KEY(scale, native_to_value_vector3);
     return out;
 }
 matteValue_t native_to_value_boneInfo(matteVM_t * vm, BoneInfo in) {
     INIT_OUT();
-    NEW_KEY(parent, int);
+    NEW_KEY(parent, native_to_value_int);
     
     char * str = MemAlloc(33);
     memset(str, 0, 33);
@@ -344,17 +359,17 @@ matteValue_t native_to_value_boneInfo(matteVM_t * vm, BoneInfo in) {
 matteValue_t native_to_value_model(matteVM_t * vm, Model in) {
     INIT_OUT();
     NATIVIZE(Model, RAYMATTE_NATIVE_TYPE__MODEL);
-    NEW_KEY(transform, transform);
-    NEW_KEY(meshCount, int);
-    NEW_KEY(materialCount, int);
-    NEW_KEY(boneCount, int);
+    NEW_KEY(transform, native_to_value_matrix);
+    NEW_KEY(meshCount, native_to_value_int);
+    NEW_KEY(materialCount, native_to_value_int);
+    NEW_KEY(boneCount, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_modelAnimation(matteVM_t * vm, ModelAnimation in) {
     INIT_OUT();
-    NATIVIZE(Mesh, RAYMATTE_NATIVE_TYPE__MODEL_ANIMATION);
-    NEW_KEY(boneCount, int);
-    NEW_KEY(frameCount, int);
+    NATIVIZE(ModelAnimation, RAYMATTE_NATIVE_TYPE__MODEL_ANIMATION);
+    NEW_KEY(boneCount, native_to_value_int);
+    NEW_KEY(frameCount, native_to_value_int);
     char * str = MemAlloc(33);
     memset(str, 0, 33);
     memcpy(str, in.name, 32);
@@ -363,56 +378,56 @@ matteValue_t native_to_value_modelAnimation(matteVM_t * vm, ModelAnimation in) {
 }
 matteValue_t native_to_value_ray(matteVM_t * vm, Ray in) {
     INIT_OUT();
-    NEW_KEY(direction, vector3);
-    NEW_KEY(position, vector3);
+    NEW_KEY(direction, native_to_value_vector3);
+    NEW_KEY(position, native_to_value_vector3);
     return out;
 }
 matteValue_t native_to_value_rayCollision(matteVM_t * vm, RayCollision in) {
     INIT_OUT();
-    NEW_KEY(hit, int);
-    NEW_KEY(distance, float);
-    NEW_KEY(point, vector3);
-    NEW_KEY(normal, vector3);
+    NEW_KEY(hit, native_to_value_int);
+    NEW_KEY(distance, native_to_value_float);
+    NEW_KEY(point, native_to_value_vector3);
+    NEW_KEY(normal, native_to_value_vector3);
     return out;
 
 }
 
 matteValue_t native_to_value_boundingBox(matteVM_t * vm, BoundingBox in) {
     INIT_OUT();
-    NEW_KEY(min, vector3);
-    NEW_KEY(max, vector3);
+    NEW_KEY(min, native_to_value_vector3);
+    NEW_KEY(max, native_to_value_vector3);
     return out;
 }
 
 matteValue_t native_to_value_wave(matteVM_t * vm, Wave in) {
     INIT_OUT();
     NATIVIZE(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
-    NEW_KEY(frameCount, int);
-    NEW_KEY(sampleRate, int);
-    NEW_KEY(sampleSize, int);
-    NEW_KEY(channels, int);
+    NEW_KEY(frameCount, native_to_value_int);
+    NEW_KEY(sampleRate, native_to_value_int);
+    NEW_KEY(sampleSize, native_to_value_int);
+    NEW_KEY(channels, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_audioStream(matteVM_t * vm, AudioStream in) {
     INIT_OUT();
     NATIVIZE(AudioStream, RAYMATTE_NATIVE_TYPE__AUDIO_STREAM);
-    NEW_KEY(sampleRate, int);
-    NEW_KEY(sampleSize, int);
-    NEW_KEY(channels, int);
+    NEW_KEY(sampleRate, native_to_value_int);
+    NEW_KEY(sampleSize, native_to_value_int);
+    NEW_KEY(channels, native_to_value_int);
     return out;
 }
 matteValue_t native_to_value_sound(matteVM_t * vm, Sound in) {
     INIT_OUT();
-    NEW_KEY(frameCount, int);
-    NEW_KEY(stream, audioStream);
+    NEW_KEY(frameCount, native_to_value_int);
+    NEW_KEY(stream, native_to_value_audioStream);
     return out;
 }
 matteValue_t native_to_value_music(matteVM_t * vm, Music in) {
     INIT_OUT();
     NATIVIZE(Music, RAYMATTE_NATIVE_TYPE__MUSIC);
-    NEW_KEY(frameCount, int);
-    NEW_KEY(stream, audioStream);
-    NEW_KEY(loooping, int);
+    NEW_KEY(frameCount, native_to_value_int);
+    NEW_KEY(stream, native_to_value_audioStream);
+    NEW_KEY(looping, native_to_value_int);
     return out;
 
 }
@@ -475,23 +490,34 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
     }\
 
 #define UPDATE_KEY(__name__, __type__)\
-    matte_value_object_set_key_string(store, in, MATTE_VM_STR_CAST(vm, "__name__"), native_to_value__type__(vm, object->__name__));
+    matte_value_object_set_key_string(store, in, MATTE_VM_STR_CAST(vm, "__name__"), __type__(vm, object->__name__));
 
+#define RETRIEVE_NATIVE_OBJECT_PTR(__TYPE__,__TAG__)\
+    matteStore_t * store = matte_vm_get_store(vm);\
+    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
+        return NULL;\
+    }\
+    NativeEncodeData_t * objectSrc = matte_value_object_get_userdata(store, in);\
+    if (objectSrc == NULL || objectSrc->typeTag != __TAG__) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an __TYPE__.");\
+        return NULL;\
+    }\
+    __TYPE__ * object = (__TYPE__*)objectSrc->data;
+    
+    
 #define RETRIEVE_NATIVE_OBJECT(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
     if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
-        __TYPE__ dout = {};\
-        return dout;\
+        return;\
     }\
-    NativeEncodeData_t * objectSrc = matte_value_object_get_userdata(store, img);\
+    NativeEncodeData_t * objectSrc = matte_value_object_get_userdata(store, in);\
     if (objectSrc == NULL || objectSrc->typeTag != __TAG__) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an __TYPE__.");\
-        __TYPE__ dout = {};\
-        return dout;\
+        return;\
     }\
-    __TYPE__ * object = (__TYPE__*)objectSrc->data;
-    
+    __TYPE__ * object = (__TYPE__*)objectSrc->data;    
 
 
 #define RETRIEVE_NATIVE(__TYPE__,__TAG__)\
@@ -501,7 +527,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
         __TYPE__ dout = {};\
         return dout;\
     }\
-    NativeEncodeData_t * object = matte_value_object_get_userdata(store, img);\
+    NativeEncodeData_t * object = matte_value_object_get_userdata(store, in);\
     if (object == NULL || object->typeTag != __TAG__) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an __TYPE__.");\
         __TYPE__ dout = {};\
@@ -512,8 +538,8 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
 #define READ_NUMBER(__NAME__)\
     out.__NAME__ = matte_value_as_number(store, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, "__NAME__")));
     
-#define READ_KEY(__NAME__,__TYPE__)\
-    out.__NAME__ = native_from_value___TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, "__NAME__")));
+#define READ_KEY(__NAME__, __TYPE__)\
+    out.__NAME__ = __TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, "__NAME__")));
 
 
 
@@ -587,10 +613,10 @@ Image native_from_value_image(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
 }
 Texture native_from_value_texture(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE(Image, RAYMATTE_NATIVE_TYPE__TEXTURE);
+    RETRIEVE_NATIVE(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
 }
 RenderTexture native_from_value_renderTexture(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE(Image, RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE);
+    RETRIEVE_NATIVE(RenderTexture, RAYMATTE_NATIVE_TYPE__RENDER_TEXTURE);
 }
 NPatchInfo native_from_value_nPatchInfo(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(NPatchInfo);
@@ -598,7 +624,7 @@ NPatchInfo native_from_value_nPatchInfo(matteVM_t * vm, matteValue_t in) {
     READ_NUMBER(left);
     READ_NUMBER(bottom);
     READ_NUMBER(right);
-    READ_KEY(source, rectangle);
+    READ_KEY(source, native_from_value_rectangle);
     return out;
 }
 GlyphInfo native_from_value_glyphInfo(matteVM_t * vm, matteValue_t in) {
@@ -607,7 +633,7 @@ GlyphInfo native_from_value_glyphInfo(matteVM_t * vm, matteValue_t in) {
     READ_NUMBER(offsetX);
     READ_NUMBER(offsetY);
     READ_NUMBER(advanceX);
-    READ_KEY(image, image);
+    READ_KEY(image, native_from_value_image);
     return out;
 
 }
@@ -618,17 +644,17 @@ Camera3D native_from_value_camera(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Camera);
     READ_NUMBER(fovy);
     READ_NUMBER(projection);
-    READ_KEY(position, vector3);
-    READ_KEY(target, vector3);
-    READ_KEY(up, vector3);
+    READ_KEY(position, native_from_value_vector3);
+    READ_KEY(target, native_from_value_vector3);
+    READ_KEY(up, native_from_value_vector3);
     return out;
 }
 Camera2D native_from_value_camera2D(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Camera2D);
     READ_NUMBER(rotation);
     READ_NUMBER(zoom);
-    READ_KEY(position, vector2);
-    READ_KEY(target, vector2);
+    READ_KEY(offset, native_from_value_vector2);
+    READ_KEY(target, native_from_value_vector2);
     return out;
 
 }
@@ -640,8 +666,8 @@ Shader native_from_value_shader(matteVM_t * vm, matteValue_t in) {
 }
 MaterialMap native_from_value_materialMap(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(MaterialMap);
-    READ_KEY(texture, texture);
-    READ_KEY(color, color);
+    READ_KEY(texture, native_from_value_texture);
+    READ_KEY(color, native_from_value_color);
     READ_NUMBER(value);
     return out;
 }
@@ -650,9 +676,9 @@ Material native_from_value_material(matteVM_t * vm, matteValue_t in) {
 }
 Transform native_from_value_transform(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Transform);
-    READ_KEY(translation, vector3);
-    READ_KEY(rotation, vector4);
-    READ_KEY(scale, vector3);
+    READ_KEY(translation, native_from_value_vector3);
+    READ_KEY(rotation, native_from_value_vector4);
+    READ_KEY(scale, native_from_value_vector3);
     return out;
 }
 
@@ -667,14 +693,14 @@ ModelAnimation native_from_value_modelAnimation(matteVM_t * vm, matteValue_t in)
 }
 Ray native_from_value_ray(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Ray);
-    READ_KEY(position, vector3);
-    READ_KEY(direction, vector3);
+    READ_KEY(position, native_from_value_vector3);
+    READ_KEY(direction, native_from_value_vector3);
     return out;
 }
 RayCollision native_from_value_rayCollision(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(RayCollision);
-    READ_KEY(point, vector3);
-    READ_KEY(normal, vector3);
+    READ_KEY(point, native_from_value_vector3);
+    READ_KEY(normal, native_from_value_vector3);
     READ_NUMBER(hit);
     READ_NUMBER(distance);
     return out;
@@ -682,8 +708,8 @@ RayCollision native_from_value_rayCollision(matteVM_t * vm, matteValue_t in) {
 }
 BoundingBox native_from_value_boundingBox(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(BoundingBox);
-    READ_KEY(min, vector3);
-    READ_KEY(max, vector3);
+    READ_KEY(min, native_from_value_vector3);
+    READ_KEY(max, native_from_value_vector3);
     return out;
 }
 Wave native_from_value_wave(matteVM_t * vm, matteValue_t in) {
@@ -694,7 +720,7 @@ AudioStream native_from_value_audioStream(matteVM_t * vm, matteValue_t in) {
 }
 Sound native_from_value_sound(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Sound);
-    READ_KEY(stream, audioStream);
+    READ_KEY(stream, native_from_value_audioStream);
     READ_NUMBER(frameCount);
     return out;
 }
@@ -703,47 +729,6 @@ Music native_from_value_music(matteVM_t * vm, matteValue_t in) {
 }
 
 
-
-
-
-Shader native_from_value_shader(matteVM_t * vm, matteValue_t shad) {
-    matteStore_t * store = matte_vm_get_store(vm);    
-
-    if (shad.binID != MATTE_VALUE_TYPE_OBJECT) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Shader: value is not an Shader.");
-        Shader imgOut = {};
-        return imgOut;
-    }
-    
-    NativeEncodeData_t * object = matte_value_object_get_userdata(store, shad);
-    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__TEXTURE) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Shader: value is not an Shader.");
-        Shader imgOut = {};
-        return imgOut;
-    }
-
-    return *((Shader*)object->data);
-}   
-
-
-Font native_from_value_font(matteVM_t * vm, matteValue_t shad) {
-    matteStore_t * store = matte_vm_get_store(vm);    
-
-    if (shad.binID != MATTE_VALUE_TYPE_OBJECT) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Font: value is not an Font.");
-        Font imgOut = {};
-        return imgOut;
-    }
-    
-    NativeEncodeData_t * object = matte_value_object_get_userdata(store, shad);
-    if (object == NULL || object->typeTag != RAYMATTE_NATIVE_TYPE__FONT) {
-        matte_vm_raise_error_cstring(vm, "Could not decode Font: value is not an Font.");
-        Font imgOut = {};
-        return imgOut;
-    }
-
-    return *((Font*)object->data);
-}   
 
 
 
@@ -817,76 +802,76 @@ void native_unload(matteVM_t * vm, matteValue_t obj) {
 }
 
 Image * native_from_value_image_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
+    RETRIEVE_NATIVE_OBJECT_PTR(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
     return object;
 }   
 
 void native_update_value_image(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Image, RAYMATTE_NATIVE_TYPE__IMAGE);
-    UPDATE_KEY(width, int);
-    UPDATE_KEY(height, int);
-    UPDATE_KEY(mipmaps, int);
-    UPDATE_KEY(format, int);
+    UPDATE_KEY(width, native_to_value_int);
+    UPDATE_KEY(height, native_to_value_int);
+    UPDATE_KEY(mipmaps, native_to_value_int);
+    UPDATE_KEY(format, native_to_value_int);
 }
 
 
-Image * native_from_value_texture_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
+Texture * native_from_value_texture_ref(matteVM_t * vm, matteValue_t in) {
+    RETRIEVE_NATIVE_OBJECT_PTR(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
     return object;
 }   
 
 void native_update_value_texture(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Texture, RAYMATTE_NATIVE_TYPE__TEXTURE);
-    UPDATE_KEY(width, int);
-    UPDATE_KEY(height, int);
-    UPDATE_KEY(mipmaps, int);
-    UPDATE_KEY(format, int);
+    UPDATE_KEY(width, native_to_value_int);
+    UPDATE_KEY(height, native_to_value_int);
+    UPDATE_KEY(mipmaps, native_to_value_int);
+    UPDATE_KEY(format, native_to_value_int);
 } 
 
 
 
 Mesh * native_from_value_mesh_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
+    RETRIEVE_NATIVE_OBJECT_PTR(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
     return object;
 }   
 
 void native_update_value_mesh(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Mesh, RAYMATTE_NATIVE_TYPE__MESH);
-    UPDATE_KEY(vertexCount, int);
-    UPDATE_KEY(triangleCount, int);
+    UPDATE_KEY(vertexCount, native_to_value_int);
+    UPDATE_KEY(triangleCount, native_to_value_int);
 } 
 
 
 Wave * native_from_value_wave_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
+    RETRIEVE_NATIVE_OBJECT_PTR(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
     return object;
 }   
 
 void native_update_value_wave(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Wave, RAYMATTE_NATIVE_TYPE__WAVE);
-    UPDATE_KEY(frameCount, int);
-    UPDATE_KEY(sampleRate, int);
-    UPDATE_KEY(sampleSize, int);
-    UPDATE_KEY(channels, int);
+    UPDATE_KEY(frameCount, native_to_value_int);
+    UPDATE_KEY(sampleRate, native_to_value_int);
+    UPDATE_KEY(sampleSize, native_to_value_int);
+    UPDATE_KEY(channels, native_to_value_int);
 } 
 
 Model * native_from_value_model_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    RETRIEVE_NATIVE_OBJECT_PTR(Model, RAYMATTE_NATIVE_TYPE__MODEL);
     return object;
 }   
 
 void native_update_value_model(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE_OBJECT(Model, RAYMATTE_NATIVE_TYPE__MODEL);
-    UPDATE_KEY(transform, transform);
-    UPDATE_KEY(meshCount, int);
-    UPDATE_KEY(materialCount, int);
-    UPDATE_KEY(boneCount, int);
+    UPDATE_KEY(transform, native_to_value_matrix);
+    UPDATE_KEY(meshCount, native_to_value_int);
+    UPDATE_KEY(materialCount, native_to_value_int);
+    UPDATE_KEY(boneCount, native_to_value_int);
 
 } 
 
 
 Material * native_from_value_material_ref(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE_OBJECT(Material, RAYMATTE_NATIVE_TYPE__MATERIAL);
+    RETRIEVE_NATIVE_OBJECT_PTR(Material, RAYMATTE_NATIVE_TYPE__MATERIAL);
     return object;
 }   
 
@@ -916,33 +901,33 @@ void native_update_value_material(matteVM_t * vm, matteValue_t in) {
         float params2;    
         float params3;    
     } MaterialExt;
-    MaterialExt exp;
+    MaterialExt ext;
     ext.shader = object->shader;
     memcpy(&ext.maps0, object->maps, sizeof(MaterialMap)*MAX_MATERIAL_MAPS);
     memcpy(&ext.params0, object->params, sizeof(float)*4);
     
     {
-        MaterialExt * object = &exp;
-        UPDATE_KEY(shader, shader);
-        UPDATE_KEY(maps0, materialMap);
-        UPDATE_KEY(maps1, materialMap);
-        UPDATE_KEY(maps2, materialMap);
-        UPDATE_KEY(maps3, materialMap);
+        MaterialExt * object = &ext;
+        UPDATE_KEY(shader, native_to_value_shader);
+        UPDATE_KEY(maps0, native_to_value_materialMap);
+        UPDATE_KEY(maps1, native_to_value_materialMap);
+        UPDATE_KEY(maps2, native_to_value_materialMap);
+        UPDATE_KEY(maps3, native_to_value_materialMap);
 
-        UPDATE_KEY(maps4, materialMap);
-        UPDATE_KEY(maps5, materialMap);
-        UPDATE_KEY(maps6, materialMap);
-        UPDATE_KEY(maps7, materialMap);
+        UPDATE_KEY(maps4, native_to_value_materialMap);
+        UPDATE_KEY(maps5, native_to_value_materialMap);
+        UPDATE_KEY(maps6, native_to_value_materialMap);
+        UPDATE_KEY(maps7, native_to_value_materialMap);
 
-        UPDATE_KEY(maps8, materialMap);
-        UPDATE_KEY(maps9, materialMap);
-        UPDATE_KEY(maps10, materialMap);
-        UPDATE_KEY(maps11, materialMap);
+        UPDATE_KEY(maps8, native_to_value_materialMap);
+        UPDATE_KEY(maps9, native_to_value_materialMap);
+        UPDATE_KEY(maps10, native_to_value_materialMap);
+        UPDATE_KEY(maps11, native_to_value_materialMap);
 
-        UPDATE_KEY(params0, float);
-        UPDATE_KEY(params1, float);
-        UPDATE_KEY(params2, float);
-        UPDATE_KEY(params3, float);
+        UPDATE_KEY(params0, native_to_value_float);
+        UPDATE_KEY(params1, native_to_value_float);
+        UPDATE_KEY(params2, native_to_value_float);
+        UPDATE_KEY(params3, native_to_value_float);
     }
 
 } 

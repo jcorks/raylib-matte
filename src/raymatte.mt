@@ -34,7 +34,7 @@
 @:base__UpdateSound = getExternalFunction(name:"raylib_UpdateSound");
 @:base__LoadWaveSamples = getExternalFunction(name:"raylib_LoadWaveSamples");
 @:base__LoadMusicStreamFromMemory = getExternalFunction(name:"raylib_LoadMusicStreamFromMemory");
-@:base__UpdateAudioStream = : getExternalFunction(name:"raylib_UpdateAudioStream");
+@:base__UpdateAudioStream = getExternalFunction(name:"raylib_UpdateAudioStream");
 
 @:raylib = {
     // Defines
@@ -811,7 +811,7 @@
     LoadImageRaw : getExternalFunction(name: "raylib_LoadImageRaw"),
     LoadImageAnim : getExternalFunction(name: "raylib_LoadImageAnim"),
     LoadImageFromMemory :: (fileType, bytes => MemoryBuffer.type) {
-        return LoadImageFromMemory(fileType, bytes:bytes.handle);
+        return base__LoadImageFromMemory(fileType, bytes:bytes.handle);
     },
     LoadImageFromTexture : getExternalFunction(name: "raylib_LoadImageFromTexture"),
     LoadImageFromScreen : getExternalFunction(name: "raylib_LoadImageFromScreen"),
@@ -942,7 +942,6 @@
         return base__LoadFontData(bytes:bytes.handle, fontSize, fontChars, type);
     }, 
     GenImageFontAtlas : getExternalFunction(name:"raylib_GenImageFontAtlas"),
-    UnloadFontData : getExternalFunction(name:"raylib_UnloadFontData"),
     UnloadFont : getExternalFunction(name:"raylib_UnloadFont"),
     ExportFontAsCode : getExternalFunction(name:"raylib_ExportFontAsCode"),
 
@@ -951,8 +950,6 @@
     DrawText : getExternalFunction(name:"raylib_DrawText"),
     DrawTextEx : getExternalFunction(name:"raylib_DrawTextEx"),
     DrawTextPro : getExternalFunction(name:"raylib_DrawTextPro"),
-    DrawTextCodepoint : getExternalFunction(name:"raylib_DrawTextCodepoint"),
-    DrawTextCodepoints : getExternalFunction(name:"raylib_DrawTextCodepoints"),
 
 
     MeasureText : getExternalFunction(name:"raylib_MeasureText"),
@@ -1093,7 +1090,7 @@
     WaveFormat : getExternalFunction(name:"raylib_WaveFormat"),
     LoadWaveSamples ::(wave) {
         @:m = MemoryBuffer.new();
-        m.bindNative(base__LoadWaveSamples(wave));
+        m.bindNative(handle:base__LoadWaveSamples(wave));
         return m;
     },
 

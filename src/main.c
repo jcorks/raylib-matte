@@ -119,6 +119,23 @@ static int ensure_arg_types8(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 
+static int ensure_arg_types9(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6, int bin7, int bin8) {
+    if (args[0].binID != bin0 ||
+        args[1].binID != bin1 ||
+        args[2].binID != bin2 ||
+        args[3].binID != bin3 ||
+        args[4].binID != bin4 ||
+        args[5].binID != bin5 ||
+        args[6].binID != bin6 ||
+        args[7].binID != bin7 ||
+        args[8].binID != bin8) {
+        matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+
 
 ////// Implementations
 
@@ -163,7 +180,7 @@ RAYLIB_FN__ARG1(raylib_FontGetRecs, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         f.recs,
         f.glyphCount,
-        native_from_value_rectangle,
+        native_to_value_rectangle,
         output
     );
     return output;
@@ -175,7 +192,7 @@ RAYLIB_FN__ARG1(raylib_FontGetGlyphs, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         f.glyphs,
         f.glyphCount,
-        native_from_value_glyphInfo,
+        native_to_value_glyphInfo,
         output
     );
     return output;
@@ -189,7 +206,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetVertices, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.vertices,
+        (void*)mesh.vertices,
         mesh.vertexCount * sizeof(Vector3)
     );
 RAYLIB_FN__END
@@ -198,7 +215,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetTexCoords, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.texcoords,
+        (void*)mesh.texcoords,
         mesh.vertexCount * sizeof(Vector2)
     );
 RAYLIB_FN__END
@@ -208,7 +225,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetTexCoords2, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.texcoords2,
+        (void*)mesh.texcoords2,
         mesh.vertexCount * sizeof(Vector2)
     );
 RAYLIB_FN__END
@@ -217,7 +234,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetNormals, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.normals,
+        (void*)mesh.normals,
         mesh.vertexCount * sizeof(Vector3)
     );
 RAYLIB_FN__END
@@ -226,7 +243,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetTangents, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.tangents,
+        (void*)mesh.tangents,
         mesh.vertexCount * sizeof(Vector4)
     );
 RAYLIB_FN__END
@@ -236,17 +253,17 @@ RAYLIB_FN__ARG1(raylib_MeshGetColors, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.colors,
+        (void*)mesh.colors,
         mesh.vertexCount * 4
     );
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG1(raylib_MeshGetColors, MATTE_VALUE_TYPE_OBJECT)
+RAYLIB_FN__ARG1(raylib_MeshGetIndices, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.indices,
+        (void*)mesh.indices,
         mesh.vertexCount * sizeof(uint32_t)
     );
 RAYLIB_FN__END
@@ -257,7 +274,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetAnimVertices, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.animVertices,
+        (void*)mesh.animVertices,
         mesh.vertexCount * sizeof(Vector3)
     );
 RAYLIB_FN__END
@@ -266,7 +283,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetAnimNormals, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.animNormals,
+        (void*)mesh.animNormals,
         mesh.vertexCount * sizeof(Vector3)
     );
 RAYLIB_FN__END
@@ -276,7 +293,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetBoneIDs, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.boneIds,
+        (void*)mesh.boneIds,
         mesh.vertexCount * 4
     );
 RAYLIB_FN__END
@@ -286,7 +303,7 @@ RAYLIB_FN__ARG1(raylib_MeshGetBoneWeights, MATTE_VALUE_TYPE_OBJECT)
     Mesh mesh = native_from_value_mesh(vm, args[0]);
     return matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        mesh.boneWeights,
+        (void*)mesh.boneWeights,
         mesh.vertexCount * 4 * sizeof(float)
     );
 RAYLIB_FN__END
@@ -300,7 +317,7 @@ RAYLIB_FN__ARG1(raylib_ModelGetMeshes, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.meshes,
         model.meshCount,
-        native_from_value_mesh,
+        native_to_value_mesh,
         output
     );
     return output;
@@ -312,7 +329,7 @@ RAYLIB_FN__ARG1(raylib_ModelGetMaterials, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.materials,
         model.materialCount,
-        native_from_value_material,
+        native_to_value_material,
         output
     );
     return output;
@@ -324,7 +341,7 @@ RAYLIB_FN__ARG1(raylib_ModelGetMaterialNumbers, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.meshMaterial,
         model.materialCount,
-        native_from_value_int,
+        native_to_value_int,
         output
     );
     return output;
@@ -335,7 +352,7 @@ RAYLIB_FN__ARG1(raylib_ModelGetBones, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.bones,
         model.boneCount,
-        native_from_value_boneInfo,
+        native_to_value_boneInfo,
         output
     );
     return output;
@@ -346,7 +363,7 @@ RAYLIB_FN__ARG1(raylib_ModelGetBindPoses, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.bindPose,
         model.boneCount,
-        native_from_value_transform,
+        native_to_value_transform,
         output
     );
     return output;
@@ -361,7 +378,7 @@ RAYLIB_FN__ARG1(raylib_ModelAnimationGetBones, MATTE_VALUE_TYPE_OBJECT)
     VARIABLE_TO_ARRAY(
         model.bones,
         model.boneCount,
-        native_from_value_boneInfo,
+        native_to_value_boneInfo,
         output
     );
     return output;
@@ -384,7 +401,7 @@ RAYLIB_FN__ARG1(raylib_ModelAnimationGetFramePoses, MATTE_VALUE_TYPE_OBJECT)
                 for(n = 0; n < (model.frameCount); ++n) {
                     matteValue_t sub = matte_store_new_value(store);
                     
-                    vals[n] = native_from_value_transform(vm, model.framePoses[i][n]);
+                    vals[n] = native_to_value_transform(vm, model.framePoses[i][n]);
                 }
                 matteArray_t arrC = MATTE_ARRAY_CAST(vals, matteValue_t, model.frameCount);
                 matte_value_into_new_object_array_ref(store, &sub, &arrC);
@@ -3958,7 +3975,7 @@ RAYLIB_FN__ARG3(raylib_ImageDrawPixelV,
 )
     ImageDrawPixelV(
         native_from_value_image_ref(vm, args[0]),
-        native_from_value_vector2(vm, args[1])
+        native_from_value_vector2(vm, args[1]),
         native_from_value_color(vm, args[2])
     );    
     native_update_value_image(vm, args[0]);
@@ -4108,7 +4125,7 @@ RAYLIB_FN__ARG3(raylib_ImageDrawRectangleRec,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT
 )
-    ImageDrawRectangleV(
+    ImageDrawRectangleRec(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_rectangle(vm, args[1]),
         native_from_value_color(vm, args[2])
@@ -4123,7 +4140,7 @@ RAYLIB_FN__ARG4(raylib_ImageDrawRectangleLines,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_OBJECT
 )
-    ImageDrawRectangleV(
+    ImageDrawRectangleLines(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_rectangle(vm, args[1]),
         args[2].value.number,
@@ -4239,7 +4256,7 @@ RAYLIB_FN__ARG2(raylib_LoadRenderTexture,
     MATTE_VALUE_TYPE_NUMBER
 )
 
-    return native_to_value_texture(
+    return native_to_value_renderTexture(
         vm,
         LoadRenderTexture(
             args[0].value.number,
@@ -4249,50 +4266,50 @@ RAYLIB_FN__ARG2(raylib_LoadRenderTexture,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG2(raylib_IsTextureReady,
+RAYLIB_FN__ARG1(raylib_IsTextureReady,
     MATTE_VALUE_TYPE_OBJECT
 )
 
     return native_to_value_boolean(
         vm,
         IsTextureReady(
-            native_from_value_image(vm, args[0])
+            native_from_value_texture(vm, args[0])
         )
     );
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG2(raylib_UnloadTexture,
+RAYLIB_FN__ARG1(raylib_UnloadTexture,
     MATTE_VALUE_TYPE_OBJECT
 )
-    Image img = native_from_value_image(vm, args[0]);
+    Texture img = native_from_value_texture(vm, args[0]);
     UnloadTexture(
         img
     );
-    native_unload(img, args[0]);
+    native_unload(vm, args[0]);
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG2(raylib_IsRenderTextureReady,
+RAYLIB_FN__ARG1(raylib_IsRenderTextureReady,
     MATTE_VALUE_TYPE_OBJECT
 )
 
     return native_to_value_boolean(
         vm,
         IsRenderTextureReady(
-            native_from_value_image(vm, args[0])
+            native_from_value_renderTexture(vm, args[0])
         )
     );
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG2(raylib_UnloadRenderTexture,
+RAYLIB_FN__ARG1(raylib_UnloadRenderTexture,
     MATTE_VALUE_TYPE_OBJECT
 )
-    Image img = native_from_value_image(vm, args[0]);
+    RenderTexture img = native_from_value_renderTexture(vm, args[0]);
     UnloadRenderTexture(
         img
     );
-    native_unload(img, args[0]);
+    native_unload(vm, args[0]);
 RAYLIB_FN__END
 
 
@@ -4301,8 +4318,8 @@ RAYLIB_FN__ARG2(raylib_UpdateTexture,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT
 )
-    Texture tex = native_from_value_texture(vm, args[0]),
-    Image img = native_from_value_image(vm args[1]),
+    Texture tex = native_from_value_texture(vm, args[0]);
+    Image img = native_from_value_image(vm, args[1]);
     
     img = ImageCopy(img);
     ImageFormat(&img, tex.format);
@@ -4321,7 +4338,7 @@ RAYLIB_FN__ARG3(raylib_UpdateTextureRec,
 )
     Texture tex = native_from_value_texture(vm, args[0]);
     Vector2 pos = native_from_value_vector2(vm, args[1]);
-    Image img = native_from_value_image(vm args[2]);
+    Image img = native_from_value_image(vm, args[2]);
     
     img = ImageCopy(img);
     Rectangle rec;
@@ -4621,7 +4638,7 @@ RAYLIB_FN__ARG3(raylib_ColorAlphaBlend,
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_GetColor,
-    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_color(
         vm,
@@ -4651,7 +4668,7 @@ RAYLIB_FN__ARG2(raylib_GetPixelColor,
     return native_to_value_color(
         vm,
         GetPixelColor(
-            data       
+            (void*)data,    
             args[1].value.number
         )
     );
@@ -4720,7 +4737,7 @@ RAYLIB_FN__ARG0(raylib_GetFontDefault
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG1(raylib_LoadFont
+RAYLIB_FN__ARG1(raylib_LoadFont,
     MATTE_VALUE_TYPE_STRING
 )
     return native_to_value_font(
@@ -4734,13 +4751,13 @@ RAYLIB_FN__END
 
 // free with MemFree when done.
 static int * get_codepoints(matteVM_t * vm, matteStore_t * store, matteValue_t v, int * glyphCount) {
-    int count = matte_value_object_get_number_key_count(store, args[2]);
+    int count = matte_value_object_get_number_key_count(store, v);
 
     int * codepoints = MemAlloc(sizeof(int)*count);
-    memset(codepoint, 0, sizeof(int)*count);
+    memset(codepoints, 0, sizeof(int)*count);
     int i;
     for(i = 0; i < count; ++i) {
-        matteValue_t str = matte_value_as_string(store, matte_value_object_access_index(store, args[2], i));
+        matteValue_t str = matte_value_as_string(store, matte_value_object_access_index(store, v, i));
         if (str.binID == MATTE_VALUE_TYPE_STRING) {
             const matteString_t * strS = matte_value_string_get_string_unsafe(store, str);
             if (matte_string_get_length(strS) > 0) {
@@ -4754,7 +4771,7 @@ static int * get_codepoints(matteVM_t * vm, matteStore_t * store, matteValue_t v
 }
 
 
-RAYLIB_FN__ARG3(raylib_LoadFontEx
+RAYLIB_FN__ARG3(raylib_LoadFontEx,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_OBJECT
@@ -4764,7 +4781,7 @@ RAYLIB_FN__ARG3(raylib_LoadFontEx
         vm,
         store,
         args[2],
-        &glyphCount
+        &count
     );
     
     if (count <= 0) {
@@ -4772,10 +4789,10 @@ RAYLIB_FN__ARG3(raylib_LoadFontEx
     }
 
 
-    Font out = native_to_value_font(
+    matteValue_t out = native_to_value_font(
         vm,
         LoadFontEx(
-            native_from_value_string_unsafe(vm, args[0]) // ok!
+            native_from_value_string_unsafe(vm, args[0]), // ok!
             args[1].value.number,
             codepoints,
             count
@@ -4790,7 +4807,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG3(raylib_LoadFontFromImage
+RAYLIB_FN__ARG3(raylib_LoadFontFromImage,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER
@@ -4807,10 +4824,10 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG4(raylib_LoadFontFromMemory
+RAYLIB_FN__ARG4(raylib_LoadFontFromMemory,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT,
-    MATTE_VALUE_TYPE_NUMBER
+    MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_OBJECT
 )
 
@@ -4826,7 +4843,7 @@ RAYLIB_FN__ARG4(raylib_LoadFontFromMemory
         vm,
         store,
         args[3],
-        &glyphCount
+        &count
     );
 
 
@@ -4847,7 +4864,7 @@ RAYLIB_FN__ARG4(raylib_LoadFontFromMemory
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG1(raylib_IsFontReady
+RAYLIB_FN__ARG1(raylib_IsFontReady,
     MATTE_VALUE_TYPE_OBJECT
 )
     return native_to_value_boolean(
@@ -4858,7 +4875,7 @@ RAYLIB_FN__ARG1(raylib_IsFontReady
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG4(raylib_LoadFontData
+RAYLIB_FN__ARG4(raylib_LoadFontData,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_OBJECT,
@@ -4878,7 +4895,7 @@ RAYLIB_FN__ARG4(raylib_LoadFontData
         vm,
         store,
         args[2],
-        &glyphCount
+        &count
     );
 
     GlyphInfo * gs = LoadFontData(
@@ -4891,16 +4908,16 @@ RAYLIB_FN__ARG4(raylib_LoadFontData
     );
 
 
-    matteValue_t * args = MemAlloc(sizeof(matteValue_t)*count);
+    matteValue_t * argss = MemAlloc(sizeof(matteValue_t)*count);
     int i;
     for(i = 0; i < count; ++i) {
-        args[i] = native_to_value_glyphInfo(vm, gs[i]);
+        argss[i] = native_to_value_glyphInfo(vm, gs[i]);
     }
     
     matteValue_t v = matte_store_new_value(store);
-    matteArray_t arr = MATTE_ARRAY_CAST(args, matteValue_t, count);
+    matteArray_t arr = MATTE_ARRAY_CAST(argss, matteValue_t, count);
     matte_value_into_new_object_array_ref(store, &v, &arr);
-    MemFree(args);    
+    MemFree(argss);    
 
     UnloadFontData(gs, count);
 
@@ -4923,7 +4940,7 @@ RAYLIB_FN__ARG4(raylib_GenImageFontAtlas,
     uint32_t count = matte_value_object_get_number_key_count(store, args[0]);
 
     Rectangle * recs = NULL;
-    GlyphInfo * glyphs = MemAlloc(sizeof(GlyphInfo), count);
+    GlyphInfo * glyphs = MemAlloc(sizeof(GlyphInfo)* count);
     
     int i;
     for(i = 0; i < count; ++i) {
@@ -4946,15 +4963,15 @@ RAYLIB_FN__ARG4(raylib_GenImageFontAtlas,
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "image"), native_to_value_image(vm, img));
 
 
-    matteValue_t * args = MemAlloc(sizeof(matteValue_t) * count);    
+    matteValue_t * argss = MemAlloc(sizeof(matteValue_t) * count);    
     for(i = 0; i < count; ++i) {
-        args[i] = native_to_value_rectangle(store, recs[i]);
+        argss[i] = native_to_value_rectangle(vm, recs[i]);
     }
     matteValue_t arrV = matte_store_new_value(store);
-    matteArray_t arr = MATTE_ARRAY_CAST(args, matteValue_t, count);
+    matteArray_t arr = MATTE_ARRAY_CAST(argss, matteValue_t, count);
     matte_value_into_new_object_array_ref(store, &arrV, &arr);
 
-    MemFree(args);
+    MemFree(argss);
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "recs"), arrV);
     
 
@@ -4966,7 +4983,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG1(raylib_UnloadFont
+RAYLIB_FN__ARG1(raylib_UnloadFont,
     MATTE_VALUE_TYPE_OBJECT
 )
     UnloadFont(
@@ -4977,7 +4994,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG2(raylib_ExportFontAsCode
+RAYLIB_FN__ARG2(raylib_ExportFontAsCode,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_STRING
 )
@@ -5176,7 +5193,7 @@ RAYLIB_FN__END
 RAYLIB_FN__ARG5(raylib_DrawCircle3D,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER,
-    MATTE_VALUE_TYPE_OBJECTz
+    MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_OBJECT
 )
@@ -5191,7 +5208,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG2(raylib_DrawTriangle3D,
+RAYLIB_FN__ARG4(raylib_DrawTriangle3D,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT,
@@ -5467,7 +5484,7 @@ RAYLIB_FN__ARG3(raylib_DrawPlane,
 )
     DrawPlane(
         native_from_value_vector3(vm, args[0]),
-        native_from_value_vector3(vm, args[1]),
+        native_from_value_vector2(vm, args[1]),
         native_from_value_color(vm, args[2])
     );
 RAYLIB_FN__END
@@ -5478,7 +5495,7 @@ RAYLIB_FN__ARG2(raylib_DrawRay,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawRay(
-        native_from_value_vector3(vm, args[0]),
+        native_from_value_ray(vm, args[0]),
         native_from_value_color(vm, args[1])
     );
 RAYLIB_FN__END
@@ -5674,7 +5691,7 @@ RAYLIB_FN__ARG6(raylib_DrawBillboardRec,
         native_from_value_texture(vm, args[1]),
         native_from_value_rectangle(vm, args[2]),
         native_from_value_vector3(vm, args[3]),
-        native_from_value_vector2(vm, args[4])
+        native_from_value_vector2(vm, args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5697,8 +5714,8 @@ RAYLIB_FN__ARG9(raylib_DrawBillboardPro,
         native_from_value_rectangle(vm, args[2]),
         native_from_value_vector3(vm, args[3]),
         native_from_value_vector3(vm, args[4]),
-        native_from_value_vector2(vm, args[5])
-        native_from_value_vector2(vm, args[6])
+        native_from_value_vector2(vm, args[5]),
+        native_from_value_vector2(vm, args[6]),
         args[7].value.number,
         native_from_value_color(vm, args[8])
     );
@@ -5747,7 +5764,7 @@ RAYLIB_FN__ARG1(raylib_UnloadMesh,
     MATTE_VALUE_TYPE_OBJECT
 )
     UnloadMesh(
-        native_from_value_mesh_ref(vm, args[0])
+        native_from_value_mesh(vm, args[0])
     );
     native_unload(vm, args[0]);
 RAYLIB_FN__END
@@ -5818,7 +5835,7 @@ RAYLIB_FN__ARG1(raylib_GenMeshTangents,
 )
     GenMeshTangents(
         native_from_value_mesh_ref(vm, args[0])
-    )
+    );
     native_update_value_mesh(vm, args[0]);
 RAYLIB_FN__END
 
@@ -5833,6 +5850,7 @@ RAYLIB_FN__ARG2(raylib_GenMeshPoly,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm, 
         GenMeshPoly(
             args[0].value.number,
             args[1].value.number
@@ -5848,6 +5866,7 @@ RAYLIB_FN__ARG4(raylib_GenMeshPlane,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm, 
         GenMeshPlane(
             args[0].value.number,
             args[1].value.number,
@@ -5865,6 +5884,7 @@ RAYLIB_FN__ARG3(raylib_GenMeshCube,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshCube(
             args[0].value.number,
             args[1].value.number,
@@ -5879,6 +5899,7 @@ RAYLIB_FN__ARG3(raylib_GenMeshSphere,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshSphere(
             args[0].value.number,
             args[1].value.number,
@@ -5887,12 +5908,13 @@ RAYLIB_FN__ARG3(raylib_GenMeshSphere,
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG3(raylib_GenMeshHemisphere,
+RAYLIB_FN__ARG3(raylib_GenMeshHemiSphere,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshHemiSphere(
             args[0].value.number,
             args[1].value.number,
@@ -5907,6 +5929,7 @@ RAYLIB_FN__ARG3(raylib_GenMeshCylinder,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshCylinder(
             args[0].value.number,
             args[1].value.number,
@@ -5922,6 +5945,7 @@ RAYLIB_FN__ARG3(raylib_GenMeshCone,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshCone(
             args[0].value.number,
             args[1].value.number,
@@ -5938,6 +5962,7 @@ RAYLIB_FN__ARG4(raylib_GenMeshTorus,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshTorus(
             args[0].value.number,
             args[1].value.number,
@@ -5954,6 +5979,7 @@ RAYLIB_FN__ARG4(raylib_GenMeshKnot,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshKnot(
             args[0].value.number,
             args[1].value.number,
@@ -5969,6 +5995,7 @@ RAYLIB_FN__ARG2(raylib_GenMeshHeightmap,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshHeightmap(
             native_from_value_image(vm, args[0]),
             native_from_value_vector3(vm, args[1])
@@ -5982,6 +6009,7 @@ RAYLIB_FN__ARG2(raylib_GenMeshCubicmap,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_mesh(
+        vm,
         GenMeshCubicmap(
             native_from_value_image(vm, args[0]),
             native_from_value_vector3(vm, args[1])
@@ -6016,7 +6044,7 @@ RAYLIB_FN__ARG1(raylib_LoadMaterials,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG0(raylib_LoadMaterialDefault,
+RAYLIB_FN__ARG0(raylib_LoadMaterialDefault
 )
     native_to_value_material(
         vm,
@@ -6105,7 +6133,7 @@ RAYLIB_FN__ARG1(raylib_LoadModelAnimations,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG3(raylib_UpdateModeAnimation,
+RAYLIB_FN__ARG3(raylib_UpdateModelAnimation,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER
@@ -6232,7 +6260,7 @@ RAYLIB_FN__ARG3(raylib_GetRayCollisionMesh,
         GetRayCollisionMesh(
             native_from_value_ray(vm, args[0]),
             native_from_value_mesh(vm, args[1]),            
-            native_from_value_transform(vm, args[2])
+            native_from_value_matrix(vm, args[2])
         )
     );
 RAYLIB_FN__END
@@ -6284,20 +6312,20 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG0(raylib_InitAudioDevice,
+RAYLIB_FN__ARG0(raylib_InitAudioDevice
 )
     InitAudioDevice(
     );
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG0(raylib_CloseAudioDevice,
+RAYLIB_FN__ARG0(raylib_CloseAudioDevice
 )
     CloseAudioDevice(
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG0(raylib_IsAudioDeviceReady,
+RAYLIB_FN__ARG0(raylib_IsAudioDeviceReady
 )
     return native_to_value_boolean(
         vm,
@@ -6308,7 +6336,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG1(raylib_IsAudioDeviceReady,
+RAYLIB_FN__ARG1(raylib_SetMasterVolume,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMasterVolume(
@@ -6426,7 +6454,7 @@ RAYLIB_FN__END
 RAYLIB_FN__ARG1(raylib_UnloadWave,
     MATTE_VALUE_TYPE_OBJECT
 )
-    UnloadSound(
+    UnloadWave(
         native_from_value_wave(vm, args[0])
     );
     
@@ -6571,6 +6599,7 @@ RAYLIB_FN__ARG1(raylib_WaveCopy,
     MATTE_VALUE_TYPE_OBJECT
 )
     return native_to_value_wave(
+        vm,
         WaveCopy(
             native_from_value_wave(vm, args[0])
         )
@@ -6584,7 +6613,7 @@ RAYLIB_FN__ARG3(raylib_WaveCrop,
     MATTE_VALUE_TYPE_NUMBER    
 )
     
-    WaveCopy(
+    WaveCrop(
         native_from_value_wave_ref(vm, args[0]),
         args[1].value.number,
         args[2].value.number
@@ -6615,12 +6644,12 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_LoadWaveSamples,
-    MATTE_VALUE_TYPE_OBJECT,  
+    MATTE_VALUE_TYPE_OBJECT
 )
     Wave w = native_from_value_wave(vm, args[0]);
 
     
-    float * samples = WaveFormat(
+    float * samples = LoadWaveSamples(
         w
     );
     
@@ -6632,7 +6661,7 @@ RAYLIB_FN__ARG1(raylib_LoadWaveSamples,
 
     matteValue_t out = matte_vm_create_memory_buffer_handle_from_data(
         vm,
-        samples,
+        (void*)samples,
         size
     );
     
@@ -6656,7 +6685,7 @@ RAYLIB_FN__ARG1(raylib_LoadMusicStream,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG2(raylib_LoadMusicFromMemory,
+RAYLIB_FN__ARG2(raylib_LoadMusicStreamFromMemory,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
@@ -6669,9 +6698,9 @@ RAYLIB_FN__ARG2(raylib_LoadMusicFromMemory,
 
     return native_to_value_music(
         vm,
-        LoadMusicFromMemory(
+        LoadMusicStreamFromMemory(
             native_from_value_string_unsafe(vm, args[0]),
-            data,
+            (void*)data,
             size
         )
     );
@@ -6968,7 +6997,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamVolume,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetAudioStreamVolume(
-        native_from_value_audioStream(vm, args[0]).
+        native_from_value_audioStream(vm, args[0]),
         args[1].value.number
     );
     
@@ -6980,7 +7009,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamPitch,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetAudioStreamPitch(
-        native_from_value_audioStream(vm, args[0]).
+        native_from_value_audioStream(vm, args[0]),
         args[1].value.number
     );
     
@@ -6992,7 +7021,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamPan,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetAudioStreamPan(
-        native_from_value_audioStream(vm, args[0]).
+        native_from_value_audioStream(vm, args[0]),
         args[1].value.number
     );
     
@@ -7066,7 +7095,7 @@ RAYLIB_FN__ARG5(raylib_Remap,
 )
     return native_to_value_float(
         vm,
-        Normalize(
+        Remap(
             args[0].value.number,
             args[1].value.number,
             args[2].value.number,
@@ -7093,11 +7122,22 @@ RAYLIB_FN__ARG3(raylib_Wrap,
 RAYLIB_FN__END
 
 
+RAYLIB_FN__ARG2(raylib_FloatEquals,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_boolean(
+        vm,
+        FloatEquals(
+            args[0].value.number,
+            args[1].value.number
+        )
+    );
+RAYLIB_FN__END
 
 
 
-
-RAYLIB_FN__ARG0(raylib_Vector2Zero,
+RAYLIB_FN__ARG0(raylib_Vector2Zero
 )
     return native_to_value_vector2(
         vm,
@@ -7107,7 +7147,7 @@ RAYLIB_FN__ARG0(raylib_Vector2Zero,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG0(raylib_Vector2One,
+RAYLIB_FN__ARG0(raylib_Vector2One
 )
     return native_to_value_vector2(
         vm,
@@ -7427,13 +7467,13 @@ RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_Vector2Equals,
     MATTE_VALUE_TYPE_OBJECT,
-    MATTE_VALUE_TYPE_NUMBER
+    MATTE_VALUE_TYPE_OBJECT
 )
     return native_to_value_boolean(
         vm,
         Vector2Equals(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number
+            native_from_value_vector2(vm, args[1])
         )
     );
 RAYLIB_FN__END
@@ -7444,7 +7484,7 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG0(raylib_Vector3Zero,
+RAYLIB_FN__ARG0(raylib_Vector3Zero
 )
     return native_to_value_vector3(
         vm,
@@ -7454,7 +7494,7 @@ RAYLIB_FN__ARG0(raylib_Vector3Zero,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG0(raylib_Vector3One,
+RAYLIB_FN__ARG0(raylib_Vector3One
 )
     return native_to_value_vector3(
         vm,
@@ -7834,7 +7874,7 @@ RAYLIB_FN__ARG3(raylib_Vector3Unproject,
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__(raylib_Vector3Invert,
+RAYLIB_FN__ARG1(raylib_Vector3Invert,
     MATTE_VALUE_TYPE_OBJECT
 )
     return native_to_value_vector3(
@@ -7868,10 +7908,10 @@ RAYLIB_FN__ARG3(raylib_Vector3ClampValue,
 )
     return native_to_value_vector3(
         vm,
-        Vector3Clamp(
+        Vector3ClampValue(
             native_from_value_vector3(vm, args[0]),
             args[1].value.number,
-            args[2].value.number,
+            args[2].value.number
         )
     );
 RAYLIB_FN__END
@@ -7961,7 +8001,7 @@ RAYLIB_FN__ARG1(raylib_MatrixInvert,
 RAYLIB_FN__END
 
 
-RAYLIB_FN__ARG0(raylib_MatrixIdentity,
+RAYLIB_FN__ARG0(raylib_MatrixIdentity
 )
     return native_to_value_matrix(
         vm,
@@ -8241,7 +8281,7 @@ RAYLIB_FN__ARG2(raylib_QuaternionSubtractValue,
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG0(raylib_QuaternionIdentity,
+RAYLIB_FN__ARG0(raylib_QuaternionIdentity
 )
     return native_to_value_vector4(
         vm,
@@ -8345,14 +8385,14 @@ RAYLIB_FN__END
 
 
 
-RAYLIB_FN__ARG3(raylib_QuaternionNLerp,
+RAYLIB_FN__ARG3(raylib_QuaternionNlerp,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_vector4(
         vm,
-        QuaternionNLerp(
+        QuaternionNlerp(
             native_from_value_vector4(vm, args[0]),
             native_from_value_vector4(vm, args[1]),
             args[2].value.number
@@ -8360,14 +8400,14 @@ RAYLIB_FN__ARG3(raylib_QuaternionNLerp,
     );
 RAYLIB_FN__END
 
-RAYLIB_FN__ARG3(raylib_QuaternionSLerp,
+RAYLIB_FN__ARG3(raylib_QuaternionSlerp,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER
 )
     return native_to_value_vector4(
         vm,
-        QuaternionSLerp(
+        QuaternionSlerp(
             native_from_value_vector4(vm, args[0]),
             native_from_value_vector4(vm, args[1]),
             args[2].value.number
@@ -8465,7 +8505,7 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_QuaternionToEuler,
-    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
 )
     return native_to_value_vector3(
         vm,
@@ -8532,7 +8572,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_ModelGetBones", raylib_ModelGetBones, NULL, "model", NULL),
     matte_add_external_function(m, "raylib_ModelGetBindPoses", raylib_ModelGetBindPoses, NULL, "model", NULL),
 
-    matte_add_external_function(m, "raylib_ModelAnimationGetBones", raylib_ModelAnimationGetBones, NULL, "modelAnimation" NULL),
+    matte_add_external_function(m, "raylib_ModelAnimationGetBones", raylib_ModelAnimationGetBones, NULL, "modelAnimation", NULL),
     matte_add_external_function(m, "raylib_ModelAnimationGetFramePoses", raylib_ModelAnimationGetFramePoses, NULL, "modelAnimation", NULL),
 
 
@@ -8922,7 +8962,6 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_IsFontReady", raylib_IsFontReady, NULL, "font", NULL);                                                          
     matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "bytes", "fontSize", "fontChars", "type", NULL); 
     matte_add_external_function(m, "raylib_GenImageFontAtlas", raylib_GenImageFontAtlas, NULL, "chars", "fontSize", "padding", "packMethod", NULL); 
-    matte_add_external_function(m, "raylib_UnloadFontData", raylib_UnloadFontData, NULL, "chars", "glyphCount",  NULL);                                
     matte_add_external_function(m, "raylib_UnloadFont", raylib_UnloadFont, NULL, "font", NULL);                                                           
     matte_add_external_function(m, "raylib_ExportFontAsCode", raylib_ExportFontAsCode, NULL, "font", "fileName", NULL);                               
 
@@ -8931,8 +8970,6 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_DrawText", raylib_DrawText, NULL, "text", "posX", "posY", "fontSize", "color", NULL);       
     matte_add_external_function(m, "raylib_DrawTextEx", raylib_DrawTextEx, NULL, "font", "text", "position", "fontSize", "spacing", "tint", NULL); 
     matte_add_external_function(m, "raylib_DrawTextPro", raylib_DrawTextPro, NULL, "font", "text", "position", "origin", "rotation", "fontSize", "spacing", "tint", NULL); 
-    matte_add_external_function(m, "raylib_DrawTextCodepoint", raylib_DrawTextCodepoint, NULL, "font", "codepoint",  "position", "fontSize", "tint",  NULL); 
-    matte_add_external_function(m, "raylib_DrawTextCodepoints", raylib_DrawTextCodepoints, NULL, "font", "codepoints", "count", "position", "fontSize", "spacing", "tint", NULL); 
 
 
     matte_add_external_function(m, "raylib_MeasureText", raylib_MeasureText, NULL, "text", "fontSize", NULL);                                      
@@ -9050,7 +9087,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_UpdateSound", raylib_UpdateSound, "sound", "data", "sampleCount", NULL); 
     matte_add_external_function(m, "raylib_UnloadWave", raylib_UnloadWave, NULL, "wave", NULL);                                     
     matte_add_external_function(m, "raylib_UnloadSound", raylib_UnloadSound, NULL, "sound", NULL);                                  
-    matte_add_external_function(m, "raylib_ExportWave", raylib_ExportWave, NULL, "wave", "fileName);               
+    matte_add_external_function(m, "raylib_ExportWave", raylib_ExportWave, NULL, "wave", "fileName", NULL);               
     matte_add_external_function(m, "raylib_ExportWaveAsCode", raylib_ExportWaveAsCode, "NULL", "wave", "fileName", NULL);         
 
 

@@ -5,7 +5,8 @@
 #include "../matte/src/matte_vm.h"
 
 #include "../raylib/src/raylib.h"
-
+#include "../raylib/src/raymath.h"
+#include "../raylib/src/rlgl.h"
 
 
 // Standard functions to encode various datatypes into 
