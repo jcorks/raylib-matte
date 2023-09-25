@@ -3,6 +3,7 @@
 #include "../matte/src/matte_string.h"
 #include "../matte/src/matte_store.h"
 #include "../matte/src/matte_array.h"
+#include "rawpack.h"
 #include "defines.h"
 #include "native.h"
 #include <stdio.h>
@@ -139,12 +140,6 @@ static int ensure_arg_types9(matteVM_t * vm, const matteValue_t * args, int bin0
 
 
 ////// Implementations
-
-
-/* Struct interfacing for closed objects
-
-
-*/
 
 
 
@@ -9271,16 +9266,233 @@ static void raymatte_init_bindings(matte_t * m) {
 
 } 
 
+static rmRawPack_t * PACK = NULL;
 
-static void raymatte_load_main(matte_t * m) {
+
+unsigned char * raymatte_rawpack_LoadFileData(const char *fileName, int *dataSize) {
+    int size;
+    const uint8_t * data = rm_raw_pack_get_entry(
+        PACK,
+        fileName,
+        &size    
+    );
+
+    unsigned char * out = MemAlloc(size);
+    memcpy(out, data, size);
+    *dataSize = size;
+    return out;
+}
+
+
+char * raymatte_rawpack_LoadFileText(const char *fileName) {
+    int size;
+    const uint8_t * data = rm_raw_pack_get_entry(
+        PACK,
+        fileName,
+        &size    
+    );
+
+    char * out = MemAlloc(size+1);
+    memcpy(out, data, size);
+    out[size] = 0;
+    return out;
+}
+
+
+static void raymatte_bind_pack(const uint8_t * buffer, uint32_t size) {
+    rmRawPack_t * rm = rm_raw_pack_create_from_data(buffer, size);
+    if (rm == NULL) {
+        TraceLog(LOG_FATAL, "Could not interpret rawpack data! (Corrupt?)");
+    } else {
+        PACK = rm;
+        
+        SetLoadFileDataCallback(raymatte_rawpack_LoadFileData);
+        SetLoadFileTextCallback(raymatte_rawpack_LoadFileText);
+    }
+}
+
+
+
+
+
+
+static void raymatte_load_main(const char * binPath, matte_t * m) {
+
+    int rawpackSize = 0;
+    uint8_t * rawpack = NULL;
+    int isRawpackFile = 0;
+
+    // first check if its packed at the end of the 
+    // executable
+    int dataSize;
+    unsigned char * exec = LoadFileData(binPath, &dataSize);
+    if (dataSize && exec) {
+        // Extract special footer
+        int index = dataSize - 32;
+        if (exec[index]   == 'R' &&
+            exec[index+1] == '|' &&
+            exec[index+2] == 'A' &&
+            exec[index+3] == '|' &&
+            exec[index+4] == 'Y' &&
+            exec[index+5] == '|' &&
+            exec[index+6] == 'M' &&
+            exec[index+7] == '|' &&
+            exec[index+8] == 'A' &&
+            exec[index+9] == '|' &&
+            exec[index+10] == 'T' &&
+            exec[index+11] == '|' &&
+            exec[index+12] == 'T' &&
+            exec[index+13] == '|' &&
+            exec[index+14] == 'E' &&
+            exec[index+15] == 'J' &&
+            exec[index+16] == 'L' &&
+            exec[index+17] == 'C'
+        ) {
+            // header passed. Extract size of payload
+            rawpackSize = *((int*)(exec+index+18));
+            rawpack = MemAlloc(rawpackSize);
+            memcpy(rawpack, (exec+index) - rawpackSize, rawpackSize);
+            
+        }
+        UnloadFileData(exec);
+        TraceLog(LOG_INFO, "Found embedded rawpack data.");
+    }
+
+    // if that failed or was unavailable, check 
+    // if theres a raymatte.data pack.
+    if (rawpackSize == 0 && IsPathFile("raymatte.data")) {
+        rawpack = (void*)LoadFileData("raymatte.data", &rawpackSize);
+    }
+
+
+
+
+    if (rawpackSize && rawpack) {
+        // if we have a rawpack, we will unpack it in memory
+        raymatte_bind_pack(rawpack, rawpackSize);
+        MemFree(rawpack);
+    }
+    
+    
+    
+    
     unsigned int bytesRead;
     char * data = LoadFileText("main.mt");
-    
     matte_run_source(m, data);
-    
     UnloadFileText(data);
 }
 
+
+static int raymatte_embed(char * bin) {
+    int packageSize;
+    uint8_t * package = LoadFileData("raymatte.data", &packageSize);
+    if (package == NULL) {
+        TraceLog(LOG_FATAL, "'raymatte.data' file could not be loaded or was empty. It is needed for embedding. You can use the 'package' command to make it.");    
+        return 1;
+    }
+
+    int execSize;
+    uint8_t * exec = LoadFileData(bin, &execSize);
+    if (exec == NULL) {
+        TraceLog(LOG_FATAL, "Running executable file could not be loaded or was empty.");    
+        return 1;
+    }
+    
+    char * endtag = "R|A|Y|M|A|T|T|EJLC";
+    
+    matteArray_t * queue = matte_array_create(1);
+    matte_array_push_n(queue, exec, execSize);
+    matte_array_push_n(queue, package, packageSize);
+    matte_array_push_n(queue, endtag, strlen(endtag));
+    matte_array_push_n(queue, &packageSize, sizeof(int));
+    int i;
+    for(i = strlen(endtag)+4; i < 32; ++i) {
+        char none = 0;
+        matte_array_push(queue, none);
+    }
+    
+    if (!SaveFileData(
+        "raymatte_embedded", 
+        matte_array_get_data(queue),
+        matte_array_get_size(queue)
+    )) {
+    
+        TraceLog(LOG_FATAL, "Couldn't create raymatte_embedded.");    
+        return 1;
+    }
+    
+    matte_array_destroy(queue);
+}
+
+
+static int raymatte_package() {
+    char * package = LoadFileText("package.mt");
+    if (package == NULL) {
+        TraceLog(LOG_FATAL, "'package.mt' file could not be loaded or was empty.");    
+        return 1;
+    }
+    
+
+    matte_t * m = matte_create();
+    matte_set_io(m, NULL, NULL, NULL);
+    matte_set_importer(m, NULL, NULL);
+
+    matteVM_t * vm = matte_get_vm(m);
+    matteStore_t * store = matte_vm_get_store(vm);
+    
+    
+    rmRawPack_t * rm = rm_raw_pack_create_empty();
+    
+    
+    matteValue_t arr = matte_run_source(m, 
+        package
+    );
+    
+    if (arr.binID != MATTE_VALUE_TYPE_OBJECT) {
+        TraceLog(LOG_FATAL, "package.mt must return an array of filenames to package.");        
+        return 1;
+    }
+    
+    int count = matte_value_object_get_number_key_count(store, arr);
+    int i;
+    int hasMain = 0;
+    for(i = 0; i < count; ++i) {
+        matteValue_t v = matte_value_object_access_index(store, arr, i);
+        if (v.binID != MATTE_VALUE_TYPE_STRING) {
+            TraceLog(LOG_FATAL, "package.mt returned array should only contain strings.");                
+            return 1;
+        } 
+        
+        const matteString_t * str = matte_value_string_get_string_unsafe(store, v);
+        int size;
+        char * data = LoadFileData(matte_string_get_c_str(str), &size);
+        
+        if (!strcmp(matte_string_get_c_str(str), "main.mt")) 
+            hasMain = 1;
+        
+        if (size == 0 || !data) {
+            TraceLog(LOG_FATAL, "Could not open file %s", matte_string_get_c_str(str));;                
+            return 1;
+        }
+        
+        rm_raw_pack_add_entry(
+            rm,
+            matte_string_get_c_str(str),
+            data,
+            size
+        );
+    }   
+    
+    if (!hasMain) {
+        TraceLog(LOG_FATAL, "Missing main.mt in package list. Every project must include a main.mt file.");                    
+    }
+    
+    int size;
+    uint8_t * data = rm_raw_pack_package(rm, &size);
+    SaveFileData("raymatte.data", data, size);
+    TraceLog(LOG_INFO, "Made raymatte.data package (%dKB)", size / 1024);
+    return 0;
+}
 
 
 int main(int argc, char ** argv) {
@@ -9302,6 +9514,35 @@ int main(int argc, char ** argv) {
             strcmp(argv[1], "-g") == 0) {
             isDebug = TRUE;
         } 
+        
+        
+                
+        
+        if (IsPathFile(argv[argc-1])) {
+            // packed file.
+            // TODO:
+            // - Unpack in memory 
+            // - Change imports and loaders to pull from memory
+        } else {
+            ChangeDirectory(argv[argc-1]);
+        }
+
+        // creates raymatte.data
+        if (strcmp(argv[1], "package") == 0 ||
+            strcmp(argv[1], "--package") == 0 ||
+            strcmp(argv[1], "-p") == 0) {
+            
+            exit(raymatte_package());
+        } 
+        
+        
+        // takes raymatte.data and appends it to the binary
+        if (strcmp(argv[1], "embed") == 0 ||
+            strcmp(argv[1], "--embed") == 0 ||
+            strcmp(argv[1], "-e") == 0) {
+            
+            exit(raymatte_embed(argv[0]));
+        }         
     }
 
 
@@ -9329,6 +9570,6 @@ int main(int argc, char ** argv) {
 
     raymatte_init_bindings(m);
     
-    raymatte_load_main(m);
+    raymatte_load_main(argv[0], m);
     return 0;
 }
