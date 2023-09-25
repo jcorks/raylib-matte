@@ -39,6 +39,25 @@ raymatte ./examples/core_2d_camera_platformer
 Which will change the current directory of `raymatte`, affecting 
 `import()`, `LoadFile*` calls as well.
 
+### Debugging
+`raymatte` also is built-in with a stdio, GDB-based debugger.
+It is accessible by using the `debug` command:
+```
+raymatte debug ./examples/core_2d_camera_platformer
+```
+
+The debugger will pause execution when the `breakpoint()` function
+is called, or when an error is thrown.
+
+The currently-understood commands are as follows:
+
+- `p` / `print` : prints an expression, which can include a variable name in scope.
+- `s` / `step` : evaluates the next instruction in the VM, which may "step into" a function call.
+- `n` / `next` : evaluates the next instruction in the VM, automatically running any instruction that would generate further function scopes. This essentially lets you step to the next instruction in the same scope or higher.
+- `bt` / `backtrace` : prints the entire callstack.
+
+
+
 ### Packaging 
 
 It is possible to bundle scripts and assets in a single file.
