@@ -1,7 +1,7 @@
 <img src="https://github.com/jcorks/raylib-matte/blob/main/logo/logo.png" width=256>
 
 
-# Raymatte
+# raylib-matte (raymatte)
 Raylib bindings as a standalone Matte executable, adding the full base and math libraries for raylib while also tayloring each function for use within a high-level language. 
 
 
