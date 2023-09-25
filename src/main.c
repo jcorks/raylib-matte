@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "raylib.mt.h"
-
+#include "../raylib/src/rcamera.h"
 
 
 ////// Helpers
@@ -8541,6 +8541,175 @@ RAYLIB_FN__END
 
 
 
+RAYLIB_FN__ARG1(raylib_GetCameraForward,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    return native_to_value_vector3(
+        vm,
+        GetCameraForward(&cam)
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_GetCameraUp,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    return native_to_value_vector3(
+        vm,
+        GetCameraUp(&cam)
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raylib_GetCameraRight,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    return native_to_value_vector3(
+        vm,
+        GetCameraRight(&cam)
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+
+RAYLIB_FN__ARG3(raylib_CameraMoveForward,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraMoveForward(
+        &cam,
+        args[1].value.number,
+        args[2].value.boolean
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_CameraMoveUp,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraMoveUp(
+        &cam,
+        args[1].value.number
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_CameraMoveRight,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraMoveRight(
+        &cam,
+        args[1].value.number,
+        args[2].value.boolean
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_CameraMoveToTarget,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraMoveToTarget(
+        &cam,
+        args[1].value.number
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raylib_CameraYaw,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraYaw(
+        &cam,
+        args[1].value.number,
+        args[2].value.boolean
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raylib_CameraPitch,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN,
+    MATTE_VALUE_TYPE_BOOLEAN,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraPitch(
+        &cam,
+        args[1].value.number,
+        args[2].value.boolean,
+        args[3].value.boolean,
+        args[4].value.boolean
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_CameraRoll,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    CameraRoll(
+        &cam,
+        args[1].value.number
+    );
+    native_update_value_camera(vm, args[0], cam);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG1(raylib_GetCameraViewMatrix,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    Matrix out = GetCameraViewMatrix(
+        &cam
+    );
+    native_update_value_camera(vm, args[0], cam);
+    return native_to_value_matrix(vm, out);
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raylib_GetCameraProjectionMatrix,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Camera cam = native_from_value_camera(vm, args[0]);
+    Matrix out = GetCameraProjectionMatrix(
+        &cam,
+        args[1].value.number
+    );
+    native_update_value_camera(vm, args[0], cam);
+    return native_to_value_matrix(vm, out);
+RAYLIB_FN__END
+
+
+
 
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
@@ -9262,6 +9431,23 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_QuaternionToEuler", raylib_QuaternionToEuler, NULL, "q", NULL);                                    
     matte_add_external_function(m, "raylib_QuaternionTransform", raylib_QuaternionTransform, NULL, "q","mat", NULL);                   
     matte_add_external_function(m, "raylib_QuaternionEquals", raylib_QuaternionEquals, NULL, "p","q", NULL);                               
+
+
+    matte_add_external_function(m, "raylib_GetCameraForward", raylib_GetCameraForward, NULL, "camera", NULL);
+    matte_add_external_function(m, "raylib_GetCameraUp", raylib_GetCameraUp, NULL, "camera", NULL);
+    matte_add_external_function(m, "raylib_GetCameraRight", raylib_GetCameraRight, NULL, "camera", NULL);
+
+    matte_add_external_function(m, "raylib_CameraMoveForward", raylib_CameraMoveForward, NULL, "camera", "distance", "moveInWorldPlane", NULL);
+    matte_add_external_function(m, "raylib_CameraMoveUp", raylib_CameraMoveUp, NULL, "camera", "distance", NULL);
+    matte_add_external_function(m, "raylib_CameraMoveRight", raylib_CameraMoveRight, NULL, "camera", "distance", "moveInWorldPlane", NULL);
+    matte_add_external_function(m, "raylib_CameraMoveToTarget", raylib_CameraMoveToTarget, NULL, "camera", "delta", NULL);
+
+    matte_add_external_function(m, "raylib_CameraYaw", raylib_CameraYaw, NULL, "camera", "angle", "rotateAroundTarget", NULL);
+    matte_add_external_function(m, "raylib_CameraPitch", raylib_CameraPitch, NULL, "camera", "angle", "lockView", "rotateAroundTarget", "rotateUp", NULL);
+    matte_add_external_function(m, "raylib_CameraRoll", raylib_CameraRoll, NULL, "camera", "angle", NULL);
+
+    matte_add_external_function(m, "raylib_GetCameraViewMatrix", raylib_GetCameraViewMatrix, NULL, "camera", NULL);
+    matte_add_external_function(m, "raylib_GetCameraProjectionMatrix", raylib_GetCameraProjectionMatrix, NULL, "camera", "aspect", NULL);
 
 
 } 

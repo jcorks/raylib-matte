@@ -42,6 +42,16 @@
                     canJump = false;
                 }
 
+                // shows off the debugger.
+                // If youre currently in the debugger, welcome!
+                // Try to print a variable to see it in action.
+                //
+                // See the project README for commands, but it follows
+                // a reduced set of command from gdb.
+                breakpoint();
+
+
+
                 @hitObstacle = false;
                 foreach(envItems) ::(i, ei) {   
                     if (ei.blocking &&
@@ -292,7 +302,6 @@ raylib.SetTargetFPS(fps:60);
     // Main game loop
     forever::{
         if (raylib.WindowShouldClose()) ::<= {
-            breakpoint();
             send();
         }
         // Update

@@ -1260,8 +1260,23 @@
     QuaternionFromEuler : getExternalFunction(name:"raylib_QuaternionFromEuler"),
     QuaternionToEuler : getExternalFunction(name:"raylib_QuaternionToEuler"),
     QuaternionTransform : getExternalFunction(name:"raylib_QuaternionTransform"),
-    QuaternionEquals : getExternalFunction(name:"raylib_QuaternionEquals") 
+    QuaternionEquals : getExternalFunction(name:"raylib_QuaternionEquals"),
 
+    GetCameraForward : getExternalFunction(name:"raylib_GetCameraForward"),
+    GetCameraUp : getExternalFunction(name:"raylib_GetCameraUp"),
+    GetCameraRight : getExternalFunction(name:"raylib_GetCameraRight"),
+
+    CameraMoveForward : getExternalFunction(name:"raylib_CameraMoveForward"),
+    CameraMoveUp : getExternalFunction(name:"raylib_CameraMoveUp"),
+    CameraMoveRight : getExternalFunction(name:"raylib_CameraMoveRight"),
+    CameraMoveToTarget : getExternalFunction(name:"raylib_CameraMoveToTarget"),
+
+    CameraYaw : getExternalFunction(name:"raylib_CameraYaw"),
+    CameraPitch : getExternalFunction(name:"raylib_CameraPitch"),
+    CameraRoll : getExternalFunction(name:"raylib_CameraRoll"),
+
+    GetCameraViewMatrix : getExternalFunction(name:"raylib_GetCameraViewMatrix"),
+    GetCameraProjectionMatrix : getExternalFunction(name:"raylib_GetCameraProjectionMatrix")
     
 };  
 

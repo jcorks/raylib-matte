@@ -11,12 +11,16 @@
 *
 ********************************************************************************************/
 
+// Adapted for Matte
+
+
+
 @:raylib = import(module:"raylib.mt");
 
 // Initialization
 //--------------------------------------------------------------------------------------
-@:screenWidth = 256;
-@:screenHeight = 256;
+@:screenWidth = 800;
+@:screenHeight = 450;
 
 raylib.InitWindow(
     width:screenWidth, 
@@ -59,8 +63,6 @@ raylib.SetTargetFPS(fps:60);               // Set our game to run at 60 frames-p
         raylib.EndDrawing();
         //----------------------------------------------------------------------------------
 
-        raylib.TakeScreenshot(fileName:"logo.png");
-        send();
     }
 
 }
