@@ -1,10 +1,22 @@
-# Raylib-Matte (raymatte)
-raylib bindings for Matte with some extra goodies and an emphasis 
-on reducing potential undefined behavior.
+<img src="https://github.com/jcorks/raylib-matte/blob/main/logo/logo.png" width=256>
+
+
+# Raymatte
+Raylib bindings as a standalone Matte executable, adding the full base and math libraries for raylib while also tayloring each function for use within a high-level language. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 **STILL A WORK IN PROGRESS.**
-Missing features:
 - Extra functions for making game organization easier
 - Makefile for MSYS2 (Windows)
 - Additional examples
