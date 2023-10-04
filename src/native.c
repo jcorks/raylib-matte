@@ -17,6 +17,7 @@ enum {
     RAYMATTE_NATIVE_TYPE__MODEL,
     RAYMATTE_NATIVE_TYPE__MODEL_ANIMATION,
     RAYMATTE_NATIVE_TYPE__WAVE,
+    RAYMATTE_NATIVE_TYPE__MATRIX,
     
     //// Structs that have unimplemented 
     //// members and need to have some help
@@ -146,27 +147,8 @@ matteValue_t native_to_value_vector4(matteVM_t * vm, Vector4 in) {
 }
 matteValue_t native_to_value_matrix(matteVM_t * vm, Matrix in) {
     INIT_OUT();
-    NEW_KEY(m0, native_to_value_float);
-    NEW_KEY(m1, native_to_value_float);
-    NEW_KEY(m2, native_to_value_float);
-    NEW_KEY(m3, native_to_value_float);
-
-    NEW_KEY(m4, native_to_value_float);
-    NEW_KEY(m5, native_to_value_float);
-    NEW_KEY(m6, native_to_value_float);
-    NEW_KEY(m7, native_to_value_float);
-
-    NEW_KEY(m8, native_to_value_float);
-    NEW_KEY(m9, native_to_value_float);
-    NEW_KEY(m10, native_to_value_float);
-    NEW_KEY(m11, native_to_value_float);
-
-    NEW_KEY(m12, native_to_value_float);
-    NEW_KEY(m13, native_to_value_float);
-    NEW_KEY(m14, native_to_value_float);
-    NEW_KEY(m15, native_to_value_float);
+    NATIVIZE(Matrix, RAYMATTE_NATIVE_TYPE__MATRIX);
     return out;
-    
 }
 matteValue_t native_to_value_color(matteVM_t * vm, Color in) {
     INIT_OUT();
@@ -534,13 +516,31 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
         return dout;\
     }\
     return *((__TYPE__*)object->data);
+    
+    
+#define RETRIEVE_NATIVE_PRELUDE(__TYPE__,__TAG__)\
+    matteStore_t * store = matte_vm_get_store(vm);\
+    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
+        __TYPE__ dout = {};\
+        return dout;\
+    }\
+    NativeEncodeData_t * object = matte_value_object_get_userdata(store, in);\
+    if (object == NULL || object->typeTag != __TAG__) {\
+        matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an __TYPE__.");\
+        __TYPE__ dout = {};\
+        return dout;\
+    }\
+    __TYPE__ * out = (__TYPE__*)object->data;
+
+#define UPDATE_PRELUDE_KEY(__NAME__, __TYPE__)\
+    out->__NAME__ = __TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, #__NAME__)));
 
 #define READ_NUMBER(__NAME__)\
     out.__NAME__ = matte_value_as_number(store, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, #__NAME__)));
     
 #define READ_KEY(__NAME__, __TYPE__)\
     out.__NAME__ = __TYPE__(vm, matte_value_object_access_string(store, in, MATTE_VM_STR_CAST(vm, #__NAME__)));
-
 
 
 
@@ -569,28 +569,7 @@ Vector4 native_from_value_vector4(matteVM_t * vm, matteValue_t in) {
     return out;
 }
 Matrix native_from_value_matrix(matteVM_t * vm, matteValue_t in) {
-    INIT_FROM(Matrix);
-    READ_NUMBER(m0);
-    READ_NUMBER(m1);
-    READ_NUMBER(m2);
-    READ_NUMBER(m3);
-
-    READ_NUMBER(m4);
-    READ_NUMBER(m5);
-    READ_NUMBER(m6);
-    READ_NUMBER(m7);
-
-    READ_NUMBER(m8);
-    READ_NUMBER(m9);
-    READ_NUMBER(m10);
-    READ_NUMBER(m11);
-
-    READ_NUMBER(m12);
-    READ_NUMBER(m13);
-    READ_NUMBER(m14);
-    READ_NUMBER(m15);
-
-    return out;
+    RETRIEVE_NATIVE(Matrix, RAYMATTE_NATIVE_TYPE__MATRIX);
 }
 Color native_from_value_color(matteVM_t * vm, matteValue_t in) {
     INIT_FROM(Color);
@@ -686,7 +665,10 @@ BoneInfo native_from_value_boneInfo(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE(BoneInfo, RAYMATTE_NATIVE_TYPE__BONEINFO);
 }
 Model native_from_value_model(matteVM_t * vm, matteValue_t in) {
-    RETRIEVE_NATIVE(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    //RETRIEVE_NATIVE(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    RETRIEVE_NATIVE_PRELUDE(Model, RAYMATTE_NATIVE_TYPE__MODEL);
+    UPDATE_PRELUDE_KEY(transform, native_from_value_matrix);
+    return *out;
 }
 ModelAnimation native_from_value_modelAnimation(matteVM_t * vm, matteValue_t in) {
     RETRIEVE_NATIVE(ModelAnimation, RAYMATTE_NATIVE_TYPE__MODEL_ANIMATION);

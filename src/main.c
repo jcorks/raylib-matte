@@ -414,6 +414,14 @@ RAYLIB_FN__ARG1(raylib_ModelAnimationGetFramePoses, MATTE_VALUE_TYPE_OBJECT)
 RAYLIB_FN__END
 
 
+RAYLIB_FN__ARG1(raylib_MatrixGetData, MATTE_VALUE_TYPE_OBJECT)
+    Matrix mat = native_from_value_matrix(vm, args[0]);
+    return matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        &mat.m0,
+        sizeof(float)*16
+    );
+RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_WaveGetData, MATTE_VALUE_TYPE_OBJECT)
@@ -8740,6 +8748,8 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_ModelAnimationGetBones", raylib_ModelAnimationGetBones, NULL, "modelAnimation", NULL),
     matte_add_external_function(m, "raylib_ModelAnimationGetFramePoses", raylib_ModelAnimationGetFramePoses, NULL, "modelAnimation", NULL),
 
+    matte_add_external_function(m, "raylib_MatrixGetData", raylib_MatrixGetData, NULL, "matrix", NULL),
+
 
     matte_add_external_function(m, "raylib_WaveGetData", raylib_WaveGetData, NULL, "wave", NULL),
 
@@ -9748,6 +9758,18 @@ int main(int argc, char ** argv) {
 
     matte_add_module(m, "raylib.mt", bytecode, bytecodeSize);
     matte_deallocate(bytecode);
+
+
+    bytecode = matte_compile_source(
+        m,
+        &bytecodeSize,
+        (char*)GAME_MT // nul-terminated!
+    );
+
+    matte_add_module(m, "game.mt", bytecode, bytecodeSize);
+    matte_deallocate(bytecode);
+
+
 
 
     if (isDebug)

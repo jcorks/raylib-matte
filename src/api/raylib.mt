@@ -14,7 +14,7 @@
 @:base__MeshGetBoneIDs = getExternalFunction(name:"raylib_MeshGetBoneIDs");
 @:base__MeshGetBoneWeights = getExternalFunction(name:"raylib_MeshGetBoneWeights");
 @:base__WaveGetData = getExternalFunction(name:"raylib_WaveGetData");
-
+@:base__MatrixGetData = getExternalFunction(name:"raylib_MatrixGetData");
 
 
 @:base__LoadFileData = getExternalFunction(name:"raylib_LoadFileData");
@@ -482,6 +482,31 @@
             return m;
         },
 
+
+        MatrixGetData :: (matrix) {
+            @:m = MemoryBuffer.new();
+            m.bindNative(handle:base__MatrixGetData(matrix));
+            return m;
+        },
+        
+        
+        
+        
+        MatrixGetFormatted ::(matrix) {
+            @:m = raylib.MatrixGetData(matrix);
+            @index = 0;
+            @:gn :: {
+                @:num = m.readFloat32(offset:index*4);
+                index += 1;
+                return num;
+            }
+            return [
+                [gn(), gn(), gn(), gn()],
+                [gn(), gn(), gn(), gn()],
+                [gn(), gn(), gn(), gn()],
+                [gn(), gn(), gn(), gn()]            
+            ]
+        },
 
 
         ModelGetMeshes : getExternalFunction(name:"raylib_ModelGetMeshes"),
