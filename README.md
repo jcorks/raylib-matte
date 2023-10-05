@@ -16,11 +16,14 @@ Raylib bindings as a standalone Matte executable, adding the full base and math 
 
 
 
-**STILL A WORK IN PROGRESS.**
-- Extra functions for making game organization easier
-- Makefile for MSYS2 (Windows)
-- Additional examples
+**Features.**
+- High-level environment for making games and other tools with raylib, adding built-in support for strings, functions as first class objects, and other useful features.
+- Bindings for raylib.h, rcamera.h, and rmath.h
+- Extra extension library for making game organization easier, adding hierarchy, event systems, and more
+- Raylib examples rewritten in Matte
+- Additional examples with the game extension library
 
+Not familiar with [Matte](http://github.com/jcorks/matte/)? Check out the [language Quick Guide](https://jcorks.github.io/matte/doc-quick.html) to get a feel for it!
 
 ## Compiling
 `raymatte` is compiled using Make. Run `make` in the 
