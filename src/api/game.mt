@@ -1,12 +1,36 @@
+/////////////////////////
+/*
+The raylib-matte Game Extension Library (game.mt)
+
+The game extension library is split into classes.
+Any relevent documentation will be commented with 
+slash-star comments
+
+NOTE;
+Functions that are not meant to be called by user code 
+and do not have a stable interface are suffixed with _
+
+
+*/
+/////////////////////////
+
 @:ray = import(module:"raylib.mt");
 @:class = import(module:"Matte.Core.Class");
 @:EventSystem = import(module:"Matte.Core.EventSystem");
 
-// A generic node.
-// Like in game engines, node are the basic building 
-// blocks of a scene. On its own, a Node is just 
-// organizational, but the useful tools inherit from 
-// this class.
+/*
+    Class: Node
+   
+    A generic node.
+    Like in game engines, nodes are the basic building 
+    blocks of a scene. On its own, a Node is just 
+    organizational, but the useful tools inherit from 
+    this class.
+
+    Nodes also can generate their own events to which 
+    user code can respond.
+
+*/
 @:Node = class(
     name: "Game.Node",
     inherits : [EventSystem],
@@ -14,54 +38,104 @@
         @:children = [];
         @parent;
         this.interface = {
+            /*
+                Adds a node as a child of this node. If the child 
+                already has a parent, that parent is detached.
+            */
             attach ::(child) {
                 when(child.parent == this) empty;
                 child.detach();
                 children->push(value:child);
-                child.bindParent(newParent:this);
+                child.bindParent_(newParent:this);
             },
             
-            bindParent ::(newParent) {
-               parent = newParent;            
-            },
             
+            /*
+                Detaches a node from its current parent.
+                Has no effect if the node has no parents.
+            */
             detach :: {
-                children->remove(key:children->findIndex(value:this));
+                when(parent == empty) empty;
+                parent.unbindParent_(child:this);
                 parent = empty;
             },
             
+            /*
+                Getter for the current parent node of this node.
+                If no such node exists, empty is returned.
+            */
             parent : {
                 get ::<- parent
             },
             
-            onDraw ::{},
+            /*
+                Virtual function that is called on every update frame.
+                Inherited classes from Node implement these with 
+                logic for what the Node should do as it updates.
+                onStep for this Node is called before children nodes.
+            */
             onStep ::{},
-            leaveDraw ::{},
+
             
+            /*
+                Virtual function that is called on every update frame.
+                Inherited classes from Node implement these with 
+                drawing commands. onDraw() is guaranteed to happen after 
+                a BeginDrawing() and before an EndDrawing().
+                onDraw for this Node is called before children nodes.
+            */
+            onDraw ::{},
+            
+            /*
+                Virtual function that is called on every update frame.
+                Inherited classes from Node implement these with 
+                things to do after a node and its children have run onDraw().
+            */
+            onLeaveDraw ::{},
+            
+            /*  
+                Performs a step for this node and its children.
+                This is called for you once StartLoop() is called.
+            */
             step ::{
                 this.onStep();
                 foreach(children) ::(i, child) {
                     child.step();
                 }
             },
+            
+            
+            /*
+                Performs a draw for this node and its children.
+                This is called for you once StartLoop() is called.
+            */
             draw ::{
-                
                 this.onDraw();
                 foreach(children) ::(i, child) {
                     child.draw();
                 }
-                this.leaveDraw();
+                this.onLeaveDraw();
             },
             
+
+            /*
+                A getter that returns the array of current children
+                of this node. The array will contain no members if 
+                there are no children.
+            */
             children : {
                 get ::<- children
             },
             
-            // used for 3D and 2D implementations
-            updateTransform ::{
+           
+            updateTransform_ ::{
                 foreach(children) ::(i, child) {
-                    child.updateTransform();
+                    child.updateTransform_();
                 }
+            },
+            bindParent_ ::(newParent) <- parent = newParent,
+            unbindParent_::(child) {
+                children->remove(key:children->findIndex(value:child));            
             }
         }   
     }    
@@ -72,9 +146,19 @@
 
 
 
+/*
+    Class: Entity
+   
+    A node that responds to a 2D or 3D environment. allowing
+    its transform to be inherited by children.
+    
+    Every entity has a position, rotation, and scale, all of which 
+    pull from its parent, if any.
+    
 
+*/
 @:Entity = ::<= {
-    @:compose ::(
+    @:compose_ ::(
         base,
         position,
         rotation,
@@ -104,17 +188,20 @@
             @scale = ray.Vector3One();
             
             this.interface = {
+            
+                /*
+                    Getter for the raylib Matrix that represents the 
+                    global, rather than local, transform of this entity.
+                    
+                */
                 globalMatrix : {
                     get ::<- matrix
                 },
-            
-                isDirty : {
-                    get ::<- isDirty,
-                    set ::(value) <- isDirty = value
-                },
+
                 
-                
-            
+                /*
+                    Setter / Getter for the local X position.
+                */
                 x : {
                     get ::<- position.x,
                     set ::(value) {
@@ -124,6 +211,9 @@
                     }
                 },
 
+                /*
+                    Setter / Getter for the local Y position.
+                */
                 y : {
                     get ::<- position.y,
                     set ::(value) {
@@ -133,6 +223,9 @@
                     }
                 },
 
+                /*
+                    Setter / Getter for the local Z position.
+                */
                 z : {
                     get ::<- position.z,
                     set ::(value) {
@@ -142,7 +235,9 @@
                     }
                 },
                 
-                
+                /*
+                    Setter / Getter for the position vector reference.
+                */
                 position : {
                     get ::<- position,
                     set ::(value) {
@@ -152,6 +247,9 @@
                     }
                 },
                 
+                /* 
+                    Getter for a global position of the Entity.
+                */
                 globalPosition : {
                     get :: {
                         return ray.Vector3Transform(v:ray.Vector3Zero(), mat:matrix);
@@ -160,6 +258,9 @@
                 
                 
                 
+                /*
+                    Setter / Getter for the rotational vector reference.
+                */
                 rotation : {
                     get ::<- rotation,
                     set ::(value) {
@@ -170,6 +271,9 @@
                 },
                 
                 
+                /*
+                    Setter / Getter for the scale vector reference.
+                */
                 scale : {
                     get ::<- scale,
                     set ::(value) {
@@ -179,149 +283,20 @@
                     }
                 },
                 
-                updateTransform:: {
-                    @:parent = this.parent;
-                    @:parentValid = parent != empty && parent->isa(type:Entity.type);
-                    
-                    if (isDirty || (parentValid && parent.isDirty)) ::<= {
-                        matrix = compose(
-                            base: if (parentValid)
-                                        parent.globalMatrix
-                                    else 
-                                        ray.MatrixIdentity()
-                                  ,
-                            position,
-                            rotation,
-                            scale
-                        );
-                        isDirty = false;
-                        foreach(this.children) ::(i, child) {
-                            // this should propogate to children
-                            child.isDirty = true;
-                        }
-                        
-                    };
-                    foreach(this.children) ::(i, child) {
-                        child.updateTransform();
-                    }
-                }
-            }
-        }
-    )
-}
-
-@:Node2D = ::<= {
-    @zup = {
-        x:0,
-        y:0,
-        z:1
-    };
-    @:compose ::(
-        base,
-        position,
-        rotation,
-        scale 
-    ) {
-        @:scale = ray.MatrixScale(x:scale.x, y:scale.y, z:1);
-        @:rotation = ray.MatrixRotate(axis:zup, angle:rotation->asRadians);
-        @:position = ray.MatrixTranslate(x:position.x, y:position.y, z:0);
-
-
-
-        base = ray.MatrixMultiply(left:position, right:base);
-        base = ray.MatrixMultiply(left:rotation, right:base);
-        base = ray.MatrixMultiply(left:scale, right:base);
-        return base;
-    }
-
-    return class(
-        name: "Game.Node2D",
-        inherits : [Node],
-        define::(this) {
-            @matrix = ray.MatrixIdentity();
-            @isDirty = true; 
+                
+                
             
-            @position = ray.Vector2Zero();
-            @rotation = 0;
-            @scale = ray.Vector2One();
-            
-            this.interface = {
-                globalMatrix : {
-                    get ::<- matrix
-                },
-            
-                isDirty : {
+                isDirty_ : {
                     get ::<- isDirty,
                     set ::(value) <- isDirty = value
                 },
-                
-                
-            
-                x : {
-                    get ::<- position.x,
-                    set ::(value) {
-                        isDirty = true;
-                        position.x = value;
-                        return value;
-                    }
-                },
-
-                y : {
-                    get ::<- position.y,
-                    set ::(value) {
-                        isDirty = true;
-                        position.y = value;;
-                        return value;
-                    }
-                },
-
-                
-                position : {
-                    get ::<- position,
-                    set ::(value) {
-                        position = value;
-                        isDirty = true;
-                        return value;
-                    }
-                },
-                
-                globalPosition : {
-                    get :: {
-                        @:result = ray.Vector3Transform(v:ray.Vector3Zero(), mat:matrix);
-                        return {
-                            x:result.x,
-                            y:result.y
-                        };
-                    }
-                },
-                
-                
-                
-                rotation : {
-                    get ::<- rotation,
-                    set ::(value) {
-                        rotation = value;
-                        isDirty = true;
-                        return rotation;
-                    }
-                },
-                
-                
-                scale : {
-                    get ::<- scale,
-                    set ::(value) {
-                        scale = value;
-                        isDirty = true;
-                        return scale;
-                    }
-                },
-                
-                updateTransform:: {
+                                
+                updateTransform_:: {
                     @:parent = this.parent;
-                    @:parentValid = parent != empty && parent->isa(type:Node2D.type);
+                    @:parentValid = parent != empty && parent->isa(type:Entity.type);
                     
-                    if (isDirty || (parentValid && parent.isDirty)) ::<= {
-                        matrix = compose(
+                    if (isDirty || (parentValid && parent.isDirty_)) ::<= {
+                        matrix = compose_(
                             base: if (parentValid)
                                         parent.globalMatrix
                                     else 
@@ -334,12 +309,13 @@
                         isDirty = false;
                         foreach(this.children) ::(i, child) {
                             // this should propogate to children
-                            child.isDirty = true;
+                            if (child->isa(type:Entity.type))
+                                child.isDirty_ = true;
                         }
                         
                     };
                     foreach(this.children) ::(i, child) {
-                        child.updateTransform();
+                        child.updateTransform_();
                     }
                 }
             }
@@ -347,36 +323,64 @@
     )
 }
 
+/*
+    Class: StateMachine
+   
+    Provides a mechanism by which states can be controlled
+    and updated of a particular object.
+    
+    States are managed with response functions that are called
+    when a state is updated. As such, a state machine can supplant 
+    the usual onStep / onDraw functions that are called for an Entity.
+    
+*/
 @StateMachine = class(
     name : 'Game.StateMachine',
     inherits : [Node],
     define::(this) {
-        @:states = {};
+        @states = {};
         @currentState = empty;
         this.interface = {
+            /* 
+                Setter for the entire possible set of 
+                states that the state machine can handle.
+                Each member of the input object should be 
+                keyed with a string, and each value shall be an object.
+                Each object shall have named, if desired, a member 
+                for "onEnter", "onStep", "onDraw", and "onLeave", each
+                corresponding to inputs to addState(). See that function 
+                for more details.
+            */
             states : {
                 set ::(value) {
-                    foreach(value) ::(name, set) {
+                    states = {};
+                    foreach(value) ::(name => String, set => Object) {
                         states[name] = set;
                     }
                 }
             },
+            
+            /*
+                Adds a new state to the state machine.
+            */
             addState ::(
-                name,
+                name => String,
                 onEnter,
                 onStep,
                 onDraw,
                 onLeave
             ) {
                 states[name] = {
-                    onEnter : onEnter,
-                    onStep : onStep,
-                    onDraw : onDraw,
-                    onLeave : onLeave
+                    onEnter : if (onEnter) onEnter else ::{},
+                    onStep : if (onStep) onStep else ::{},
+                    onDraw : if (onDraw) onDraw else ::{},
+                    onLeave : if (onLeave) onLeave else ::{}
                 };
             },
             
-
+            /*
+                Setter / getter for the current state name.
+            */
             state : {
                 get ::<- currentState,
                 set ::(value) {
@@ -556,11 +560,17 @@
 
 
 
-
+@:lerp_repeat ::(t, m) {
+    return raylib.Clamp(value:t - ((t / m)->floor) * m, min:0, max:m);
+}
 
 return ::<= {
     @:roots = [];
     return {
+        LerpAngle ::(start, end, amount) {
+            @:dt = lerp_repeat(t:end - start, m:360);
+            return raylib.Lerp(start, end:start + (if(dt > 180) dt - 360 else dt), amount);
+        },    
         Log : Log,
         Node : Node,
         Entity : Entity,
@@ -569,7 +579,7 @@ return ::<= {
         StartLoop ::{
             forever ::{
                 foreach(roots) ::(i, root) {
-                    root.updateTransform();
+                    root.updateTransform_();
                 }
                 foreach(roots) ::(i, root) {
                     root.step();

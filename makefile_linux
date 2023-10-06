@@ -5,4 +5,4 @@ all:
 	cd ./src/api/ && make
 	cd ./matte/src/rom/ && make
 	cd ./matte/src/rom/ && ./makerom
-	gcc -g -fsanitize=address -fsanitize=undefined  ./src/*.c -I./matte/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -ldl -lpthread -o raymatte
+	gcc ./src/*.c -I./matte/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -ldl -lpthread -o raymatte

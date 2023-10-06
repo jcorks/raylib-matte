@@ -36,6 +36,9 @@
 @:base__LoadMusicStreamFromMemory = getExternalFunction(name:"raylib_LoadMusicStreamFromMemory");
 @:base__UpdateAudioStream = getExternalFunction(name:"raylib_UpdateAudioStream");
 
+
+
+
 @:raylib = {
     // Defines
     LIGHTGRAY  : {r:200, g:200, b:200, a:255},   // Light Gray

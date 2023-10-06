@@ -70,7 +70,7 @@
         
             // controls the 
             onStep :: {
-                scale += 0.01;
+                scale += ray.GetFrameTime();
                 this.scale = {
                     x: 0.7 + (scale->sin) * 0.7,
                     y: 0.7 + (scale->sin) * 0.7,
@@ -109,6 +109,8 @@
 
 // initialize window
 ray.InitWindow(width: 800, height: 480, title: 'Entity Test');
+
+
 
 @:room = game.Node.new();
 

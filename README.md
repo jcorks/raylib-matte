@@ -34,7 +34,7 @@ run immediately.
 
 Optionally, you can specify a path to start within: 
 ```
-raymatte ./examples/core_2d_camera_platformer
+raymatte ./examples/raylib/core_2d_camera_platformer
 ```
 Which will change the current directory of `raymatte`, affecting 
 `import()`, `LoadFile*` calls as well.
@@ -43,7 +43,7 @@ Which will change the current directory of `raymatte`, affecting
 `raymatte` also is built-in with a stdio, GDB-based debugger.
 It is accessible by using the `debug` command:
 ```
-raymatte debug ./examples/core_2d_camera_platformer
+raymatte debug ./examples/raylib/core_2d_camera_platformer
 ```
 
 The debugger will pause execution when the `breakpoint()` function
@@ -99,11 +99,33 @@ This can be done using the `embed` command, which will take a directory
 containing the `raymatte.data` and combine it with the running `raymatte` 
 instance.
 
-`raymatte embed ./path/to/packagedata/`
+```
+raymatte embed ./path/to/packagedata/
+```
 
 This process produces a `raymatte_embedded` which can be used in a 
 standalone manner.
 
+
+### Game Extension (game.mt)
+
+Along with the functions for raylib being implemented, `raymatte`
+also contains a "game extension" library that brings higher-level 
+constructs similar to game engine tools, such as a transform hierarchy,
+state machine controller, and event systems.
+
+In the spirit of raylib, the usage of these is dictated by examples and 
+the function declarations in code.
+
+Examples can be found in `examples/game`, and the source file 
+for the library, with notes on each function, are within 
+`src/api/game.mt`.
+
+
+
+```
+raymatte ./examples/game/timer/
+```
 
 ## Differences vs. the C API
 
