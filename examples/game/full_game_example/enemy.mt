@@ -6,6 +6,7 @@
 @:Bullet = import(module:"bullet.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:Explosion = import(module:"explosion.mt");
 
 @:mesh = ray.GenMeshCube(width:1, length: 1, height: 1);
 
@@ -25,6 +26,7 @@ return class(
     },
 
     define::(this) {
+        @:controller = import(module:"controller.mt");
         @size = Number.random() * 1 + 0.5;
         @health = (size*5)->ceil;
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
@@ -90,8 +92,8 @@ return class(
                     dir = ray.Vector2Normalize(v:dir);
                     
                     
-                    this.x += size * 0.2 * dir.x;
-                    this.y += size * 0.2 * dir.y;
+                    this.x += size * 0.2 * dir.x ;
+                    this.y += size * 0.2 * dir.y ;
 
                 },
                 onStep ::{
@@ -123,14 +125,10 @@ return class(
                     dir = ray.Vector2Normalize(v:dir);
                     
                     
-                    this.x += frame * 1/size * 0.25* dir.x;
-                    this.y += frame * 1/size * 0.25* dir.y;
+                    this.x += frame * 1/size * 0.23* dir.x * (1.1 ** (controller.wave));
+                    this.y += frame * 1/size * 0.23* dir.y * (1.1 ** (controller.wave));
                     
-                    
-                    // add some spin
-                    //target += 90;
-                    //this.x += frame * size * 0.1 * dir.x;
-                    //this.y += frame * size * 0.1 * dir.y;
+   
 
                 },
                 onDraw :: {
@@ -191,6 +189,9 @@ return class(
                     }   
                     this.scale = scale;                    
                     if (dyingTime < 0) ::<={
+                        @exp = Explosion.new();
+                        exp.setup(position:this.position, intensity:0.8);
+                        room.attach(child:exp);
                         this.detach();
                         all->remove(key:this);
                     }

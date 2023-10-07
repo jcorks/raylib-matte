@@ -8,6 +8,9 @@
 
 @main;
 
+
+@:BULLET_SPREAD_DEGREES = 30;
+
 return class(
     name: "Shooter",
     inherits : [game.Entity],
@@ -22,16 +25,21 @@ return class(
         main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
-            @:b = Bullet.new();                
-            b.setup(
-                position:  this.position,
-                direction: 
-                    direction + Number.random() * 20 - 10,
-                speed :
-                    Number.random() * 5 + 10
-            );
+            @dir = direction - ((statSpread-1)*BULLET_SPREAD_DEGREES / 2)
+            for(0, statSpread) ::(i) {
             
-            room.attach(child:b);
+                @:b = Bullet.new();                
+                b.setup(
+                    position:  this.position,
+                    direction: 
+                        dir + Number.random() * 20 - 10,
+                    speed :
+                        Number.random() * 5 + 10
+                );
+                
+                room.attach(child:b);
+                dir += BULLET_SPREAD_DEGREES;
+            }
         }
             
         @model = ::<= {

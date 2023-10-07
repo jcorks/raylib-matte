@@ -1,12 +1,12 @@
 @:ray    = import(module:"raylib.mt");
 
-
+ray.SetConfigFlags(flags:ray.FLAG_MSAA_4X_HINT);
 ray.InitWindow(width: 800, height: 480, title: 'Game');
 
 
 @:game = import(module:"game.mt");
 @:Shooter = import(module:"shooter.mt");
-@:Controller = import(module:"controller.mt");
+@:controller = import(module:"controller.mt");
 @:room = import(module:"room.mt");
 @:camera = import(module:"camera.mt");
 
@@ -21,7 +21,6 @@ game.roots->push(value:camera);
 @:player = Shooter.new();
 
 
-@:controller = Controller.new();
 room.attach(child:controller);
 
 // The root node that acts as a room.

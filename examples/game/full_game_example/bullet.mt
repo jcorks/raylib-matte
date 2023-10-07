@@ -6,6 +6,7 @@
 @:bullet = import(module:"bullet.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:Explosion = import(module:"explosion.mt");
 
 @:mesh = ray.GenMeshCube(width:0.2, length: 0.2, height: 0.2);
 
@@ -30,6 +31,7 @@ return class(
         @direction_;
         @speed_;
         @origin;
+        @isFar = false;
         
         @model = ray.LoadModelFromMesh(mesh);
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
@@ -50,9 +52,9 @@ return class(
             },
             
             explode ::{
-                //@exp = Explosion.new();
-                //exp.setup(position:this.position, size:0.2);
-                //room.attach(child:exp);
+                @exp = Explosion.new();
+                exp.setup(position:this.position, intensity:0.3);
+                room.attach(child:exp);
                 this.detach();
                 all->remove(key:this);
             },
@@ -71,11 +73,18 @@ return class(
                     yaw: rotation.y,
                     roll: rotation.z
                 );
-                    
-                lastPosition.x = ray.Lerp(start:lastPosition.x, end:this.x, amount: 0.014);  
-                lastPosition.y = ray.Lerp(start:lastPosition.y, end:this.y, amount: 0.014);  
-                
-                if (ray.Vector3Distance(v1:this.position, v2:origin) > 50) ::<= {
+                if (!isFar) ::<= {
+                    lastPosition = {...origin};
+                    isFar = ray.Vector2Distance(v1:origin, v2:this.position) >= 1;
+                } else ::<= {
+                    lastPosition.x = (direction_-180)->asRadians->cos;
+                    lastPosition.y = (direction_-180)->asRadians->sin;
+                    lastPosition.x *= 1;
+                    lastPosition.y *= 1;
+                    lastPosition.x += this.x;
+                    lastPosition.y += this.y;                    
+                }
+                if (ray.Vector3Distance(v1:this.position, v2:origin) > 20) ::<= {
                     all->remove(key:this);
                     this.detach();
                 }

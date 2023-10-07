@@ -15,6 +15,7 @@
 @:SPAWN_RADIUS = 5;
 
 @:FONT_SIZE = 40;
+@:FONT_SIZE_SUB = 28;
 
 return class(
     inherits : [game.Node],
@@ -25,14 +26,17 @@ return class(
         
         @counter;
         @textPos = {x:-200, y:ray.GetRenderHeight() * (1 / 3)};
+        @textLength;
+        @textLengthSub;
         @targetPos = {};
         @active;
         @remaining;
         sm.states = {
             "displayWave_enter" : {
                 onEnter ::{
+                    textLength = ray.MeasureText(text:"Wave " + waveCount, fontSize: FONT_SIZE);
                     waveCount += 1;
-                    targetPos = {x:ray.GetRenderWidth() / 2, y:ray.GetRenderHeight() / 2};
+                    targetPos = {x:ray.GetRenderWidth() / 2 - textLength/2, y:ray.GetRenderHeight() / 2};
                     counter = WAVE_DISPLAY_ENTER;
                 },
                 
@@ -90,7 +94,7 @@ return class(
                     counter -= ray.GetFrameTime();
                     @progress = 1 - counter / WAVE_DISPLAY_ENTER;
                     
-                    textPos.x = ray.Lerp(start:ray.GetRenderWidth()/2, end:targetPos.x, amount:progress * progress); 
+                    textPos.x = ray.Lerp(start:ray.GetRenderWidth()/2- textLength/2, end:targetPos.x, amount:progress * progress); 
                     when(counter <= 0) ::<= {
                         sm.state = "wave"
                     }
@@ -194,15 +198,25 @@ return class(
             "gameover" : {
                 onEnter ::{
                     Shooter.getMain().detach();
+                    textLength = ray.MeasureText(text:"Game Over", fontSize:FONT_SIZE);
+                    textLengthSub = ray.MeasureText(text:"Made it to Wave " + waveCount, fontSize:FONT_SIZE_SUB);
                 },
                 
                 
                 onDraw ::{
                     ray.DrawText(
                         text:"Game Over",
-                        posX: ray.GetRenderWidth()/2,
-                        posY: ray.GetRenderHeight()/2,
+                        posX: ray.GetRenderWidth()/2 - textLength/2,
+                        posY: ray.GetRenderHeight()/3,
                         fontSize: FONT_SIZE,
+                        color : ray.WHITE                        
+                    );
+
+                    ray.DrawText(
+                        text:"Made it to Wave " + waveCount,
+                        posX: ray.GetRenderWidth()/2 - textLengthSub/2,
+                        posY: ray.GetRenderHeight()/2,
+                        fontSize: FONT_SIZE_SUB,
                         color : ray.WHITE                        
                     );
                 }
@@ -218,5 +232,11 @@ return class(
             sm.state = 'displayWave_enter';
         }
         
+        this.interface = {
+            wave : {
+                get ::<- waveCount
+            }
+        }
+        
     }
-);
+).new();
