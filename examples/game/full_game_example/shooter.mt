@@ -6,10 +6,20 @@
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
 
+@main;
+
 return class(
     name: "Shooter",
     inherits : [game.Entity],
+    statics : {
+        getMain ::<- main
+    },
     define::(this) {
+        @statCount = 4;
+        @statSpread = 1;
+        @statCooldown = 1.5;
+        @statFirerate = 0.1;
+        main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
             @:b = Bullet.new();                
@@ -69,15 +79,15 @@ return class(
                 onEnter :: {
                     shotCount = 0;
                     shootingTimer.endless = true;
-                    shootingTimer.start(seconds:0.1);
+                    shootingTimer.start(seconds:statFirerate);
                 },
                 
                 onLeave :: {
                     shootingTimer.stop();
-                    cooldown = 1.5;
+                    cooldown = statCooldown;
                 },
                 onStep :: {
-                    if (shotCount == 4) ::<={
+                    if (shotCount == statCount) ::<={
                         sm.state = "cooldown";
                         shotCount = 0;
                     }
@@ -109,6 +119,20 @@ return class(
  
         
         this.interface = {
+            
+            upgradeBulletCount ::{
+                statCount += 3;
+            },
+            upgradeCooldown ::{
+                statCooldown *= 0.7;
+            },
+            upgradeSpread ::{
+                statSpread += 1;
+            },
+            upgradeFireRate ::{
+                statFirerate *= 0.7;
+            },
+            
             onStep ::{
                 @:delta = ray.GetFrameTime();
             
@@ -120,7 +144,7 @@ return class(
                 @target = -ray.Vector2Angle(v1:{x:0, y:1}, v2:other)->asDegrees - 90;
 
                 if (target < 0) target += 360;
-                direction = ray.LerpAngle(start:direction, end:target, amount:7 * delta);
+                direction = game.LerpAngle(start:direction, end:target, amount:7 * delta);
 
                 this.rotation = ray.QuaternionFromAxisAngle(axis:{x:0, y:0, z:1}, angle:(direction + 45)->asRadians);                
             },

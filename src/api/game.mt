@@ -561,7 +561,7 @@ and do not have a stable interface are suffixed with _
 
 
 @:lerp_repeat ::(t, m) {
-    return raylib.Clamp(value:t - ((t / m)->floor) * m, min:0, max:m);
+    return ray.Clamp(value:t - ((t / m)->floor) * m, min:0, max:m);
 }
 
 return ::<= {
@@ -569,7 +569,7 @@ return ::<= {
     return {
         LerpAngle ::(start, end, amount) {
             @:dt = lerp_repeat(t:end - start, m:360);
-            return raylib.Lerp(start, end:start + (if(dt > 180) dt - 360 else dt), amount);
+            return ray.Lerp(start, end:start + (if(dt > 180) dt - 360 else dt), amount);
         },    
         Log : Log,
         Node : Node,

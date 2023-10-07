@@ -4,6 +4,7 @@
 
 
 @:Enemy = import(module:"enemy.mt"); 
+@:Shooter = import(module:"shooter.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
 
@@ -23,7 +24,7 @@ return class(
         @sm = game.StateMachine.new();
         
         @counter;
-        @textPos = {x:-200, y:ray.GetRenderHeight()/2};
+        @textPos = {x:-200, y:ray.GetRenderHeight() * (1 / 3)};
         @targetPos = {};
         @active;
         @remaining;
@@ -113,6 +114,11 @@ return class(
                     active = waveCount * 2;
                 },
                 onStep ::{
+                    foreach(Enemy.getAll()) ::(enemy, t) {
+                        if (ray.Vector2Length(v:enemy.position) < 0.00001)
+                            sm.state = "gameover";
+                    }
+                
                     if (remaining > 0 && Enemy.getCount() <= active) ::<= {
                         // spawn 
                         @e = Enemy.new();
@@ -133,17 +139,78 @@ return class(
                         room.attach(child:e);
                         remaining -= 1;
                     }                    
-                    game.Log.display[0] = 'Remaining: ' + Enemy.getCount();
+                    game.Log.display[0] = 'Remaining: ' + (remaining->ceil + Enemy.getCount());
 
                 
                     // wave complete
                     if (remaining <= 0 && Enemy.getCount() == 0) ::<= {
+                        sm.state = 'upgrade';
+                    }
+                }
+            },
+            
+            
+            "upgrade" : {
+                onEnter :: {
+                    game.Log.display[0] = "Pick an upgrade:";
+                    game.Log.display[2] = "1 - Reduce Cooldown";
+                    game.Log.display[3] = "2 - Bullet count";
+                    game.Log.display[4] = "3 - Bullet spread";
+                    game.Log.display[5] = "4 - Fire rate";
+                    
+                },
+                
+                onStep :: {
+                    if (ray.IsKeyPressed(key:ray.KEY_ONE)) ::<= {
+                        Shooter.getMain().upgradeCooldown();
                         sm.state = 'displayWave_enter';
                     }
-            }
-            }
+
+                    if (ray.IsKeyPressed(key:ray.KEY_TWO)) ::<= {
+                        Shooter.getMain().upgradeBulletCount();
+                        sm.state = 'displayWave_enter';
+                    }
+
+                    if (ray.IsKeyPressed(key:ray.KEY_THREE)) ::<= {
+                        Shooter.getMain().upgradeSpread();
+                        sm.state = 'displayWave_enter';
+                    }
+
+
+                    if (ray.IsKeyPressed(key:ray.KEY_FOUR)) ::<= {
+                        Shooter.getMain().upgradeFireRate();
+                        sm.state = 'displayWave_enter';
+                    }
+
+
+                },
+                
+                onLeave :: {
+                    game.Log.display = [];                
+                }
+            },
+            
+            
+            "gameover" : {
+                onEnter ::{
+                    Shooter.getMain().detach();
+                },
+                
+                
+                onDraw ::{
+                    ray.DrawText(
+                        text:"Game Over",
+                        posX: ray.GetRenderWidth()/2,
+                        posY: ray.GetRenderHeight()/2,
+                        fontSize: FONT_SIZE,
+                        color : ray.WHITE                        
+                    );
+                }
+            },            
         
         }
+        
+        
         
         
         this.constructor = ::{
@@ -151,9 +218,5 @@ return class(
             sm.state = 'displayWave_enter';
         }
         
-        this.interface = {
-            onStep ::{
-            }
-        }
     }
 );

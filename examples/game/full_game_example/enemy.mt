@@ -11,15 +11,16 @@
 
 
 @:SPAWN_TIME = 4;
-@:HURT_TIME = 0.2;
-@:DYING_TIME = 2;
+@:HURT_TIME = 0.1;
+@:DYING_TIME = 0.5;
 
 @:all = {};
 return class(
     name: "Enemy",
     inherits : [game.Entity],
     statics : {
-        getCount :: <- all->keycount
+        getCount :: <- all->keycount,
+        getAll ::<- all
         
     },
 
@@ -35,15 +36,19 @@ return class(
         @dyingTime = 0;
         @hurtTime = 0;
         @flip = false;
+        @tPos;
         sm.states = {
             "spawning" : {
+                onEnter :: {                
+                    this.scale = ray.Vector3Zero(); 
+                },
                 onStep ::{
                     spawnTime -= ray.GetFrameTime();
                     @rate = 1 - (spawnTime / SPAWN_TIME);
                     @scale = {
-                        x: ray.Lerp(start:0, end:1, amount:rate) * size,
-                        y: ray.Lerp(start:0, end:1, amount:rate) * size,
-                        z: ray.Lerp(start:0, end:1, amount:rate) * size
+                        x: ray.Lerp(start:0, end:1, amount:rate*rate) * size,
+                        y: ray.Lerp(start:0, end:1, amount:rate*rate) * size,
+                        z: ray.Lerp(start:0, end:1, amount:rate*rate) * size
                     }   
                     this.scale = scale;                    
                     if (spawnTime < 0)
@@ -77,6 +82,17 @@ return class(
             "hunting" : {
                 onEnter :: {
                     this.scale = {x:size, y:size, z:size}               
+
+                    @dir = {
+                        x: this.x,
+                        y: this.y
+                    }
+                    dir = ray.Vector2Normalize(v:dir);
+                    
+                    
+                    this.x += size * 0.2 * dir.x;
+                    this.y += size * 0.2 * dir.y;
+
                 },
                 onStep ::{
                     @:frame = ray.GetFrameTime();
@@ -93,23 +109,28 @@ return class(
                     
                     rotation.x += frame * 4;
                     rotation.y += frame * 3;
-                    rotation.z += frame * 13;
+                    rotation.z += frame * 5;
                     this.rotation = ray.QuaternionFromEuler(
                         pitch:rotation.x,
                         yaw : rotation.y,
                         roll : rotation.z
                     );
                     
-                    @target = -ray.Vector2Angle(v1:{x:0, y:0}, v2:this.position)->asDegrees - 180;
+                    @dir = {
+                        x: 0 - this.x,
+                        y: 0 - this.y
+                    }
+                    dir = ray.Vector2Normalize(v:dir);
                     
-                    this.x += frame * size * 0.5 * target->asRadians->cos;
-                    this.y += frame * size * 0.5 * target->asRadians->sin;
+                    
+                    this.x += frame * 1/size * 0.25* dir.x;
+                    this.y += frame * 1/size * 0.25* dir.y;
                     
                     
                     // add some spin
-                    target += 90;
-                    this.x += frame * size * 0.1 * target->asRadians->cos;
-                    this.y += frame * size * 0.1 * target->asRadians->sin;
+                    //target += 90;
+                    //this.x += frame * size * 0.1 * dir.x;
+                    //this.y += frame * size * 0.1 * dir.y;
 
                 },
                 onDraw :: {
@@ -132,31 +153,24 @@ return class(
                 onEnter :: {
                     this.scale = {x:size, y:size, z:size}               
                     hurtTime = HURT_TIME;  
+                    tPos = {...this.position};
                 },
                 onStep ::{
                     hurtTime -= ray.GetFrameTime();
+                    this.x = tPos.x +  0.2*(Number.random() - 0.5);
+                    this.y = tPos.y +  0.2*(Number.random() - 0.5);
                     if (hurtTime < 0)
                         sm.state = "hunting"
                 },
                 onDraw :: {
                     ray.BeginMode3D(camera);
                         @color;
-                        if (flip == false) 
-                            color = {
-                                r: 0,
-                                g: 0,
-                                b: 0,
-                                a:255
-                            }
-                        else
-                            color = {
-                                r: 255,
-                                g: 0,
-                                b: 0,
-                                a:255
-                            }
-                        ;
-                        flip = !flip;
+                        color = {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            a:255
+                        }
                         model.transform = this.globalMatrix;
                         ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint: color);                                
                     ray.EndMode3D();                      
@@ -171,9 +185,9 @@ return class(
                     dyingTime -= ray.GetFrameTime();
                     @rate = 1 - (dyingTime / DYING_TIME);
                     @scale = {
-                        x: ray.Lerp(start:1, end:0, amount:rate) * size,
-                        y: ray.Lerp(start:1, end:0, amount:rate) * size,
-                        z: ray.Lerp(start:1, end:0, amount:rate) * size
+                        x: ray.Lerp(start:1, end:0, amount:rate*rate) * size,
+                        y: ray.Lerp(start:1, end:0, amount:rate*rate) * size,
+                        z: ray.Lerp(start:1, end:0, amount:rate*rate) * size
                     }   
                     this.scale = scale;                    
                     if (dyingTime < 0) ::<={
