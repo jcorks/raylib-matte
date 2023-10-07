@@ -32,6 +32,7 @@ return class(
         @speed_;
         @origin;
         @isFar = false;
+        @knockback_;
         
         @model = ray.LoadModelFromMesh(mesh);
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
@@ -40,7 +41,8 @@ return class(
             setup ::(
                 position,
                 direction,
-                speed
+                speed,
+                knockback
             ) {
                 all[this] = true;
                 origin = {...position};
@@ -49,6 +51,7 @@ return class(
                 this.y = origin.y;
                 direction_ = direction;
                 speed_ = speed;
+                knockback_ = knockback;
             },
             
             explode ::{
@@ -57,6 +60,10 @@ return class(
                 room.attach(child:exp);
                 this.detach();
                 all->remove(key:this);
+            },
+            
+            knockback : {
+                get ::<- knockback_
             },
             
             onStep ::{

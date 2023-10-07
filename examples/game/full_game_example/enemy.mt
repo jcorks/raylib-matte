@@ -39,6 +39,7 @@ return class(
         @hurtTime = 0;
         @flip = false;
         @tPos;
+        @lastBulletKnockback = 0;
         sm.states = {
             "spawning" : {
                 onEnter :: {                
@@ -101,6 +102,7 @@ return class(
                     
                     @hit = Bullet.collidedWithABullet(entity:this);
                     if (hit != empty) ::<= {
+                        lastBulletKnockback = hit.knockback;
                         hit.explode();
                         health -= 1;           
                         if (health <= 0)
@@ -124,9 +126,9 @@ return class(
                     }
                     dir = ray.Vector2Normalize(v:dir);
                     
-                    
-                    this.x += frame * 1/size * 0.23* dir.x * (1.1 ** (controller.wave));
-                    this.y += frame * 1/size * 0.23* dir.y * (1.1 ** (controller.wave));
+                    @:s = this.speedThisFrame;
+                    this.x += dir.x * s;
+                    this.y += dir.y * s;
                     
    
 
@@ -151,7 +153,22 @@ return class(
                 onEnter :: {
                     this.scale = {x:size, y:size, z:size}               
                     hurtTime = HURT_TIME;  
+
+
+                    // knockback
+                    @dir = {
+                        x: this.x,
+                        y: this.y
+                    }
+                    dir = ray.Vector2Normalize(v:dir);
+                    
+                    this.x += dir.x * lastBulletKnockback;
+                    this.y += dir.y * lastBulletKnockback;
+
                     tPos = {...this.position};
+
+
+
                 },
                 onStep ::{
                     hurtTime -= ray.GetFrameTime();
@@ -198,23 +215,13 @@ return class(
                 },
                 onDraw :: {
                     ray.BeginMode3D(camera);
-                        @color;
-                        if (flip == false) 
-                            color = {
-                                r: 0,
-                                g: 0,
-                                b: 0,
-                                a:255
-                            }
-                        else
-                            color = {
-                                r: 255,
-                                g: 0,
-                                b: 0,
-                                a:255
-                            }
-                        ;
-                        flip = !flip;
+                        @color = {
+                            r: 255,
+                            g: 255,
+                            b: 255,
+                            a: 255
+                        }
+                    
                         model.transform = this.globalMatrix;
                         ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint: color);                                
                     ray.EndMode3D();                       
@@ -235,6 +242,10 @@ return class(
                 all[this] = true;
                 this.x = position.x;
                 this.y = position.y;
+            },
+            
+            speedThisFrame : {
+                get ::<- ray.GetFrameTime() * 1/size * 0.23 * (1.1 ** (controller.wave))
             },
             
             collideRadius : {

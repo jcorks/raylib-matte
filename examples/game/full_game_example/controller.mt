@@ -119,7 +119,7 @@ return class(
                 },
                 onStep ::{
                     foreach(Enemy.getAll()) ::(enemy, t) {
-                        if (ray.Vector2Length(v:enemy.position) < 0.00001)
+                        if (ray.Vector2Length(v:enemy.position) < enemy.speedThisFrame)
                             sm.state = "gameover";
                     }
                 
@@ -161,6 +161,7 @@ return class(
                     game.Log.display[3] = "2 - Bullet count";
                     game.Log.display[4] = "3 - Bullet spread";
                     game.Log.display[5] = "4 - Fire rate";
+                    game.Log.display[6] = "5 - Knockback";
                     
                 },
                 
@@ -186,6 +187,10 @@ return class(
                         sm.state = 'displayWave_enter';
                     }
 
+                    if (ray.IsKeyPressed(key:ray.KEY_FIVE)) ::<= {
+                        Shooter.getMain().upgradeKnockback();
+                        sm.state = 'displayWave_enter';
+                    }
 
                 },
                 

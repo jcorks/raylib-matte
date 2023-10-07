@@ -9579,7 +9579,7 @@ static void raymatte_load_main(const char * binPath, matte_t * m) {
 }
 
 
-static int raymatte_embed(char * bin) {
+static int raymatte_embed(const uint8_t * exec, uint32_t execSize) {
     int packageSize;
     uint8_t * package = LoadFileData("raymatte.data", &packageSize);
     if (package == NULL) {
@@ -9587,8 +9587,6 @@ static int raymatte_embed(char * bin) {
         return 1;
     }
 
-    int execSize;
-    uint8_t * exec = LoadFileData(bin, &execSize);
     if (exec == NULL) {
         TraceLog(LOG_FATAL, "Running executable file could not be loaded or was empty.");    
         return 1;
@@ -9691,6 +9689,19 @@ static int raymatte_package() {
 }
 
 
+uint32_t raymatte_importer(matte_t * m, const char * name, void * userdata) {
+    unsigned int size = 0;
+    unsigned char * data = LoadFileData(
+        name,
+        &size
+    );    
+    
+    uint32_t fileID =  matte_add_module(m, name, data, size);
+    MemFree(data);
+    return fileID;
+}
+
+
 int main(int argc, char ** argv) {
     int isDebug = FALSE;
     if (argc > 1) {
@@ -9698,7 +9709,7 @@ int main(int argc, char ** argv) {
             strcmp(argv[1], "-h") == 0 ||
             strcmp(argv[1], "-v") == 0) {
             printf("raymatte v%s\n\n", RAYMATTE__VERSION);
-            printf("Johnathan Corkery\n");
+            printf("Johnathan Corkery, 2023\n");
             printf("raylib https://github.com/raysan5/raylib\n");
             printf("matte  https://github.com/jcorks/matte\n");
             return 0;
@@ -9712,6 +9723,15 @@ int main(int argc, char ** argv) {
         } 
         
         
+        int execSize;
+        uint8_t * exec;
+        int isEmbed = FALSE;
+        if (strcmp(argv[1], "embed") == 0 ||
+            strcmp(argv[1], "--embed") == 0 ||
+            strcmp(argv[1], "-e") == 0) {
+            isEmbed = TRUE;
+            exec = LoadFileData(argv[0], &execSize);
+        }
                 
         
         if (IsPathFile(argv[argc-1])) {
@@ -9733,11 +9753,8 @@ int main(int argc, char ** argv) {
         
         
         // takes raymatte.data and appends it to the binary
-        if (strcmp(argv[1], "embed") == 0 ||
-            strcmp(argv[1], "--embed") == 0 ||
-            strcmp(argv[1], "-e") == 0) {
-            
-            exit(raymatte_embed(argv[0]));
+        if (isEmbed) {
+            exit(raymatte_embed(exec, execSize));
         }         
     }
 
@@ -9745,7 +9762,7 @@ int main(int argc, char ** argv) {
 
     matte_t * m = matte_create();
     matte_set_io(m, NULL, NULL, NULL);
-    matte_set_importer(m, NULL, NULL);
+    matte_set_importer(m, raymatte_importer, NULL);
 
     // defalt module
     uint32_t bytecodeSize;

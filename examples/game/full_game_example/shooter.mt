@@ -22,6 +22,7 @@ return class(
         @statSpread = 1;
         @statCooldown = 1.5;
         @statFirerate = 0.1;
+        @statKnockback = 0.1;
         main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
@@ -34,7 +35,9 @@ return class(
                     direction: 
                         dir + Number.random() * 20 - 10,
                     speed :
-                        Number.random() * 5 + 10
+                        Number.random() * 5 + 10,
+                    knockback : 
+                        statKnockback
                 );
                 
                 room.attach(child:b);
@@ -75,7 +78,7 @@ return class(
                     targetColor.b = 128;                
                 },
                 onStep :: {
-                    if (ray.IsKeyPressed(key:ray.KEY_SPACE))
+                    if (ray.IsKeyDown(key:ray.KEY_SPACE))
                         sm.state = "shooting"
                         
                 }
@@ -105,9 +108,9 @@ return class(
             // Has to 
             "cooldown" : {
                 onEnter :: {
-                    targetColor.r = 64;
-                    targetColor.g = 64;
-                    targetColor.b = 64;                
+                    targetColor.r = 32;
+                    targetColor.g = 32;
+                    targetColor.b = 32;                
                 },
                 onStep :: {
                     cooldown -= ray.GetFrameTime();
@@ -139,6 +142,10 @@ return class(
             },
             upgradeFireRate ::{
                 statFirerate *= 0.7;
+            },
+            
+            upgradeKnockback ::{
+                statKnockback *= 1.4;
             },
             
             onStep ::{
