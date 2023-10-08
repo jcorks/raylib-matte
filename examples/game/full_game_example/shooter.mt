@@ -10,6 +10,8 @@
 
 
 @:BULLET_SPREAD_DEGREES = 30;
+@:AMMO_HEIGHT = 0.1
+@:AMMO_WIDTH = 0.05
 
 return class(
     name: "Shooter",
@@ -18,26 +20,38 @@ return class(
         getMain ::<- main
     },
     define::(this) {
-        @statCount = 4;
-        @statSpread = 1;
-        @statCooldown = 1.5;
-        @statFirerate = 0.1;
-        @statKnockback = 0.1;
+        @rankCount = 0;
+        @rankSpread = 0;
+        @rankCooldown = 0;
+        @rankFirerate = 0;
+        @rankKnockback = 0;
+        @rankRange = 0;
+
+        // Rank scaling helpers
+        @:getMaxShots ::<- 4 + rankCount * 3;
+        @:getCooldown ::<- 1.5 * (0.7 ** rankCooldown);
+        @:getFirerate ::<- 0.1 * (0.7 ** rankFirerate);
+        @:getKnockback ::<- 0.03 * (1.4 ** rankKnockback);
+        @:getFriction ::<- 0.02 + 0.03 * (0.9 ** rankRange);
+
+
         main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
-            @dir = direction - ((statSpread-1)*BULLET_SPREAD_DEGREES / 2)
-            for(0, statSpread) ::(i) {
+            @dir = direction - ((rankSpread)*BULLET_SPREAD_DEGREES / 2)
+            for(0, rankSpread + 1) ::(i) {
             
                 @:b = Bullet.new();                
                 b.setup(
                     position:  this.position,
                     direction: 
                         dir + Number.random() * 20 - 10,
-                    speed :
-                        Number.random() * 5 + 10,
-                    knockback : 
-                        statKnockback
+                    speed:
+                        Number.random() * 1.5 + 10,
+                    knockback: 
+                        getKnockback(),
+                    friction:
+                        getFriction()
                 );
                 
                 room.attach(child:b);
@@ -68,14 +82,17 @@ return class(
 
         @cooldown = 0;
         @shotCount = 0;
-        
         sm.states = {
             // State means is ready to shoot
             "ready" : {
                 onEnter :: {
+                    // Flash for juice, particularly nice when cooldown ends
+                    currentColor.r = 255;
+                    currentColor.g = 255;
+                    currentColor.b = 255;                
                     targetColor.r = 128;
                     targetColor.g = 128;
-                    targetColor.b = 128;                
+                    targetColor.b = 128;
                 },
                 onStep :: {
                     if (ray.IsKeyDown(key:ray.KEY_SPACE))
@@ -90,15 +107,15 @@ return class(
                 onEnter :: {
                     shotCount = 0;
                     shootingTimer.endless = true;
-                    shootingTimer.start(seconds:statFirerate);
+                    shootingTimer.start(seconds:getFirerate());
                 },
                 
                 onLeave :: {
                     shootingTimer.stop();
-                    cooldown = statCooldown;
+                    cooldown = getCooldown();
                 },
                 onStep :: {
-                    if (shotCount == statCount) ::<={
+                    if (shotCount == getMaxShots()) ::<={
                         sm.state = "cooldown";
                         shotCount = 0;
                     }
@@ -130,22 +147,29 @@ return class(
  
         
         this.interface = {
-            
-            upgradeBulletCount ::{
-                statCount += 3;
+            rankCount : {
+                get ::<- rankCount,
+                set ::(value) <- rankCount = value
             },
-            upgradeCooldown ::{
-                statCooldown *= 0.7;
+            rankCooldown : {
+                get ::<- rankCooldown,
+                set ::(value) <- rankCooldown = value
             },
-            upgradeSpread ::{
-                statSpread += 1;
+            rankSpread : {
+                get ::<- rankSpread,
+                set ::(value) <- rankSpread = value
             },
-            upgradeFireRate ::{
-                statFirerate *= 0.7;
+            rankFirerate : {
+                get ::<- rankFirerate,
+                set ::(value) <- rankFirerate = value
             },
-            
-            upgradeKnockback ::{
-                statKnockback *= 1.4;
+            rankKnockback : {
+                get ::<- rankKnockback,
+                set ::(value) <- rankKnockback = value
+            },
+            rankRange : {
+                get ::<- rankRange,
+                set ::(value) <- rankRange = value
             },
             
             onStep ::{
@@ -166,14 +190,57 @@ return class(
         
             onDraw ::{
                 @:delta = ray.GetFrameTime();
+
+                // Ammo bar rendering helpers 
+                @:maxShots = getMaxShots();
+                @:barHorizontalOffset = AMMO_WIDTH * (maxShots * 1.5 - 0.5) / 2;
+
                 // ease color
-                currentColor.r = ray.Lerp(start:currentColor.r, end:targetColor.r, amount: 7 * delta);
-                currentColor.g = ray.Lerp(start:currentColor.g, end:targetColor.r, amount: 7 * delta);
-                currentColor.b = ray.Lerp(start:currentColor.b, end:targetColor.r, amount: 7 * delta);
+                currentColor.r = ray.Lerp(start:currentColor.r, end:targetColor.r, amount: 5 * delta);
+                currentColor.g = ray.Lerp(start:currentColor.g, end:targetColor.r, amount: 5 * delta);
+                currentColor.b = ray.Lerp(start:currentColor.b, end:targetColor.r, amount: 5 * delta);
             
                 ray.BeginMode3D(camera);
                     model.transform = this.globalMatrix;
                     ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint:currentColor);                                    
+                    
+                    if (sm.state == "cooldown") ::<= {
+                        @ratio = cooldown / getCooldown();
+
+                        ray.DrawLineEx(    
+                            startPos: {
+                                x: camera.target.x + barHorizontalOffset - barHorizontalOffset
+                                    * (1 - ratio)
+                                    + AMMO_WIDTH / 2,
+                                y: camera.target.y - 0.5
+                            }, 
+                            endPos: {
+                                x: camera.target.x - barHorizontalOffset + barHorizontalOffset
+                                    * (1 - ratio),
+                                y: camera.target.y - 0.5
+                            }, 
+                            thick: AMMO_HEIGHT * 0.8,
+                            color: {...currentColor, a: currentColor.a / 2}
+                        );
+                    } else ::<= {                       
+                        for (0, maxShots) ::(i) {
+                            @xPos = camera.target.x + barHorizontalOffset - AMMO_WIDTH * (i * 1.5);
+                            @yPos = camera.target.y - 0.5 - AMMO_HEIGHT / 2;
+
+                            ray.DrawLineEx(
+                                startPos: {
+                                    x: xPos,
+                                    y: yPos
+                                },
+                                endPos: {
+                                    x: xPos,
+                                    y: yPos + AMMO_HEIGHT * 0.2 + AMMO_HEIGHT * 0.8 * (i >= shotCount)
+                                },
+                                thick: AMMO_WIDTH,
+                                color: currentColor
+                            );
+                        }
+                    }
                 ray.EndMode3D();            
                 
             }
