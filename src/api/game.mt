@@ -340,6 +340,7 @@ and do not have a stable interface are suffixed with _
     define::(this) {
         @states = {};
         @currentState = empty;
+        @currentStateName = empty;
         this.interface = {
             /* 
                 Setter for the entire possible set of 
@@ -380,9 +381,10 @@ and do not have a stable interface are suffixed with _
             
             /*
                 Setter / getter for the current state name.
+                To set no state, set with empty.
             */
             state : {
-                get ::<- currentState,
+                get ::<- currentStateName,
                 set ::(value) {
                     if (currentState)
                         if (currentState.onLeave)
@@ -391,6 +393,9 @@ and do not have a stable interface are suffixed with _
                     currentState = states[value];
                     if (value != empty && currentState == empty)
                         error(detail:"No such state exists.");
+
+                                    
+                    currentStateName = value;
                     
                     if (currentState)
                         if (currentState.onEnter)
