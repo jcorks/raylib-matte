@@ -11,6 +11,10 @@
 @:mesh = ray.GenMeshCube(width:0.2, length: 0.2, height: 0.2);
 
 @:all = {};
+
+
+@:SPEED_FADE_THRESHOLD = 8;
+
 return class(
     name: "Bullet",
     inherits : [game.Entity],
@@ -33,16 +37,23 @@ return class(
         @origin;
         @isFar = false;
         @knockback_;
+        @friction_;
         
         @model = ray.LoadModelFromMesh(mesh);
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
         @lastPosition = {x:0, y:0, z:0};
+
+        @:shouldExpire ::{
+            return ray.Vector3Distance(v1:this.position, v2:origin) > 20 || speed_ < 0.1 + friction_;
+        };
+
         this.interface = {
             setup ::(
                 position,
                 direction,
                 speed,
-                knockback
+                knockback,
+                friction
             ) {
                 all[this] = true;
                 origin = {...position};
@@ -52,6 +63,7 @@ return class(
                 direction_ = direction;
                 speed_ = speed;
                 knockback_ = knockback;
+                friction_ = friction;
             },
             
             explode ::{
@@ -84,14 +96,19 @@ return class(
                     lastPosition = {...origin};
                     isFar = ray.Vector2Distance(v1:origin, v2:this.position) >= 1;
                 } else ::<= {
+                    @scale = if (speed_ > 8) 1 else speed_ / SPEED_FADE_THRESHOLD;
+
                     lastPosition.x = (direction_-180)->asRadians->cos;
                     lastPosition.y = (direction_-180)->asRadians->sin;
-                    lastPosition.x *= 1;
-                    lastPosition.y *= 1;
+                    lastPosition.x *= scale;
+                    lastPosition.y *= scale;
                     lastPosition.x += this.x;
                     lastPosition.y += this.y;                    
                 }
-                if (ray.Vector3Distance(v1:this.position, v2:origin) > 20) ::<= {
+
+                speed_ -= friction_;
+
+                if (shouldExpire()) ::<= {
                     all->remove(key:this);
                     this.detach();
                 }
@@ -103,7 +120,7 @@ return class(
                         r: Number.random()*255,
                         g: Number.random()*255,
                         b: Number.random()*255,
-                        a:255
+                        a: 64 + speed_ / SPEED_FADE_THRESHOLD * 128
                     };
                     model.transform = this.globalMatrix;
                     ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint: color);    
