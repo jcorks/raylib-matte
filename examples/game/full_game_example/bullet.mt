@@ -44,7 +44,7 @@ return class(
         @lastPosition = {x:0, y:0, z:0};
 
         @:shouldExpire ::{
-            return ray.Vector3Distance(v1:this.position, v2:origin) > 20 || speed_ < 0.1 + friction_;
+            return ray.Vector3Distance(v1:this.position, v2:origin) > 20 || speed_ < 0.1;
         };
 
         this.interface = {
@@ -106,7 +106,7 @@ return class(
                     lastPosition.y += this.y;                    
                 }
 
-                speed_ -= friction_;
+                speed_ -= friction_ * delta;
 
                 if (shouldExpire()) ::<= {
                     all->remove(key:this);
