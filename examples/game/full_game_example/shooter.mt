@@ -31,8 +31,8 @@ return class(
         @:getMaxShots ::<- 4 + rankCount * 3;
         @:getCooldown ::<- 1.5 * (0.7 ** rankCooldown);
         @:getFirerate ::<- 0.1 * (0.7 ** rankFirerate);
-        @:getKnockback ::<- 0.03 * (1.4 ** rankKnockback);
-        @:getFriction ::<- 0.02 + 0.03 * (0.9 ** rankRange);
+        @:getKnockback ::<- 0.05 * (1.4 ** rankKnockback) - 0.03;
+        @:getFriction ::<- 6 + 24 * (0.5 ** (rankRange));
 
 
         main = this;

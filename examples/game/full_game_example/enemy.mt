@@ -15,6 +15,10 @@
 @:HURT_TIME = 0.1;
 @:DYING_TIME = 0.5;
 
+@:HEALTH_WIDTH = 0.05;
+@:HEALTH_HEIGHT = 0.05;
+@:HEALTH_BORDER_OFFSET = 0.02;
+
 @:all = {};
 return class(
     name: "Enemy",
@@ -29,6 +33,7 @@ return class(
         @:controller = import(module:"controller.mt");
         @size = Number.random() * 1 + 0.5;
         @health = (size*5)->ceil;
+        @maxHealth = health;
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
 
         @model = ray.LoadModelFromMesh(mesh);
@@ -40,6 +45,37 @@ return class(
         @flip = false;
         @tPos;
         @lastBulletKnockback = 0;
+
+
+        @:drawHealthBar ::(color) {
+            @:barHorizontalOffset = HEALTH_WIDTH * (maxHealth * 1.5 - 0.5) / 2;
+            @:ratio = health / maxHealth;
+
+            ray.DrawRectangleLinesEx(    
+                rec: {
+                    x: this.position.x - barHorizontalOffset - HEALTH_BORDER_OFFSET * 2,
+                    y: this.position.y - HEALTH_HEIGHT / 2 - HEALTH_BORDER_OFFSET * 2 - 0.5,
+                    width: (barHorizontalOffset + HEALTH_BORDER_OFFSET * 2) * 2,
+                    height: HEALTH_HEIGHT + HEALTH_BORDER_OFFSET * 4
+                }, 
+                lineThick: HEALTH_BORDER_OFFSET,
+                color: {...color, a: 128}
+            );
+
+            ray.DrawLineEx(    
+                startPos: {
+                    x: this.position.x + barHorizontalOffset,
+                    y: this.position.y - 0.5
+                }, 
+                endPos: {
+                    x: this.position.x - barHorizontalOffset + barHorizontalOffset  * (1 - ratio) * 2,
+                    y: this.position.y - 0.5
+                }, 
+                thick: HEALTH_HEIGHT,
+                color: color
+            );
+        }
+
         sm.states = {
             "spawning" : {
                 onEnter :: {                
@@ -65,14 +101,14 @@ return class(
                                 r: 0,
                                 g: 0,
                                 b: 0,
-                                a:255
+                                a: 255
                             }
                         else
                             color = {
                                 r: 255,
                                 g: 0,
                                 b: 0,
-                                a:255
+                                a: 255
                             }
                         ;
                         flip = !flip;
@@ -84,18 +120,7 @@ return class(
             
             "hunting" : {
                 onEnter :: {
-                    this.scale = {x:size, y:size, z:size}               
-
-                    @dir = {
-                        x: this.x,
-                        y: this.y
-                    }
-                    dir = ray.Vector2Normalize(v:dir);
-                    
-                    
-                    this.x += size * 0.2 * dir.x ;
-                    this.y += size * 0.2 * dir.y ;
-
+                    this.scale = {x:size, y:size, z:size}
                 },
                 onStep ::{
                     @:frame = ray.GetFrameTime();
@@ -144,6 +169,8 @@ return class(
                         ;
                         model.transform = this.globalMatrix;
                         ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint: color);                                
+
+                        drawHealthBar(color: color);
                     ray.EndMode3D();                       
                 }
             },    
@@ -151,31 +178,39 @@ return class(
             
             "hurt" : {
                 onEnter :: {
-                    this.scale = {x:size, y:size, z:size}               
+                    // Flicker scale when hurt for extra juice
+                    @:pop = 0.9 + Number.random() * 0.5;
+
+                    this.scale = {
+                        x:size * pop,
+                        y:size * pop,
+                        z:size * pop
+                    }
                     hurtTime = HURT_TIME;  
 
 
-                    // knockback
+                    // Knockback
                     @dir = {
                         x: this.x,
                         y: this.y
                     }
                     dir = ray.Vector2Normalize(v:dir);
                     
-                    this.x += dir.x * lastBulletKnockback;
-                    this.y += dir.y * lastBulletKnockback;
+                    this.x += dir.x * lastBulletKnockback / size ** 2;
+                    this.y += dir.y * lastBulletKnockback / size ** 2;
 
                     tPos = {...this.position};
-
-
-
                 },
-                onStep ::{
+                onStep :: {
                     hurtTime -= ray.GetFrameTime();
                     this.x = tPos.x +  0.2*(Number.random() - 0.5);
                     this.y = tPos.y +  0.2*(Number.random() - 0.5);
                     if (hurtTime < 0)
                         sm.state = "hunting"
+                },
+                onLeave :: {
+                    this.x = tPos.x;
+                    this.y = tPos.y;
                 },
                 onDraw :: {
                     ray.BeginMode3D(camera);
@@ -188,6 +223,8 @@ return class(
                         }
                         model.transform = this.globalMatrix;
                         ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint: color);                                
+
+                        drawHealthBar(color: color);
                     ray.EndMode3D();                      
                 }
             },                              
