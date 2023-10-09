@@ -6,6 +6,10 @@ ray.InitWindow(width: 800, height: 480, title: 'Game');
 
 @:game = import(module:"game.mt");
 @:Shooter = import(module:"shooter.mt");
+
+// Create a new cube
+@:player = Shooter.new();
+
 @:controller = import(module:"controller.mt");
 @:room = import(module:"room.mt");
 @:camera = import(module:"camera.mt");
@@ -17,14 +21,12 @@ game.roots->push(value:room);
 game.roots->push(value:camera);
 
 
-// Create a new cube
-@:player = Shooter.new();
-
-
-room.attach(child:controller);
 
 // The root node that acts as a room.
 room.attach(child:player);
+
+room.attach(child:controller);
+
 
 // Starts the main loop.
 game.StartLoop();

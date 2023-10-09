@@ -48,6 +48,18 @@ and do not have a stable interface are suffixed with _
                 children->push(value:child);
                 child.bindParent_(newParent:this);
             },
+
+            /*
+                Adds a node as a child of this node. If the child 
+                already has a parent, that parent is detached.
+            */
+            attachFirst ::(child) {
+                when(child.parent == this) empty;
+                child.detach();
+                children->insert(at:0, value:child);
+                child.bindParent_(newParent:this);
+            },
+
             
             
             /*

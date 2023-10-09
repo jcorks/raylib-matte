@@ -7,6 +7,7 @@
 @:Shooter = import(module:"shooter.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:Upgrade = import(module:"upgrade.mt");
 
 
 @:WAVE_DISPLAY_ENTER = 1;
@@ -31,6 +32,7 @@ return class(
         @targetPos = {};
         @active;
         @remaining;
+        @upgradeMenu;
         sm.states = {
             "displayWave_enter" : {
                 onEnter ::{
@@ -156,52 +158,16 @@ return class(
             
             "upgrade" : {
                 onEnter :: {
-                    @shooter = Shooter.getMain();
-
-                    game.Log.display[0] = "Pick an upgrade:";
-                    game.Log.display[2] = "1 - Reduce Cooldown - Rank " + shooter.rankCooldown;
-                    game.Log.display[3] = "2 - Bullet count - Rank " + shooter.rankCount;
-                    game.Log.display[4] = "3 - Bullet spread - Rank " + shooter.rankSpread;
-                    game.Log.display[5] = "4 - Fire rate - Rank " + shooter.rankFirerate;
-                    game.Log.display[6] = "5 - Knockback - Rank " + shooter.rankKnockback;
-                    game.Log.display[7] = "6 - Increase range - Rank " + shooter.rankRange;
-                    
+                    upgradeMenu = Upgrade.new();
+                    room.attach(child:upgradeMenu);
+                    game.Log.display = [];
                 },
                 
                 onStep :: {
-                    @shouldContinue = false;
-
-                    if (ray.IsKeyPressed(key:ray.KEY_ONE)) ::<= {
-                        Shooter.getMain().rankCooldown += 1;
-                        shouldContinue = true;
+                    if (upgradeMenu.shouldContinue) ::<= {
+                        upgradeMenu.detach(); // TODO: enter and exit anims
+                        sm.state = 'displayWave_enter';
                     }
-
-                    if (ray.IsKeyPressed(key:ray.KEY_TWO)) ::<= {
-                        Shooter.getMain().rankCount += 1;
-                        shouldContinue = true;
-                    }
-
-                    if (ray.IsKeyPressed(key:ray.KEY_THREE)) ::<= {
-                        Shooter.getMain().rankSpread += 1;
-                        shouldContinue = true;
-                    }
-
-                    if (ray.IsKeyPressed(key:ray.KEY_FOUR)) ::<= {
-                        Shooter.getMain().rankFirerate += 1;
-                        shouldContinue = true;
-                    }
-
-                    if (ray.IsKeyPressed(key:ray.KEY_FIVE)) ::<= {
-                        Shooter.getMain().rankKnockback += 1;
-                        shouldContinue = true;
-                    }
-
-                    if (ray.IsKeyPressed(key:ray.KEY_SIX)) ::<= {
-                        Shooter.getMain().rankRange += 1;
-                        shouldContinue = true;
-                    }
-
-                    if (shouldContinue) sm.state = 'displayWave_enter';
                 },
                 
                 onLeave :: {
