@@ -95,7 +95,7 @@ return class(
                     targetColor.b = 128;
                 },
                 onStep :: {
-                    if (ray.IsKeyDown(key:ray.KEY_SPACE))
+                    if (ray.IsKeyDown(key:ray.KEY_SPACE) || ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_LEFT))
                         sm.state = "shooting"
                         
                 }

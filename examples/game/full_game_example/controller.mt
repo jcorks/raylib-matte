@@ -216,6 +216,11 @@ return class(
         this.interface = {
             wave : {
                 get ::<- waveCount
+            },
+            
+            onStep :: {
+                if (ray.WindowShouldClose())
+                    send (message: "The game has exited!");
             }
         }
         
