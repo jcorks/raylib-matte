@@ -18,6 +18,7 @@ and do not have a stable interface are suffixed with _
 @:class = import(module:"Matte.Core.Class");
 @:EventSystem = import(module:"Matte.Core.EventSystem");
 
+@toDestroy = empty;
 /*
     Class: Node
    
@@ -37,6 +38,7 @@ and do not have a stable interface are suffixed with _
     define::(this) {
         @:children = [];
         @parent;
+        @destroyed = false;
         this.interface = {
             /*
                 Adds a node as a child of this node. If the child 
@@ -105,11 +107,17 @@ and do not have a stable interface are suffixed with _
             */
             onLeaveDraw ::{},
             
+            /*
+                Virtual function that is called when destroy() is called.
+            */
+            onDestroy ::{},
+            
             /*  
                 Performs a step for this node and its children.
                 This is called for you once StartLoop() is called.
             */
             step ::{
+                if (destroyed) error(detail:"Tried to update Node that was already destroyed!");
                 this.onStep();
                 foreach(children) ::(i, child) {
                     child.step();
@@ -122,11 +130,21 @@ and do not have a stable interface are suffixed with _
                 This is called for you once StartLoop() is called.
             */
             draw ::{
+                if (destroyed) error(detail:"Tried to draw Node that was already destroyed!");
                 this.onDraw();
                 foreach(children) ::(i, child) {
                     child.draw();
                 }
                 this.onLeaveDraw();
+            },
+            
+            /*
+                Marks that this Node is not to be used any further.
+                When called, onDestroy() is called for this Node.
+            */
+            destroy ::{
+                if (toDestroy == empty) toDestroy = {};
+                toDestroy[this] = true;
             },
             
 
@@ -148,6 +166,13 @@ and do not have a stable interface are suffixed with _
             bindParent_ ::(newParent) <- parent = newParent,
             unbindParent_::(child) {
                 children->remove(key:children->findIndex(value:child));            
+            },
+            finalize_ ::{
+                if (destroyed) error(detail:"Tried to destroy a Node that was already destroyed.");
+                this.detach();
+                this.onDestroy();
+                destroyed = true;
+            
             }
         }   
     }    
@@ -608,6 +633,13 @@ return ::<= {
                     }                            
                 Log.draw();
                 ray.EndDrawing();
+                
+                if (toDestroy) ::<= {
+                    foreach(toDestroy) ::(node, v) {
+                        node.finalize_();
+                    }
+                    toDestroy = empty;
+                }
             }
         },
         roots : roots,

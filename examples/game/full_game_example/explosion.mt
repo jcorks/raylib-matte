@@ -31,7 +31,7 @@ return class(
                 when(life == empty) empty;
                 life -= ray.GetFrameTime();
                 when(life <= 0)
-                    this.detach();
+                    this.destroy();
             },
             
             onDraw ::{

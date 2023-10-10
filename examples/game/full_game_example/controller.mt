@@ -165,7 +165,7 @@ return class(
                 
                 onStep :: {
                     if (upgradeMenu.shouldContinue) ::<= {
-                        upgradeMenu.detach(); // TODO: enter and exit anims
+                        upgradeMenu.destroy(); // TODO: enter and exit anims
                         sm.state = 'displayWave_enter';
                     }
                 },
@@ -178,7 +178,7 @@ return class(
             
             "gameover" : {
                 onEnter ::{
-                    Shooter.getMain().detach();
+                    Shooter.getMain().destroy();
                     textLength = ray.MeasureText(text:"Game Over", fontSize:FONT_SIZE);
                     textLengthSub = ray.MeasureText(text:"Made it to Wave " + waveCount, fontSize:FONT_SIZE_SUB);
                 },

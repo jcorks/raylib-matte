@@ -70,7 +70,7 @@ return class(
                 @exp = Explosion.new();
                 exp.setup(position:this.position, intensity:0.3);
                 room.attach(child:exp);
-                this.detach();
+                this.destroy();
                 all->remove(key:this);
             },
             
@@ -110,7 +110,7 @@ return class(
 
                 if (shouldExpire()) ::<= {
                     all->remove(key:this);
-                    this.detach();
+                    this.destroy();
                 }
             },
             

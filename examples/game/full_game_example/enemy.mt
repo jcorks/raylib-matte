@@ -246,7 +246,7 @@ return class(
                         @exp = Explosion.new();
                         exp.setup(position:this.position, intensity:0.8);
                         room.attach(child:exp);
-                        this.detach();
+                        this.destroy();
                         all->remove(key:this);
                     }
                 },
