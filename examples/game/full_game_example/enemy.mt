@@ -6,6 +6,7 @@
 @:Bullet = import(module:"bullet.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:res    = import(module:"resources.mt");
 @:Explosion = import(module:"explosion.mt");
 
 @:mesh = ray.GenMeshCube(width:1, length: 1, height: 1);
@@ -46,6 +47,18 @@ return class(
         @tPos;
         @lastBulletKnockback = 0;
 
+        // Resource prep
+        @:soundHit = ray.LoadSoundAlias(source: res.sounds["enemyHit"]);
+        @:soundDeath = ray.LoadSoundAlias(source: res.sounds["enemyDeath"]);
+
+        @:playPositionedSound ::(sound) {
+            // Pan sound according to x coordinates, but with some reasonable scaling and clamp
+            ray.SetSoundPan(
+                sound: sound,
+                pan: ray.Clamp(value: this.x / 8 + 0.5, min: 0.1, max: 0.9)
+            );
+            ray.PlaySound(sound: sound);
+        }
 
         @:drawHealthBar ::(color) {
             @:barHorizontalOffset = HEALTH_WIDTH * (maxHealth * 1.5 - 0.5) / 2;
@@ -134,6 +147,9 @@ return class(
                             sm.state = "dead"
                         else
                             sm.state = "hurt";
+
+                        // Position sound and play
+                        playPositionedSound(sound: soundHit);
                     }
                     
                     rotation.x += frame * 4;
@@ -245,6 +261,10 @@ return class(
                     if (dyingTime < 0) ::<={
                         @exp = Explosion.new();
                         exp.setup(position:this.position, intensity:0.8);
+
+                        // Sound
+                        playPositionedSound(sound: soundDeath);
+
                         room.attach(child:exp);
                         this.destroy();
                         all->remove(key:this);

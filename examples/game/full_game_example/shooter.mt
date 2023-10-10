@@ -5,6 +5,7 @@
 @:Bullet = import(module:"bullet.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:res    = import(module:"resources.mt");
 
 @main;
 
@@ -32,8 +33,11 @@ return class(
         @:getCooldown ::<- 1.5 * (0.7 ** rankCooldown);
         @:getFirerate ::<- 0.1 * (0.7 ** rankFirerate);
         @:getKnockback ::<- 0.05 * (1.4 ** rankKnockback) - 0.03;
-        @:getFriction ::<- 6 + 24 * (0.5 ** (rankRange));
+        @:getFriction ::<- 6 + 24 * (0.5 ** rankRange);
 
+        // Resource prep
+        @:soundShoot = ray.LoadSoundAlias(source: res.sounds["shoot"]);
+        @:soundLoaded = ray.LoadSoundAlias(source: res.sounds["loaded"]);
 
         main = this;
         @:shootBullet ::{
@@ -56,6 +60,9 @@ return class(
                 
                 room.attach(child:b);
                 dir += BULLET_SPREAD_DEGREES;
+
+                // Sound
+                ray.PlaySound(sound: soundShoot);
             }
         }
             
@@ -93,6 +100,9 @@ return class(
                     targetColor.r = 128;
                     targetColor.g = 128;
                     targetColor.b = 128;
+
+                    // Sound
+                    ray.PlaySound(sound: soundLoaded);
                 },
                 onStep :: {
                     if (ray.IsKeyDown(key:ray.KEY_SPACE) || ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_LEFT))

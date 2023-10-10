@@ -7,6 +7,7 @@
 @:Shooter = import(module:"shooter.mt"); 
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
+@:res    = import(module:"resources.mt");
 @:Upgrade = import(module:"upgrade.mt");
 
 
@@ -17,6 +18,11 @@
 
 @:FONT_SIZE = 40;
 @:FONT_SIZE_SUB = 28;
+
+@:MUSIC_MENU_VOLUME = 0.1;
+@:MUSIC_BASE_VOLUME = 0.5;
+@:MUSIC_BASE_PITCH = 0.91;
+@:MUSIC_PITCH_CHANGE_PER_WAVE = 0.03;
 
 return class(
     inherits : [game.Node],
@@ -33,6 +39,10 @@ return class(
         @active;
         @remaining;
         @upgradeMenu;
+
+        // Resource prep
+        @:musicMain = res.music["main"];
+
         sm.states = {
             "displayWave_enter" : {
                 onEnter ::{
@@ -40,6 +50,12 @@ return class(
                     waveCount += 1;
                     targetPos = {x:ray.GetRenderWidth() / 2 - textLength/2, y:ray.GetRenderHeight() / 2};
                     counter = WAVE_DISPLAY_ENTER;
+
+                    // Update music pitch scaling with wave count
+                    ray.SetMusicPitch(
+                        music: musicMain,
+                        pitch: MUSIC_BASE_PITCH + MUSIC_PITCH_CHANGE_PER_WAVE * (waveCount - 1)
+                    );
                 },
                 
                 onStep ::{
@@ -161,24 +177,30 @@ return class(
                     upgradeMenu = Upgrade.new();
                     room.attach(child:upgradeMenu);
                     game.Log.display = [];
+
+                    // Adjust music volume
+                    ray.SetMusicVolume(music: musicMain, volume: MUSIC_MENU_VOLUME);
                 },
                 
                 onStep :: {
                     if (upgradeMenu.shouldContinue) ::<= {
-                        upgradeMenu.destroy(); // TODO: enter and exit anims
+                        upgradeMenu.detach(); // TODO: enter and exit anims
                         sm.state = 'displayWave_enter';
                     }
                 },
                 
                 onLeave :: {
                     game.Log.display = [];                
+
+                    // Adjust music volume
+                    ray.SetMusicVolume(music: musicMain, volume: MUSIC_BASE_VOLUME);
                 }
             },
             
             
             "gameover" : {
                 onEnter ::{
-                    Shooter.getMain().destroy();
+                    Shooter.getMain().detach();
                     textLength = ray.MeasureText(text:"Game Over", fontSize:FONT_SIZE);
                     textLengthSub = ray.MeasureText(text:"Made it to Wave " + waveCount, fontSize:FONT_SIZE_SUB);
                 },
@@ -211,6 +233,10 @@ return class(
         this.constructor = ::{
             this.attach(child:sm);
             sm.state = 'displayWave_enter';
+
+            // Start playing music buffer
+            ray.SetMusicVolume(music: musicMain, volume: MUSIC_BASE_VOLUME);
+            ray.PlayMusicStream(music: musicMain);
         }
         
         this.interface = {
@@ -219,6 +245,9 @@ return class(
             },
             
             onStep :: {
+                // Update music buffer
+                ray.UpdateMusicStream(music: musicMain);
+
                 if (ray.WindowShouldClose())
                     send (message: "The game has exited!");
             }

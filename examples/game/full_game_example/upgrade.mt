@@ -2,6 +2,7 @@
 @:ray    = import(module:"raylib.mt");
 @:class  = import(module:"Matte.Core.Class");
 @:Shooter = import(module:"shooter.mt"); 
+@:res    = import(module:"resources.mt");
 
 
 // WHere the table should begin, vertically
@@ -227,7 +228,10 @@ return class(
     
         @originY = DISPLAY_Y;
         @picked = false;
-    
+
+        // Resource prep
+        @:soundUpgraded = res.sounds["upgraded"];
+
         @:addRow::(
             display => String,
             onSelect => Function,
@@ -248,6 +252,7 @@ return class(
                 display: "Cooldown",
                 onSelect ::{ 
                     Shooter.getMain().rankCooldown += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank : Shooter.getMain().rankCooldown
@@ -258,6 +263,7 @@ return class(
                 display: "Bullet Count",
                 onSelect ::{ 
                     Shooter.getMain().rankCount += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank : Shooter.getMain().rankCount
@@ -267,6 +273,7 @@ return class(
                 display: "Bullet Spread",
                 onSelect ::{ 
                     Shooter.getMain().rankSpread += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank :  Shooter.getMain().rankSpread
@@ -276,6 +283,7 @@ return class(
                 display: "Fire rate",
                 onSelect ::{ 
                     Shooter.getMain().rankFirerate += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank : Shooter.getMain().rankFirerate
@@ -286,6 +294,7 @@ return class(
                 display: "Knockback",
                 onSelect ::{ 
                     Shooter.getMain().rankKnockback += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank : Shooter.getMain().rankKnockback
@@ -295,6 +304,7 @@ return class(
                 display: "Range",
                 onSelect ::{ 
                     Shooter.getMain().rankRange += 1;
+                    ray.PlaySound(sound: soundUpgraded);
                     picked = true;
                 },
                 rank : Shooter.getMain().rankRange
