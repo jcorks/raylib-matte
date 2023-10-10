@@ -28,9 +28,14 @@ room.attach(child:player);
 
 room.attach(child:controller);
 
-
+{:::} {
     // Starts the main loop.
     game.StartLoop();
+} : {
+    onSend:::(message) {
+        print(message: "Main loop ended with message: " + message);
+    }
+}
 
 // Unload resources
 res.unloadAll();
