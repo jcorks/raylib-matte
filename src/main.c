@@ -6412,6 +6412,18 @@ RAYLIB_FN__ARG1(raylib_LoadSound,
 RAYLIB_FN__END
 
 
+RAYLIB_FN__ARG1(raylib_LoadSoundAlias,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_sound(
+        vm,
+        LoadSoundAlias(
+            native_from_value_sound(vm, args[0])
+        )
+    );
+RAYLIB_FN__END
+
+
 RAYLIB_FN__ARG1(raylib_LoadSoundFromWave,
     MATTE_VALUE_TYPE_OBJECT
 )
@@ -10222,6 +10234,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_LoadWaveFromMemory", raylib_LoadWaveFromMemory, NULL, "fileType", "bytes", NULL); 
     matte_add_external_function(m, "raylib_IsWaveReady", raylib_IsWaveReady, NULL, "wave", NULL);                                    
     matte_add_external_function(m, "raylib_LoadSound", raylib_LoadSound, NULL, "fileName",  NULL);                          
+    matte_add_external_function(m, "raylib_LoadSoundAlias", raylib_LoadSoundAlias, NULL, "source",  NULL);
     matte_add_external_function(m, "raylib_LoadSoundFromWave", raylib_LoadSoundFromWave, NULL, "wave", NULL);                             
     matte_add_external_function(m, "raylib_IsSoundReady", raylib_IsSoundReady, NULL, "sound", NULL);                                 
     matte_add_external_function(m, "raylib_UpdateSound", raylib_UpdateSound, "sound", "data", "sampleCount", NULL); 
