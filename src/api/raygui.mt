@@ -409,8 +409,8 @@
 
     GuiIconText : getExternalFunction(name:"raygui_GuiIconText"),
     GuiSetIconScale : getExternalFunction(name:"raygui_GuiSetIconScale"),
-    GuiGetIcons : getExternalFunction(name:"raygui_GuiGetIcons"),
-    GuiLoadIcons : getExternalFunction(name:"raygui_GuiLoadIcons"),
+    //GuiGetIcons : getExternalFunction(name:"raygui_GuiGetIcons"),
+    //GuiLoadIcons : getExternalFunction(name:"raygui_GuiLoadIcons"),
     GuiDrawIcon : getExternalFunction(name:"raygui_GuiDrawIcon"),
 
 
@@ -458,3 +458,5 @@
     GuiColorPickerHSV : getExternalFunction(name:"raygui_GuiColorPickerHSV"),
     GuiColorPanelHSV : getExternalFunction(name:"raygui_GuiColorPanelHSV")
 };
+
+return raygui;
