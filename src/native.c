@@ -762,6 +762,38 @@ void native_update_value_vector3(matteVM_t * vm, matteValue_t v, Vector3 vec) {
     matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "z"), z);
 }
 
+void native_update_value_color(matteVM_t * vm, matteValue_t v, Color c) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+
+    matteValue_t r   = native_to_value_float(vm, c.r);
+    matteValue_t g   = native_to_value_float(vm, c.g);
+    matteValue_t b   = native_to_value_float(vm, c.b);
+    matteValue_t a   = native_to_value_float(vm, c.a);
+
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "r"), r);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "g"), g);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "b"), b);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "a"), a);
+}
+
+void native_update_value_rectangle(matteVM_t * vm, matteValue_t v, Rectangle r) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+
+
+    matteValue_t x     = native_to_value_float(vm, r.x);
+    matteValue_t y     = native_to_value_float(vm, r.y);
+    matteValue_t width = native_to_value_float(vm, r.width);
+    matteValue_t height= native_to_value_float(vm, r.height);
+
+
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "x"),      x);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "y"),      y);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "width"),  width);
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, "height"), height);
+   
+}
 
 
 

@@ -10,7 +10,8 @@
 #include <stdlib.h>
 #include "raylib.mt.h"
 #include "../raylib/src/rcamera.h"
-
+#define RAYGUI_IMPLEMENTATION
+#include "../raygui/src/raygui.h"
 
 ////// Helpers
 // Defines to quickly deploy raylib bindings
@@ -8719,6 +8720,970 @@ RAYLIB_FN__END
 
 
 
+
+
+
+
+
+
+
+
+
+///////////////////////////////// RAYGUI
+//////////
+
+RAYLIB_FN__ARG0(raygui_GuiEnable
+)
+    GuiEnable();
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raygui_GuiDisable
+)
+    GuiDisable();
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raygui_GuiLock
+)
+    GuiLock();
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raygui_GuiUnlock
+)
+    GuiUnlock();
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raygui_GuiIsLocked
+)
+    return native_to_value_boolean(
+        vm,
+        GuiIsLocked()
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raygui_GuiSetAlpha,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    GuiSetAlpha(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raygui_GuiSetState,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    GuiSetState(
+        (int)args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raygui_GuiGetState
+)
+    return native_to_value_int(
+        vm,
+        GuiGetState()
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raygui_GuiSetFont,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    GuiSetFont(
+        native_from_value_font(vm, args[0])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG0(raygui_GuiGetFont
+)
+    return native_to_value_font(
+        vm,
+        GuiGetFont(
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+
+
+RAYLIB_FN__ARG3(raygui_GuiSetStyle,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    GuiSetStyle(
+        (int)args[0].value.number,
+        (int)args[1].value.number,
+        (int)args[2].value.number
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raygui_GuiGetStyle,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_int(
+        vm,
+        GuiGetStyle(
+            (int)args[0].value.number,
+            (int)args[1].value.number
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raygui_GuiLoadStyle,
+    MATTE_VALUE_TYPE_STRING
+)
+    GuiLoadStyle(
+        native_from_value_string_unsafe(vm, args[0]) // ok!
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG0(raygui_GuiLoadStyleDefault
+)
+    GuiLoadStyleDefault();
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG0(raygui_GuiEnableTooltip
+)
+    GuiEnableTooltip();
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG0(raygui_GuiDisableTooltip
+)
+    GuiDisableTooltip();
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG1(raygui_GuiSetTooltip,   
+    MATTE_VALUE_TYPE_STRING
+)
+    GuiSetTooltip(
+        native_from_value_string_unsafe(vm, args[0]) // ok!
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raygui_GuiIconText,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_string(
+        vm,
+        GuiIconText(
+            args[0].value.number,
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG1(raygui_GuiSetIconScale,   
+    MATTE_VALUE_TYPE_NUMBER
+)
+    GuiSetIconScale(
+        args[0].value.number
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raygui_GuiDrawIcon,   
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    GuiDrawIcon(
+        args[0].value.number,
+        args[1].value.number,
+        args[2].value.number,
+        args[3].value.number,
+        native_from_value_color(vm, args[4])
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG2(raygui_GuiWindowBox,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiWindowBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiGroupBox,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiGroupBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiLine,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiLine(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiPanel,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiPanel(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+static matteValue_t gui_extract_data_param(matteVM_t * vm, const char * name, matteValue_t v) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+    matteValue_t out = matte_value_object_access_string(store, v, MATTE_VM_STR_CAST(vm, name));
+    if (out.binID == MATTE_VALUE_TYPE_EMPTY) {
+        matte_vm_raise_error_cstring(vm, "In/out parameter missing original member! This member is required for in/out computation.");
+    }
+    return out;
+}
+
+static matteValue_t gui_update_data_param(matteVM_t * vm, matteValue_t v, const char * name, matteValue_t data) {
+    matteStore_t * store = matte_vm_get_store(vm);    
+    matte_value_object_set_key_string(store, v, MATTE_VM_STR_CAST(vm, name), data);    
+}
+
+RAYLIB_FN__ARG3(raygui_GuiTabBar,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    uint32_t count = matte_value_object_get_number_key_count(store, args[1]);
+    const char ** text = MemAlloc(count * sizeof(char*));
+    uint32_t i;
+    for(i = 0; i < count; ++i) {
+        matteValue_t vstr = matte_value_object_access_index(store, args[1], i);
+        if (vstr.binID == MATTE_VALUE_TYPE_STRING) {
+            text[i] = native_from_value_string_unsafe(vm, vstr); // ok!
+        } else {
+            matte_vm_raise_error_cstring(vm, "GuiListViewEx: given array for text contains a non-string value.");
+        }
+    }
+
+
+    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;    
+    matteValue_t output =  native_to_value_int(
+        vm,
+        GuiTabBar(
+            native_from_value_rectangle(vm, args[0]),
+            text, // ok!
+            count,
+            &toggle
+        )
+    );
+    MemFree(text);
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG5(raygui_GuiScrollPanel,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector2 scroll = native_from_value_vector2(vm, args[3]);
+    Rectangle view = native_from_value_rectangle(vm, args[4]);
+    int output = GuiScrollPanel(
+        native_from_value_rectangle(vm, args[0]),
+        native_from_value_string_unsafe(vm, args[1]), // ok!
+        native_from_value_rectangle(vm, args[2]),
+        &scroll,
+        &view
+    );
+    
+    
+    native_update_value_vector2(vm, args[3], scroll);
+    native_update_value_rectangle(vm, args[4], view);
+    return native_to_value_int(vm, output);
+RAYLIB_FN__END
+
+
+
+
+
+
+
+
+
+RAYLIB_FN__ARG2(raygui_GuiLabel,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiLabel(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiButton,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiButton(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiLabelButton,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiLabelButton(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG3(raygui_GuiToggle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    bool toggle = gui_extract_data_param(vm, "active", args[2]).value.boolean;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiToggle(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    gui_update_data_param(vm, args[2], "active", native_to_value_boolean(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG3(raygui_GuiToggleGroup,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiToggleGroup(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raygui_GuiToggleSlider,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiToggleSlider(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiCheckBox,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    bool toggle = gui_extract_data_param(vm, "checked", args[2]).value.boolean;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiCheckBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "checked", native_to_value_boolean(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raygui_GuiComboBox,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiComboBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raygui_GuiDropdownBox,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiDropdownBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle,
+            args[3].value.boolean
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raygui_GuiSpinner,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    int toggle = gui_extract_data_param(vm, "value", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiSpinner(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle,
+            args[3].value.number,
+            args[4].value.number,
+            args[5].value.boolean
+        )
+    );
+    gui_update_data_param(vm, args[2], "value", native_to_value_int(vm, toggle));
+    return output;    
+    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raygui_GuiValueBox,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+    int toggle = gui_extract_data_param(vm, "value", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiValueBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle,
+            args[3].value.number,
+            args[4].value.number,
+            args[5].value.boolean
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "value", native_to_value_int(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+static char * eval_inout_string(const matteString_t * input) {
+    static char * TEXT_BOX_BUFFER = NULL;
+    if (TEXT_BOX_BUFFER == NULL)
+        TEXT_BOX_BUFFER = MemAlloc(0xffff+1);
+        
+    TEXT_BOX_BUFFER[0xffff-1] = 0;
+    int inputLength = matte_string_get_utf8_length(input);
+    int maxSize = inputLength > (0xffff-1) ? 0xffff-1 : inputLength;
+    memcpy(
+        TEXT_BOX_BUFFER,
+        matte_string_get_utf8_data(input),
+        maxSize
+    );
+    TEXT_BOX_BUFFER[inputLength] = 0;
+    return TEXT_BOX_BUFFER;
+}
+
+RAYLIB_FN__ARG3(raygui_GuiTextBox,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_BOOLEAN
+)
+
+    matteValue_t vtext = gui_extract_data_param(vm, "text", args[1]);
+    if (vtext.binID != MATTE_VALUE_TYPE_STRING) {
+        matte_vm_raise_error_cstring(vm, "GuiTextBox: input parameter for text's data parameter isnt a string!");
+        return vtext;
+    }
+    const matteString_t * input = matte_value_string_get_string_unsafe(matte_vm_get_store(vm), vtext); // ok!
+    char * text = eval_inout_string(input);
+    
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiTextBox(
+            native_from_value_rectangle(vm, args[0]),
+            text,
+            0xffff,
+            args[2].value.boolean
+        )
+    );
+    
+    gui_update_data_param(vm, args[1], "text", native_to_value_string(vm, text));
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raygui_GuiSlider,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiSlider(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            native_from_value_string_unsafe(vm, args[2]), // ok!
+            &toggle,
+            args[4].value.number,
+            args[5].value.number
+        )
+    );
+    
+    gui_update_data_param(vm, args[3], "value", native_to_value_float(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG6(raygui_GuiSliderBar,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiSliderBar(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            native_from_value_string_unsafe(vm, args[2]), // ok!
+            &toggle,
+            args[4].value.number,
+            args[5].value.number
+        )
+    );
+    
+    gui_update_data_param(vm, args[3], "value", native_to_value_float(vm, toggle));
+    return output;    
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG6(raygui_GuiProgressBar,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiProgressBar(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            native_from_value_string_unsafe(vm, args[2]), // ok!
+            &toggle,
+            args[4].value.number,
+            args[5].value.number
+        )
+    );
+    
+    gui_update_data_param(vm, args[3], "value", native_to_value_float(vm, toggle));
+    return output;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiStatusBar,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiStatusBar(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raygui_GuiDummyRec,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiDummyRec(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+
+
+RAYLIB_FN__ARG5(raygui_GuiGrid,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector2 toggle = native_from_value_vector2(vm, args[4]);
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiGrid(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            args[2].value.number,
+            args[3].value.number,
+            &toggle
+        )
+    );
+    native_update_value_vector2(vm, args[4], toggle);
+    return output;
+    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiListView,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+    int toggle =  gui_extract_data_param(vm, "scrollIndex", args[2]).value.number;
+    int toggle2 = gui_extract_data_param(vm, "active", args[2]).value.number;
+
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiListView(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle,
+            &toggle2
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "scrollIndex", native_to_value_int(vm, toggle));
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle2));
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raygui_GuiListViewEx,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+
+
+    uint32_t count = matte_value_object_get_number_key_count(store, args[1]);
+    const char ** text = MemAlloc(count * sizeof(char*));
+    uint32_t i;
+    for(i = 0; i < count; ++i) {
+        matteValue_t vstr = matte_value_object_access_index(store, args[1], i);
+        if (vstr.binID == MATTE_VALUE_TYPE_STRING) {
+            text[i] = native_from_value_string_unsafe(vm, vstr); // ok!
+        } else {
+            matte_vm_raise_error_cstring(vm, "GuiListViewEx: given array for text contains a non-string value.");
+        }
+    }
+    
+
+
+    int toggle  = gui_extract_data_param(vm, "scrollIndex", args[2]).value.number;
+    int toggle2 = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle3 = gui_extract_data_param(vm, "focus", args[2]).value.number;
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiListViewEx(
+            native_from_value_rectangle(vm, args[0]),
+            text,
+            count,
+            &toggle,
+            &toggle2,
+            &toggle3
+        )
+    );
+    
+    gui_update_data_param(vm, args[2], "scrollIndex", native_to_value_int(vm, toggle));
+    gui_update_data_param(vm, args[2], "active", native_to_value_int(vm, toggle2));
+    gui_update_data_param(vm, args[2], "focus", native_to_value_int(vm, toggle3));
+
+    MemFree(text);
+    return output;    
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG4(raygui_GuiMessageBox,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING
+)
+    return native_to_value_int(
+        vm,
+        GuiMessageBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            native_from_value_string_unsafe(vm, args[2]), // ok!
+            native_from_value_string_unsafe(vm, args[3]) // ok!
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG5(raygui_GuiTextInputBox,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    bool toggle  = gui_extract_data_param(vm, "secretViewActive", args[5]).value.number;
+    matteValue_t v = gui_extract_data_param(vm, "text", args[5]);
+    if (v.binID != MATTE_VALUE_TYPE_STRING) {
+        matte_vm_raise_error_cstring(vm, "GuiTextInputBox: 'inOut' parameter MUST contain a 'text' member thats a string!");
+        return v;
+    }
+    const matteString_t * vtext = matte_value_string_get_string_unsafe(matte_vm_get_store(vm), v); // ok!
+    char * text = eval_inout_string(vtext);
+    
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiTextInputBox(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            native_from_value_string_unsafe(vm, args[2]), // ok!
+            native_from_value_string_unsafe(vm, args[3]), // ok!
+            text,
+            0xffff,
+            &toggle
+        )
+    );
+    gui_update_data_param(vm, args[5], "secretViewActive", native_to_value_int(vm, toggle));
+    gui_update_data_param(vm, args[5], "text", native_to_value_string(vm, text));
+    return output;
+
+
+
+
+RAYLIB_FN__END
+
+
+
+
+RAYLIB_FN__ARG3(raygui_GuiColorPicker,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Color toggle = native_from_value_color(vm, args[2]);
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorPicker(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    native_update_value_color(vm, args[2], toggle);
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiColorPanel,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Color toggle = native_from_value_color(vm, args[2]);
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorPanel(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    native_update_value_color(vm, args[2], toggle);
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiColorBarAlpha,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    float toggle  = gui_extract_data_param(vm, "alpha", args[2]).value.number;
+    
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorBarAlpha(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    gui_update_data_param(vm, args[2], "alpha", native_to_value_float(vm, toggle));
+    return output;
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiColorBarHue,   
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    float toggle  = gui_extract_data_param(vm, "value", args[2]).value.number;
+    
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorBarHue(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    gui_update_data_param(vm, args[2], "value", native_to_value_float(vm, toggle));
+    return output;
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raygui_GuiColorPickerHSV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 toggle = native_from_value_vector3(vm, args[2]);
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorPickerHSV(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    native_update_value_vector3(vm, args[2], toggle);
+    return output;    
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG3(raygui_GuiColorPanelHSV,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 toggle = native_from_value_vector3(vm, args[2]);
+    matteValue_t output = native_to_value_int(
+        vm,
+        GuiColorPanelHSV(
+            native_from_value_rectangle(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &toggle
+        )
+    );
+    native_update_value_vector3(vm, args[2], toggle);
+    return output;    
+RAYLIB_FN__END
+
+
 static void raymatte_init_bindings(matte_t * m) {
     // struct interfacing
     
@@ -9460,6 +10425,64 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_GetCameraProjectionMatrix", raylib_GetCameraProjectionMatrix, NULL, "camera", "aspect", NULL);
 
 
+
+    // RAYGUI
+    matte_add_external_function(m, "raygui_GuiEnable", raygui_GuiEnable, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiDisable", raygui_GuiDisable, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiLock", raygui_GuiLock, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiUnlock", raygui_GuiUnlock, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiIsLocked", raygui_GuiIsLocked, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiSetAlpha", raygui_GuiSetAlpha, NULL, "alpha", NULL);
+    matte_add_external_function(m, "raygui_GuiSetState", raygui_GuiSetState, NULL, "state", NULL);
+    matte_add_external_function(m, "raygui_GuiGetState", raygui_GuiGetState, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiSetFont", raygui_GuiSetFont, NULL, "font", NULL);
+    matte_add_external_function(m, "raygui_GuiGetFont", raygui_GuiGetFont, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiSetStyle", raygui_GuiSetStyle, NULL, "control", "property", "value", NULL);
+    matte_add_external_function(m, "raygui_GuiGetStyle", raygui_GuiGetStyle, NULL, "control", "property",NULL);
+    matte_add_external_function(m, "raygui_GuiLoadStyle", raygui_GuiLoadStyle, NULL, "fileName", NULL);
+    matte_add_external_function(m, "raygui_GuiLoadStyleDefault", raygui_GuiLoadStyleDefault, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiEnableTooltip", raygui_GuiEnableTooltip, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiDisableTooltip", raygui_GuiDisableTooltip, NULL, NULL);
+    matte_add_external_function(m, "raygui_GuiSetTooltip", raygui_GuiSetTooltip, NULL, "tooltip", NULL);
+    matte_add_external_function(m, "raygui_GuiIconText", raygui_GuiIconText, NULL, "iconId", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiSetIconScale", raygui_GuiSetIconScale, NULL, "scale", NULL);
+    //matte_add_external_function(m, "raygui_GuiGetIcons", raygui_GuiGetIcons, NULL, NULL);
+    //matte_add_external_function(m, "raygui_GuiLoadIcons", raygui_GuiLoadIcons, NULL, "fileName", "loadIconsName",NULL);
+    matte_add_external_function(m, "raygui_GuiDrawIcon", raygui_GuiDrawIcon, NULL, "iconId", "posX", "posY", "pixelSize", "color", NULL);
+    matte_add_external_function(m, "raygui_GuiWindowBox", raygui_GuiWindowBox, NULL, "bounds", "title",NULL);
+    matte_add_external_function(m, "raygui_GuiGroupBox", raygui_GuiGroupBox, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiLine", raygui_GuiLine, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiPanel", raygui_GuiPanel, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiTabBar", raygui_GuiTabBar, NULL, "bounds", "text", "inOut",NULL);
+    matte_add_external_function(m, "raygui_GuiScrollPanel", raygui_GuiScrollPanel, NULL, "bounds", "text", "content", "scroll", "view", NULL);
+    matte_add_external_function(m, "raygui_GuiLabel", raygui_GuiLabel, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiButton", raygui_GuiButton, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiLabelButton", raygui_GuiLabelButton, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiToggle", raygui_GuiToggle, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiToggleGroup", raygui_GuiToggleGroup, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiToggleSlider", raygui_GuiToggleSlider, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiCheckBox", raygui_GuiCheckBox, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiComboBox", raygui_GuiComboBox, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiDropdownBox", raygui_GuiDropdownBox, NULL, "bounds", "text", "inOut", "editMode",NULL);
+    matte_add_external_function(m, "raygui_GuiSpinner", raygui_GuiSpinner, NULL, "bounds", "text", "inOut", "minValue", "maxValue", "editMode", NULL);
+    matte_add_external_function(m, "raygui_GuiValueBox", raygui_GuiValueBox, NULL, "bounds", "text", "inOut", "minValue", "maxValue", "editMode", NULL);
+    matte_add_external_function(m, "raygui_GuiTextBox", raygui_GuiTextBox, NULL, "bounds", "inOut", "editMode",NULL);
+    matte_add_external_function(m, "raygui_GuiSlider", raygui_GuiSlider, NULL, "bounds", "textLeft", "textRight", "inOut", "minValue", "maxValue", NULL);
+    matte_add_external_function(m, "raygui_GuiSliderBar", raygui_GuiSliderBar, NULL, "bounds", "textLeft", "textRight", "inOut", "minValue", "maxValue", NULL);
+    matte_add_external_function(m, "raygui_GuiProgressBar", raygui_GuiProgressBar, NULL, "bounds", "textLeft", "textRight", "inOut", "minValue", "maxValue", NULL);
+    matte_add_external_function(m, "raygui_GuiStatusBar", raygui_GuiStatusBar, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiDummyRec", raygui_GuiDummyRec, NULL, "bounds", "text",NULL);
+    matte_add_external_function(m, "raygui_GuiGrid", raygui_GuiGrid, NULL, "bounds", "text", "spacing", "subdivs", "mouseCell", NULL);
+    matte_add_external_function(m, "raygui_GuiListView", raygui_GuiListView, NULL, "bounds", "text", "inOut",NULL);
+    matte_add_external_function(m, "raygui_GuiListViewEx", raygui_GuiListViewEx, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiMessageBox", raygui_GuiMessageBox, NULL, "bounds", "title", "message", "buttons",NULL);
+    matte_add_external_function(m, "raygui_GuiTextInputBox", raygui_GuiTextInputBox, NULL, "bounds", "title", "message", "buttons", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiColorPicker", raygui_GuiColorPicker, NULL, "bounds", "text", "color", NULL);
+    matte_add_external_function(m, "raygui_GuiColorPanel", raygui_GuiColorPanel, NULL, "bounds", "text", "color", NULL);
+    matte_add_external_function(m, "raygui_GuiColorBarAlpha", raygui_GuiColorBarAlpha, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiColorBarHue", raygui_GuiColorBarHue, NULL, "bounds", "text", "inOut", NULL);
+    matte_add_external_function(m, "raygui_GuiColorPickerHSV", raygui_GuiColorPickerHSV, NULL, "bounds", "text", "colorHsv", NULL);
+    matte_add_external_function(m, "raygui_GuiColorPanelHSV", raygui_GuiColorPanelHSV, NULL, "bounds", "text", "colorHsv", NULL);    
 } 
 
 static rmRawPack_t * PACK = NULL;
@@ -9775,6 +10798,19 @@ int main(int argc, char ** argv) {
 
     matte_add_module(m, "raylib.mt", bytecode, bytecodeSize);
     matte_deallocate(bytecode);
+
+
+    // gui module
+    bytecode = matte_compile_source(
+        m,
+        &bytecodeSize,
+        (char*)RAYGUI_MT // nul-terminated!
+    );
+
+
+    matte_add_module(m, "raygui.mt", bytecode, bytecodeSize);
+    matte_deallocate(bytecode);
+
 
 
     bytecode = matte_compile_source(

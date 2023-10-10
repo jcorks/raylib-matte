@@ -115,7 +115,8 @@ void native_update_value_wave(matteVM_t * vm, matteValue_t in);
 void native_update_value_camera(matteVM_t * vm, matteValue_t v, Camera cam);
 void native_update_value_vector2(matteVM_t * vm, matteValue_t v, Vector2 cam);
 void native_update_value_vector3(matteVM_t * vm, matteValue_t v, Vector3 cam);
-
+void native_update_value_rectangle(matteVM_t * vm, matteValue_t v, Rectangle r);
+void native_update_value_color(matteVM_t * vm, matteValue_t v, Color c);
 
 // Unloads a native object safely.
 void native_unload(matteVM_t * vm, matteValue_t obj);

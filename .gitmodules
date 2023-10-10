@@ -4,3 +4,6 @@
 [submodule "matte"]
 	path = matte
 	url = https://github.com/jcorks/matte
+[submodule "raygui"]
+	path = raygui
+	url = https://github.com/raysan5/raygui

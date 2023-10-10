@@ -17,6 +17,7 @@ Raylib bindings as a standalone Matte executable, adding the full base and math 
 
 
 **Features.**
+- raygui bindings included
 - High-level environment for making games and other tools with raylib, adding built-in support for strings, functions as first class objects, and other useful features.
 - Bindings for raylib.h, rcamera.h, and rmath.h
 - Extra extension library for making game organization easier, adding hierarchy, event systems, and more
@@ -58,7 +59,7 @@ The currently-understood commands are as follows:
 - `s` / `step` : evaluates the next instruction in the VM, which may "step into" a function call.
 - `n` / `next` : evaluates the next instruction in the VM, automatically running any instruction that would generate further function scopes. This essentially lets you step to the next instruction in the same scope or higher.
 - `bt` / `backtrace` : prints the entire callstack.
-
+- `c` / `continue` : resume normal execution.
 
 
 ### Packaging 
@@ -162,6 +163,8 @@ These changes are listed here:
   -  `DetachAudioStreamProcessor`
   -  `AttachAudioMixedProcessor`
   -  `DetachAudioMixedProcessor`
+  -  `GuiGetIcons`
+  -  `GuiLoadIcons`
           
   Functions which do NOT have bindings:
   | Function | Reason |
@@ -184,7 +187,7 @@ These changes are listed here:
   |`UnloadFontData` | Not needed. |
   |`DrawTextCodepoint` | Not especially needed with Matte string access. |
   |`DrawTextCodepoints` | Not especially needed with Matte strings access. |
-  |All `Text*`, `UTF8`, and `Codepoint` functions | Not needed. Can be handled at the Matte level with the Matte string type, functions, and querries
+  |All `Text*`, `UTF8`, and `Codepoint` functions | Not needed. Can be handled at the Matte level with the Matte string type, functions, and queries
   |`UnloadModelAnimations` | Not needed. |
   |`Vector3toFloatV` | Not needed. |
   |`MatrixToFloatV` | Not needed. |
@@ -361,8 +364,27 @@ These changes are listed here:
 
 - `LoadMusicStreamFromMemory` takes a MemoryBuffer as input ("bytes")
 
+- `GuiScrollPanel` modifies the "scroll" and "view" input objects by setting their respective members.
 
+- For `GuiTabBar, GuiToggle, GuiToggleGroup, GuiToggleSlider, GuiCheckBox, GuiComboBox, GuiDropdownBox, GuiSpinner, GuiValueBox, GuiTextBox, GuiSlider, GuiSliderBar, GuiProgressBar, GuiListView, GuiListViewEx` whose inputs use in/out references whose values are NOT objects (structs), the input(s) in question are removed from the function signature. Instead, an "inOut" parameter is provided, which is an object which should include members named with the original parameters. This is the parameter thats modified. I.e., for GuiToggle, this member is "active", so an object should be passed in with a data paramter which will be edited as called.
 
+```
+// initialize the in/out data
+@guiData = {active: false};
+
+// then later when looping, guiData will modify the active member
+@:update ::{
+    gui.GuiToggle(
+        bounds,
+        text: "My toggle",
+        inOut: guiData
+    )
+}
+```
+
+- `GuiTextBox` "textSize" parameter is omitted. A default large limit of 0xffff bytes is provided for any string.
+
+- `GuiListView` removes the "count" parameter, and "text" is an array of strings.
 ## Additional Notes
 
 When cloning, use git clone --recursive (url to this repo) to ensure copying the submodules matte and raylib.

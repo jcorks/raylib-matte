@@ -58,5 +58,16 @@ int main() {
     fprintf(out, "0};\n");
 
 
+    free(data);
+    data = dump_bytes("raygui.mt", &size, 1);
+
+    fprintf(out, "uint8_t RAYGUI_MT[%d] = {\n", (int)size+1);
+    for(int i = 0; i < (int)size; ++i) {
+        fprintf(out, "%d,", data[i]);
+    }
+    fprintf(out, "0};\n");
+
+
+
     fclose(out);
 }
