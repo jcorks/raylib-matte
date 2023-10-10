@@ -1094,6 +1094,7 @@
     },
     IsWaveReady : getExternalFunction(name:"raylib_IsWaveReady"),
     LoadSound : getExternalFunction(name:"raylib_LoadSound"),
+    LoadSoundAlias : getExternalFunction(name:"raylib_LoadSoundAlias"),
     LoadSoundFromWave : getExternalFunction(name:"raylib_LoadSoundFromWave"),
     IsSoundReady : getExternalFunction(name:"raylib_IsSoundReady"),
     UpdateSound ::(sound, bytes => MemoryBuffer.type) {
