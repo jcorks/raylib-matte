@@ -64,7 +64,16 @@ return class(
                     pos.y *= SPAWN_RADIUS;
                     e.setup(
                         position : pos,
-                        health: 4 + (Number.random()*3)->floor
+                        health: 
+                            if (waveCount < 5) 
+                                4 + (Number.random()*3)->floor
+                            else
+                                (
+                                    if (Number.random() < 0.15)
+                                        1
+                                    else
+                                        4 + (Number.random()*3)->floor
+                                )
                     )
                     room.attach(child:e);
                     remaining -= 1;
@@ -165,7 +174,7 @@ return class(
                     active = waveCount * 2;
                     
                     spawnTimer.endless = true;
-                    spawnTimer.start(seconds: 2.5 * (0.95 ** waveCount));
+                    spawnTimer.start(seconds: 1.25 * (0.95 ** waveCount));
                 },
                 onStep ::{
                     foreach(Enemy.getAll()) ::(enemy, t) {

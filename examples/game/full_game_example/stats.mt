@@ -78,7 +78,7 @@ Stats.list[Stats.KNOCKBACK] = Stat.new().setup(
 
 Stats.list[Stats.CHARGE_RATE] = Stat.new().setup(
     name: "Charge rate",
-    formula ::(rank) <- 2.5 * (0.9 ** rank)
+    formula ::(rank) <- 4 * (0.9 ** rank)
 );
 
 
@@ -94,7 +94,7 @@ Stats.list[Stats.SPEED] = Stat.new().setup(
 
 Stats.list[Stats.ACCURACY] = Stat.new().setup(
     name: "Bullet Accuracy",
-    formula ::(rank) <- 30 * (0.9 ** rank)
+    formula ::(rank) <- 30 * (0.7 ** rank)
 );
 
 Stats.list[Stats.CHARGED_INTENSITY] = Stat.new().setup(

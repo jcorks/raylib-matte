@@ -61,6 +61,7 @@ return class(
         }
 
         @:drawHealthBar ::(color) {
+            when(maxHealth == 1) empty;
             @:barHorizontalOffset = HEALTH_WIDTH * (maxHealth * 1.5 - 0.5) / 2;
             @:ratio = health_ / maxHealth;
 
@@ -184,7 +185,7 @@ return class(
                     ray.BeginMode3D(camera);
                         @:color = {
                                 r: 255,
-                                g: 0,
+                                g: if (maxHealth == 1) 255 else 0,
                                 b: 0,
                                 a:255
                             }
@@ -312,7 +313,7 @@ return class(
             },
             
             speedThisFrame : {
-                get ::<- ray.GetFrameTime() * 1/size * 0.13 * (1 + 0.02 * (controller.wave))
+                get ::<- ray.GetFrameTime() * 1/size * 0.18 * (1 + 0.015 * (controller.wave))
             },
             
             collideRadius : {
