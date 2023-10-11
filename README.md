@@ -298,7 +298,7 @@ These changes are listed here:
 
 - CompressData and DecompressData returns a MemoryBuffer and takes a MemoryBuffer ("bytes").
 
-- `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, and `CheckCollisionPointPoly` all take an input array of "flat values", that is, an array of 
+- `DrawLineBSpline`, `DrawLineCatmullRom`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, and `CheckCollisionPointPoly` all take an input array of "flat values", that is, an array of 
   number values in a single array, rather than an array of xy objects.
   
   I.e.
@@ -311,6 +311,8 @@ These changes are listed here:
   
 - `LoadImageAnim` will return an image object with an extra public member called "frames",
   which contains the output frame count
+  
+- `ExportImageToMemory` will return a MemoryBuffer with data populated from the return value. "fileSize" is ommitted.  
   
 - `UpdateTexture` and `UpdateTextureRec` do not take a raw buffer of pixels to 
   update the texture, instead they take an image. They behave as follows:

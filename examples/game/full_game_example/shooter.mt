@@ -6,6 +6,7 @@
 @:camera = import(module:"camera.mt");
 @:room   = import(module:"room.mt");
 @:res    = import(module:"resources.mt");
+@:Stats  = import(module:"stats.mt");
 
 @main;
 
@@ -13,6 +14,8 @@
 @:BULLET_SPREAD_DEGREES = 30;
 @:AMMO_HEIGHT = 0.1
 @:AMMO_WIDTH = 0.05
+@:CHARGE_THRESHOLD = 0.5;
+@:BULLET_FRICTION = 7;
 
 return class(
     name: "Shooter",
@@ -21,19 +24,8 @@ return class(
         getMain ::<- main
     },
     define::(this) {
-        @rankCount = 0;
-        @rankSpread = 0;
-        @rankCooldown = 0;
-        @rankFirerate = 0;
-        @rankKnockback = 0;
-        @rankRange = 0;
+        @charge = 0;
 
-        // Rank scaling helpers
-        @:getMaxShots ::<- 4 + rankCount * 3;
-        @:getCooldown ::<- 1.5 * (0.7 ** rankCooldown);
-        @:getFirerate ::<- 0.1 * (0.7 ** rankFirerate);
-        @:getKnockback ::<- 0.05 * (1.4 ** rankKnockback) - 0.03;
-        @:getFriction ::<- 6 + 24 * (0.5 ** rankRange);
 
         // Resource prep
         @:soundShoot = ray.LoadSoundAlias(source: res.sounds["shoot"]);
@@ -42,20 +34,24 @@ return class(
         main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
-            @dir = direction - ((rankSpread)*BULLET_SPREAD_DEGREES / 2)
-            for(0, rankSpread + 1) ::(i) {
+            @:spreadCount = Stats.list[Stats.SPREAD].value;
+            @dir = direction - ((spreadCount)*BULLET_SPREAD_DEGREES / 2)
+            @:dirSpread = Stats.list[Stats.ACCURACY].value;
+
+            for(0, spreadCount + 1) ::(i) {
             
                 @:b = Bullet.new();                
                 b.setup(
                     position:  this.position,
                     direction: 
-                        dir + Number.random() * 20 - 10,
+                        dir + Number.random() * dirSpread - dirSpread/2,
                     speed:
-                        Number.random() * 1.5 + 10,
+                        Number.random() * 1.5 + Stats.list[Stats.SPEED].value,
                     knockback: 
-                        getKnockback(),
+                        Stats.list[Stats.KNOCKBACK].value,
                     friction:
-                        getFriction()
+                        BULLET_FRICTION,
+                    isBomb: false
                 );
                 
                 room.attach(child:b);
@@ -64,6 +60,41 @@ return class(
                 // Sound
                 ray.PlaySound(sound: soundShoot);
             }
+        }
+        
+        
+        @:shootBomb ::{
+            camera.shake(amount: 4, length: 0.05);
+            @:b = Bullet.new();                
+            @:dirSpread = Stats.list[Stats.ACCURACY].value;
+            b.setup(
+                position:  this.position,
+                direction: 
+                    direction + Number.random() * dirSpread - dirSpread/2,
+                speed:
+                    3,
+                knockback: 
+                    Stats.list[Stats.KNOCKBACK].value,
+                friction: 0,
+                isBomb:
+                    true,
+                intensity:
+                    (getShotsCharged() / 4) * Stats.list[Stats.CHARGED_INTENSITY].value
+            );
+            
+            
+            room.attach(child:b);
+
+            // Maybe a different sound for bombs?
+            ray.PlaySound(sound: soundShoot);
+        
+        }        
+        
+        @:getShotsCharged :: {
+            @:maxShots = Stats.list[Stats.MAX_SHOTS].value;
+            @:r = (charge - CHARGE_THRESHOLD);
+            when (r > maxShots - shotCount) maxShots - shotCount
+            return r->floor;
         }
             
         @model = ::<= {
@@ -105,36 +136,66 @@ return class(
                     ray.PlaySound(sound: soundLoaded);
                 },
                 onStep :: {
-                    if (ray.IsKeyDown(key:ray.KEY_SPACE) || ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_LEFT))
-                        sm.state = "shooting"
-                        
+                    if (ray.IsKeyDown(key:ray.KEY_SPACE) || ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_LEFT)) ::<= {
+                        sm.state = "shootPrimary"
+                        charge = 0;
+                    } else ::<= {
+                        if (ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_RIGHT)) ::<= {
+                            charge += Stats.list[Stats.CHARGE_RATE].value * ray.GetFrameTime();
+                        } else ::<= {
+                            if (charge < CHARGE_THRESHOLD)
+                                charge = 0
+                            else 
+                                sm.state = "shootSecondary"
+                        }
+                    }
                 }
             },
             
+            
             // State means is in the process of shooting
             // Shooting happens for 1.5 seconds
-            "shooting" : {
+            "shootPrimary" : {
                 onEnter :: {
-                    shotCount = 0;
                     shootingTimer.endless = true;
-                    shootingTimer.start(seconds:getFirerate());
+                    shootingTimer.start(seconds:Stats.list[Stats.FIRERATE].value);
                 },
                 
                 onLeave :: {
                     shootingTimer.stop();
-                    cooldown = getCooldown();
                 },
                 onStep :: {
-                    if (shotCount == getMaxShots()) ::<={
+                    if (shotCount == Stats.list[Stats.MAX_SHOTS].value) ::<={
                         sm.state = "cooldown";
                         shotCount = 0;
                     }
                 }
             },
             
-            // Has to 
+            
+            // Fires one large shot
+            "shootSecondary" : {
+                onEnter :: {
+                    shootBomb();
+                    shotCount += getShotsCharged();
+                    charge = 0;                    
+                },
+                
+                onStep ::{
+                    if (shotCount >= Stats.list[Stats.MAX_SHOTS].value) ::<={
+                        sm.state = "cooldown";
+                        shotCount = 0;
+                    } else ::<= {
+                        sm.state = "ready";
+                    }
+                }
+            },
+            
+            
+            // Has to recharge
             "cooldown" : {
                 onEnter :: {
+                    cooldown = Stats.list[Stats.COOLDOWN].value;
                     targetColor.r = 32;
                     targetColor.g = 32;
                     targetColor.b = 32;                
@@ -143,6 +204,10 @@ return class(
                     cooldown -= ray.GetFrameTime();
                     if (cooldown < 0)
                         sm.state = "ready";
+                },
+                
+                onLeave ::{
+                    shotCount = 0;                
                 }
             }
         };
@@ -157,30 +222,6 @@ return class(
  
         
         this.interface = {
-            rankCount : {
-                get ::<- rankCount,
-                set ::(value) <- rankCount = value
-            },
-            rankCooldown : {
-                get ::<- rankCooldown,
-                set ::(value) <- rankCooldown = value
-            },
-            rankSpread : {
-                get ::<- rankSpread,
-                set ::(value) <- rankSpread = value
-            },
-            rankFirerate : {
-                get ::<- rankFirerate,
-                set ::(value) <- rankFirerate = value
-            },
-            rankKnockback : {
-                get ::<- rankKnockback,
-                set ::(value) <- rankKnockback = value
-            },
-            rankRange : {
-                get ::<- rankRange,
-                set ::(value) <- rankRange = value
-            },
             
             onStep ::{
                 @:delta = ray.GetFrameTime();
@@ -202,7 +243,7 @@ return class(
                 @:delta = ray.GetFrameTime();
 
                 // Ammo bar rendering helpers 
-                @:maxShots = getMaxShots();
+                @:maxShots = Stats.list[Stats.MAX_SHOTS].value;
                 @:barHorizontalOffset = AMMO_WIDTH * (maxShots * 1.5 - 0.5) / 2;
 
                 // ease color
@@ -215,7 +256,7 @@ return class(
                     ray.DrawModelWires(model, position:ray.Vector3Zero(), scale: 1, tint:currentColor);                                    
                     
                     if (sm.state == "cooldown") ::<= {
-                        @ratio = cooldown / getCooldown();
+                        @ratio = cooldown / Stats.list[Stats.COOLDOWN].value;
 
                         ray.DrawLineEx(    
                             startPos: {
@@ -232,11 +273,13 @@ return class(
                             thick: AMMO_HEIGHT * 0.8,
                             color: {...currentColor, a: currentColor.a / 2}
                         );
-                    } else ::<= {                       
+                    } else ::<= {  
+                        @shotsCharged = getShotsCharged(); 
                         for (0, maxShots) ::(i) {
                             @xPos = camera.target.x + barHorizontalOffset - AMMO_WIDTH * (i * 1.5);
                             @yPos = camera.target.y - 0.5 - AMMO_HEIGHT / 2;
 
+                            @isReady = (i >= shotCount);
                             ray.DrawLineEx(
                                 startPos: {
                                     x: xPos,
@@ -244,10 +287,10 @@ return class(
                                 },
                                 endPos: {
                                     x: xPos,
-                                    y: yPos + AMMO_HEIGHT * 0.2 + AMMO_HEIGHT * 0.8 * (i >= shotCount)
+                                    y: yPos + AMMO_HEIGHT * 0.2 + AMMO_HEIGHT * 0.8 * isReady
                                 },
                                 thick: AMMO_WIDTH,
-                                color: currentColor
+                                color: if ((i < shotsCharged) && isReady) ray.GREEN else currentColor
                             );
                         }
                     }

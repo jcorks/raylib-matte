@@ -494,6 +494,10 @@ and do not have a stable interface are suffixed with _
                 }   
             },
             
+            active : {
+                get ::<- active
+            },
+            
             pause ::{
                 when(freezeRemaining != empty) empty;
                 freezeRemaining = this.remaining;
@@ -605,6 +609,94 @@ and do not have a stable interface are suffixed with _
 @:lerp_repeat ::(t, m) {
     return ray.Clamp(value:t - ((t / m)->floor) * m, min:0, max:m);
 }
+
+
+
+
+/*
+@:Layout = ::<= {
+    @Vertical = class(
+        name: "game.Layout.Vertical",
+        inherits : [Node],
+        define::(this) {
+            @bounds_ = {};
+            @margin = 0;
+            @padding = 0;
+            @updateLayout ::{
+                @padded = {...bounds_};
+                padded.x += padding;
+                padded.y += padding;
+                padded.width -= padding;
+                padded.height -= padding;
+                
+                
+                @:childBox = {...padded};
+                foreach(this.children) ::(index, child) {
+                    
+                    child.resize(
+                }
+            }
+            
+            
+            this.interface = {
+                resize ::(bounds) {
+                    @boundsInner = {...bounds_};
+                    boundsInner.x += margin;
+                    boundsInner.y += margin;
+                    boundsInner.width -= margin;
+                    boundsInner.height -= margin;
+                    bounds_ = boundsInner;
+                    onRecalculate(bounds:bounds_);
+                },
+                setup ::(
+                    name, 
+                    items,
+                    margin,
+                    padding,
+                    sizeRequest, // fraction of remainingSpace
+                    pixelSizeRequest, // pixels of total space used. calculated first. Takes priority if both are present
+                ) {
+                    foreach(items) ::(i, item) {
+                        this.attach(child:item);
+                    }     
+                    return this;               
+                },
+                
+                onRecalculate::(bounds) {
+                    updateLayout();
+                }
+            }
+        }
+    );
+
+
+    @Item = class(
+        name: "game.Layout.Item",
+        inherits : [Node],
+        define::(this) {
+            @bounds_ = {}
+            this.interface = {
+                setup ::(
+                    margin,
+                    padding,
+                    sizeRequest, // fraction of remainingSpace
+                    pixelSizeRequest // pixels of total space used. calculated first. Takes priority if both are present                
+                ) {
+                
+                },
+                resize(bounds) {
+                    bounds_ = {...bounds};
+                    onRecalculate(bounds:bounds_);
+                }
+                
+                
+                onRecalculate ::(bounds){}
+            }
+        }
+    );
+}
+*/
+
 
 return ::<= {
     @:roots = [];

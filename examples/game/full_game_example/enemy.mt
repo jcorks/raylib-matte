@@ -32,9 +32,9 @@ return class(
 
     define::(this) {
         @:controller = import(module:"controller.mt");
-        @size = Number.random() * 1 + 0.5;
-        @health = (size*5)->ceil;
-        @maxHealth = health;
+        @size;
+        @health_;
+        @maxHealth;
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
 
         @model = ray.LoadModelFromMesh(mesh);
@@ -62,7 +62,7 @@ return class(
 
         @:drawHealthBar ::(color) {
             @:barHorizontalOffset = HEALTH_WIDTH * (maxHealth * 1.5 - 0.5) / 2;
-            @:ratio = health / maxHealth;
+            @:ratio = health_ / maxHealth;
 
             ray.DrawRectangleLinesEx(    
                 rec: {
@@ -87,6 +87,17 @@ return class(
                 thick: HEALTH_HEIGHT,
                 color: color
             );
+        }
+
+        @:hurt = ::{
+            health_ -= 1;           
+            if (health_ <= 0)
+                sm.state = "dead"
+            else
+                sm.state = "hurt";
+
+            // Position sound and play
+            playPositionedSound(sound: soundHit);        
         }
 
         sm.states = {
@@ -142,15 +153,10 @@ return class(
                     if (hit != empty) ::<= {
                         lastBulletKnockback = hit.knockback;
                         hit.explode();
-                        health -= 1;           
-                        if (health <= 0)
-                            sm.state = "dead"
-                        else
-                            sm.state = "hurt";
-
-                        // Position sound and play
-                        playPositionedSound(sound: soundHit);
-                    }
+                        hurt();
+                    } else if (Explosion.isInDamagingExplosion(entity:this)) ::<= {
+                        hurt();
+                    };
                     
                     rotation.x += frame * 4;
                     rotation.y += frame * 3;
@@ -295,14 +301,18 @@ return class(
         this.interface = {
             setup ::(
                 position,
+                health
             ) {
+                health_ = health;
+                maxHealth = health;
+                size = 0.3 + (health * 0.10)
                 all[this] = true;
                 this.x = position.x;
                 this.y = position.y;
             },
             
             speedThisFrame : {
-                get ::<- ray.GetFrameTime() * 1/size * 0.23 * (1.1 ** (controller.wave))
+                get ::<- ray.GetFrameTime() * 1/size * 0.13 * (1 + 0.02 * (controller.wave))
             },
             
             collideRadius : {

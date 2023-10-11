@@ -3,6 +3,7 @@
 @:class  = import(module:"Matte.Core.Class");
 @:Shooter = import(module:"shooter.mt"); 
 @:res    = import(module:"resources.mt");
+@:Stats  = import(module:"stats.mt");
 
 
 // WHere the table should begin, vertically
@@ -44,6 +45,9 @@
 
 // Max number of notches before defaulting to text display.
 @:MAX_RANK = 10;
+
+// Number of upgrades choosable
+@:UPGRADE_COUNT = 4;
 
 @:UpgradeWindowRow = class(
     name : "UpgradeWindowRow",
@@ -92,6 +96,7 @@
                 );
 
                 ray.DrawText(
+                    text: rankDisplay,
                     posX: pen.x,
                     posY: pen.y - textSize.y / 2,
                     fontSize: ROW_FONT_SIZE,
@@ -232,86 +237,35 @@ return class(
         // Resource prep
         @:soundUpgraded = res.sounds["upgraded"];
 
-        @:addRow::(
-            display => String,
-            onSelect => Function,
-            rank => Number
-        ) {
+        @:addRow::(upgrade) {
+        
+        
             this.attach(
                 child:UpgradeWindowRow.new().setup(
                     y: originY + this.children->size * (ROW_HEIGHT + ROW_SPACING),
                     index : this.children->size+1,
-                    display,
-                    onSelect,
-                    rank
+                    display:upgrade.name,
+                    onSelect ::{
+                        upgrade.rankUp();
+                        ray.PlaySound(sound: soundUpgraded);
+                        picked = true;
+                        breakpoint();                    
+                    },
+                    rank: upgrade.rank
                 )
             );
         }
         this.constructor = ::{
-            addRow(
-                display: "Cooldown",
-                onSelect ::{ 
-                    Shooter.getMain().rankCooldown += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank : Shooter.getMain().rankCooldown
-            );
-
-
-            addRow(
-                display: "Bullet Count",
-                onSelect ::{ 
-                    Shooter.getMain().rankCount += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank : Shooter.getMain().rankCount
-            );
-
-            addRow(
-                display: "Bullet Spread",
-                onSelect ::{ 
-                    Shooter.getMain().rankSpread += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank :  Shooter.getMain().rankSpread
-            );
-
-            addRow(
-                display: "Fire rate",
-                onSelect ::{ 
-                    Shooter.getMain().rankFirerate += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank : Shooter.getMain().rankFirerate
-            );
-
-
-            addRow(
-                display: "Knockback",
-                onSelect ::{ 
-                    Shooter.getMain().rankKnockback += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank : Shooter.getMain().rankKnockback
-            );
-
-            addRow(
-                display: "Range",
-                onSelect ::{ 
-                    Shooter.getMain().rankRange += 1;
-                    ray.PlaySound(sound: soundUpgraded);
-                    picked = true;
-                },
-                rank : Shooter.getMain().rankRange
-            );
-
-
-
+            @upgrades = {...Stats.list};
+            @:pickOneUpgrade :: {
+                @index = (Number.random() * (upgrades->size))->floor
+                @upgrade = upgrades[index];
+                upgrades->remove(key:index);
+                return upgrade;
+            }
+            for(0, UPGRADE_COUNT) ::(i) {
+                addRow(upgrade:pickOneUpgrade());
+            }
         }
         
         @:titleDisplay = "Choose an Upgrade";

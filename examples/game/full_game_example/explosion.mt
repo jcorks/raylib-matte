@@ -10,16 +10,34 @@
 
 
 @:AXIS = {x:0, y:0, z:1};
-
+@:damagingExplosions = {};
 return class(
     name: "Explosion",
     inherits : [game.Entity],
+    statics : {
+        isInDamagingExplosion::(entity) {
+            return {:::} {
+                foreach(damagingExplosions)::(exp, v) {
+                    if (ray.Vector2Distance(v1:exp.position, v2:entity.position) < (entity.collideRadius + exp.size/2))
+                        send(message:true);
+                }
+                return false;
+            }
+        }
+    },
     define::(this) {
         @life;
         @size;
         @initialLife;
         this.interface = {
-            setup ::(position, intensity) {
+            size : {
+                get ::<- size * (1 - life / initialLife)**0.5
+            },
+        
+            setup ::(position, intensity, isDamaging) {
+                if (isDamaging)
+                    damagingExplosions[this] = true;
+
                 life = intensity;
                 size = intensity * 4;
                 initialLife = life;
@@ -34,6 +52,10 @@ return class(
                     this.destroy();
             },
             
+            onDestroy ::{
+                damagingExplosions->remove(key:this);
+            },
+            
             onDraw ::{
                 when(life == empty) empty;
                 ray.BeginMode3D(camera);
@@ -45,7 +67,7 @@ return class(
                     };
                     ray.DrawCircle3D(
                         center : this.position,
-                        radius : size * (1 - life / initialLife)**0.5,
+                        radius : this.size,
                         rotationAxis : AXIS,
                         rotationAngle: 0,
                         color

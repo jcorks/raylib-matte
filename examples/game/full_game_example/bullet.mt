@@ -38,6 +38,8 @@ return class(
         @isFar = false;
         @knockback_;
         @friction_;
+        @isBomb_;
+        @intensity_;
         
         @model = ray.LoadModelFromMesh(mesh);
         @rotation = {x:Number.random()*1000, y:Number.random()*1000, z:Number.random()*1000};
@@ -53,9 +55,16 @@ return class(
                 direction,
                 speed,
                 knockback,
-                friction
+                friction,
+                isBomb,
+                intensity
             ) {
                 all[this] = true;
+                isBomb_ = isBomb;
+                if (isBomb_) 
+                    this.scale = {x:1+intensity/3, y:1+intensity/3, z:1+intensity/3};
+                intensity_ = intensity;
+                
                 origin = {...position};
                 lastPosition = {...origin};
                 this.x = origin.x;
@@ -68,7 +77,10 @@ return class(
             
             explode ::{
                 @exp = Explosion.new();
-                exp.setup(position:this.position, intensity:0.3);
+                if (isBomb_)
+                    exp.setup(position:this.position, intensity:0.2+intensity_/2.2, isDamaging: true)
+                else
+                    exp.setup(position:this.position, intensity:0.3);
                 room.attach(child:exp);
                 this.destroy();
                 all->remove(key:this);

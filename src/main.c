@@ -513,6 +513,12 @@ RAYLIB_FN__ARG0(raylib_ToggleFullscreen)
     ToggleFullscreen();
 RAYLIB_FN__END
 
+
+RAYLIB_FN__ARG0(raylib_ToggleBorderlessWindowed)
+    ToggleBorderlessWindowed();
+RAYLIB_FN__END
+
+
 RAYLIB_FN__ARG0(raylib_MaximizeWindow)
     MaximizeWindow();
 RAYLIB_FN__END
@@ -570,6 +576,14 @@ RAYLIB_FN__ARG2(raylib_SetWindowMinSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TY
         args[1].value.number
     );
 RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_SetWindowMaxSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER)
+    SetWindowMaxSize(
+        args[0].value.number,
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
 
 RAYLIB_FN__ARG2(raylib_SetWindowSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER) 
     SetWindowSize(
@@ -1780,6 +1794,17 @@ RAYLIB_FN__ARG1(raylib_IsKeyPressed,
         );
 RAYLIB_FN__END
 
+RAYLIB_FN__ARG1(raylib_IsKeyPressedRepeat,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return 
+        native_to_value_boolean(
+            vm,
+            IsKeyPressedRepeat(
+                args[0].value.number 
+            )
+        );
+RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_IsKeyDown,
@@ -2474,6 +2499,66 @@ RAYLIB_FN__ARG6(raylib_DrawLineBezierCubic,
         args[4].value.number,
         native_from_value_color(vm, args[5])
     );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_DrawLineBSpline,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[0]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "DrawLineBSpline received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2+1));
+    }
+
+    DrawLineBSpline(  
+        pts,
+        num/2,
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+    
+    MemFree(pts);
+  L_END:
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_DrawLineCatmullRom,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    uint32_t num = matte_value_object_get_number_key_count(store, args[0]);
+    if (num % 2 != 0) {
+        matte_vm_raise_error_cstring(vm, "DrawLineBSpline received a points array of uneven values.");
+        goto L_END;
+    }
+
+    Vector2 * pts = MemAlloc(sizeof(Vector2)*num);
+    
+    uint32_t i;
+    for(i = 0; i < num/2; ++i) {
+        pts[i].x = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2));
+        pts[i].y = matte_value_as_number(store, matte_value_object_access_index(store, args[0], i*2+1));
+    }
+
+    DrawLineCatmullRom(  
+        pts,
+        num/2,
+        args[1].value.number,
+        native_from_value_color(vm, args[2])
+    );
+    
+    MemFree(pts);
+  L_END:
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_DrawLineStrip,
@@ -3199,6 +3284,22 @@ RAYLIB_FN__ARG5(raylib_LoadImageRaw,
     );
 RAYLIB_FN__END
 
+
+RAYLIB_FN__ARG3(raylib_LoadImageSvg,
+    MATTE_VALUE_TYPE_STRING,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    return native_to_value_image(
+        vm,
+        LoadImageSvg(  
+            native_from_value_string_unsafe(vm, args[0]), // ok!
+            args[1].value.number,
+            args[2].value.number
+        )        
+    );
+RAYLIB_FN__END
+
 RAYLIB_FN__ARG1(raylib_LoadImageAnim,
     MATTE_VALUE_TYPE_STRING
 )
@@ -3312,6 +3413,29 @@ RAYLIB_FN__ARG2(raylib_ExportImageAsCode,
             native_from_value_string_unsafe(vm, args[1]) // ok!
         )        
     );
+RAYLIB_FN__END
+
+
+RAYLIB_FN__ARG2(raylib_ExportImageToMemory,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_STRING
+)
+    int sizeOut = 0;
+    unsigned char * dataOut =
+        ExportImageToMemory(  
+            native_from_value_image(vm, args[0]),
+            native_from_value_string_unsafe(vm, args[1]), // ok!
+            &sizeOut
+        );
+
+    matteValue_t output = matte_vm_create_memory_buffer_handle_from_data(
+        vm,
+        dataOut,
+        sizeOut
+    );    
+    
+    MemFree(dataOut);
+    return output;
 RAYLIB_FN__END
 
 
@@ -5088,6 +5212,14 @@ RAYLIB_FN__END
 
 
 
+RAYLIB_FN__ARG1(raylib_SetTextLineSpacing,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    SetTextLineSpacing(
+        args[1].value.number
+    );
+RAYLIB_FN__END
+
 RAYLIB_FN__ARG2(raylib_MeasureText,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_NUMBER
@@ -6490,6 +6622,17 @@ RAYLIB_FN__ARG1(raylib_UnloadSound,
     
 RAYLIB_FN__END
 
+RAYLIB_FN__ARG1(raylib_UnloadSoundAlias,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    UnloadSoundAlias(
+        native_from_value_sound(vm, args[0])
+    );
+    
+    native_unload(vm, args[0]);
+    
+RAYLIB_FN__END
+
 RAYLIB_FN__ARG2(raylib_ExportWave,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_STRING
@@ -7304,6 +7447,19 @@ RAYLIB_FN__ARG2(raylib_Vector2Angle,
     );
 RAYLIB_FN__END
 
+RAYLIB_FN__ARG2(raylib_Vector2LineAngle,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    return native_to_value_float(
+        vm,
+        Vector2LineAngle(
+            native_from_value_vector2(vm, args[0]),
+            native_from_value_vector2(vm, args[1])
+        )
+    );
+RAYLIB_FN__END
+
 RAYLIB_FN__ARG2(raylib_Vector2Scale,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_NUMBER
@@ -7744,6 +7900,37 @@ RAYLIB_FN__ARG1(raylib_Vector3Normalize,
     );
 RAYLIB_FN__END
 
+
+RAYLIB_FN__ARG2(raylib_Vector3Project,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 a = native_from_value_vector3(vm, args[0]);
+    Vector3 b = native_from_value_vector3(vm, args[1]);
+    return native_to_value_vector3(
+        vm, 
+        Vector3Project(
+            a,
+            b
+        )
+    );
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG2(raylib_Vector3Reject,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Vector3 a = native_from_value_vector3(vm, args[0]);
+    Vector3 b = native_from_value_vector3(vm, args[1]);
+
+    return native_to_value_vector3(
+        vm, 
+        Vector3Reject(
+            a,
+            b
+        )
+    );
+RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_Vector3OrthoNormalize,
     MATTE_VALUE_TYPE_OBJECT,
@@ -9735,8 +9922,8 @@ static void raymatte_init_bindings(matte_t * m) {
 
     //rcore: windowing
     matte_add_external_function(m, "raylib_InitWindow", raylib_InitWindow, NULL, "width", "height", "title", NULL);
-    matte_add_external_function(m, "raylib_WindowShouldClose", raylib_WindowShouldClose, NULL, NULL);
     matte_add_external_function(m, "raylib_CloseWindow", raylib_CloseWindow, NULL, NULL);
+    matte_add_external_function(m, "raylib_WindowShouldClose", raylib_WindowShouldClose, NULL, NULL);
     matte_add_external_function(m, "raylib_IsWindowReady", raylib_IsWindowReady, NULL, NULL);
     matte_add_external_function(m, "raylib_IsWindowFullscreen", raylib_IsWindowFullscreen, NULL, NULL);
     matte_add_external_function(m, "raylib_IsWindowHidden", raylib_IsWindowHidden, NULL, NULL);
@@ -9748,6 +9935,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_SetWindowState", raylib_SetWindowState, NULL, "flags", NULL);
     matte_add_external_function(m, "raylib_ClearWindowState", raylib_ClearWindowState, NULL, "flags", NULL);
     matte_add_external_function(m, "raylib_ToggleFullscreen", raylib_ToggleFullscreen, NULL, NULL);
+    matte_add_external_function(m, "raylib_ToggleBorderlessWindowed", raylib_ToggleFullscreen, NULL, NULL);
     matte_add_external_function(m, "raylib_MaximizeWindow", raylib_MaximizeWindow, NULL, NULL);
     matte_add_external_function(m, "raylib_MinimizeWindow", raylib_MinimizeWindow, NULL, NULL);
     matte_add_external_function(m, "raylib_RestoreWindow", raylib_RestoreWindow, NULL, NULL);
@@ -9757,6 +9945,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_SetWindowPosition", raylib_SetWindowPosition, NULL, "x", "y", NULL);
     matte_add_external_function(m, "raylib_SetWindowMonitor", raylib_SetWindowMonitor, NULL, "monitor", NULL);
     matte_add_external_function(m, "raylib_SetWindowMinSize", raylib_SetWindowMinSize, NULL, "width", "height", NULL);
+    matte_add_external_function(m, "raylib_SetWindowMaxSize", raylib_SetWindowMinSize, NULL, "width", "height", NULL);
     matte_add_external_function(m, "raylib_SetWindowSize", raylib_SetWindowSize, NULL, "width", "height", NULL);
     matte_add_external_function(m, "raylib_SetWindowOpacity", raylib_SetWindowOpacity, NULL, "opacity", NULL);
     matte_add_external_function(m, "raylib_GetScreenWidth", raylib_GetScreenWidth, NULL, NULL);
@@ -9809,11 +9998,11 @@ static void raymatte_init_bindings(matte_t * m) {
     //matte_add_external_function(m, "raylib_BeginVrStereoMode", raylib_BeginVrStereoMode,NULL, "config", NULL);
     //matte_add_external_function(m, "raylib_EndVrStereoMode", raylib_EndVrStereoMode, NULL, NULL);
     
-    matte_add_external_function(m, "raylib_LoadShader", raylib_LoadShader, NULL, NULL);
-    matte_add_external_function(m, "raylib_LoadShaderFromMemory", raylib_LoadShaderFromMemory, NULL, "vsFileName", "fsFileName", NULL);
-    matte_add_external_function(m, "raylib_IsShaderReady", raylib_IsShaderReady, NULL, "vsCode", "fsCode",  NULL);
-    matte_add_external_function(m, "raylib_GetShaderLocation", raylib_GetShaderLocation, NULL, "shader", NULL);
-    matte_add_external_function(m, "raylib_GetShaderLocationAttrib", raylib_GetShaderLocationAttrib, NULL, "shader", "uniformName", NULL);
+    matte_add_external_function(m, "raylib_LoadShader", raylib_LoadShader, NULL,  "vsFileName", "fsFileName", NULL);
+    matte_add_external_function(m, "raylib_LoadShaderFromMemory", raylib_LoadShaderFromMemory, NULL, "vsCode", "fsCode", NULL);
+    matte_add_external_function(m, "raylib_IsShaderReady", raylib_IsShaderReady, NULL, "shader", NULL);
+    matte_add_external_function(m, "raylib_GetShaderLocation", raylib_GetShaderLocation, NULL, "shader", "uniformName", NULL);
+    matte_add_external_function(m, "raylib_GetShaderLocationAttrib", raylib_GetShaderLocationAttrib, NULL, "shader", "attribName", NULL);
     matte_add_external_function(m, "raylib_SetShaderValueFloat", raylib_SetShaderValueFloat, NULL, "shader", "locIndex", "value", NULL);
     matte_add_external_function(m, "raylib_SetShaderValueInt", raylib_SetShaderValueInt, NULL, "shader", "locIndex", "value", NULL);
     matte_add_external_function(m, "raylib_SetShaderValueFloatV", raylib_SetShaderValueFloatV, NULL, "shader", "locIndex", "values",  "numComponents",NULL);
@@ -9881,6 +10070,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_DecodeDataBase64", raylib_DecodeDataBase64, NULL, "data", NULL);
 
     matte_add_external_function(m, "raylib_IsKeyPressed", raylib_IsKeyPressed, NULL, "key", NULL);
+    matte_add_external_function(m, "raylib_IsKeyPressedRepeat", raylib_IsKeyPressedRepeat, NULL, "key", NULL);
     matte_add_external_function(m, "raylib_IsKeyDown", raylib_IsKeyDown, NULL, "key", NULL);
     matte_add_external_function(m, "raylib_IsKeyReleased", raylib_IsKeyReleased, NULL, "key", NULL);
     matte_add_external_function(m, "raylib_IsKeyUp", raylib_IsKeyUp, NULL, "key", NULL);
@@ -9897,7 +10087,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_GetGamepadButtonPressed", raylib_GetGamepadButtonPressed, NULL, NULL);
     matte_add_external_function(m, "raylib_GetGamepadAxisCount", raylib_GetGamepadAxisCount, NULL, "gamepad", NULL);
     matte_add_external_function(m, "raylib_GetGamepadAxisMovement", raylib_GetGamepadAxisMovement, NULL, "gamepad", "axis", NULL);
-    matte_add_external_function(m, "raylib_SetGamepadMappings", raylib_SetGamepadMappings, NULL, "mapps", NULL);
+    matte_add_external_function(m, "raylib_SetGamepadMappings", raylib_SetGamepadMappings, NULL, "mappings", NULL);
 
 
     matte_add_external_function(m, "raylib_IsMouseButtonPressed", raylib_IsMouseButtonPressed, NULL, "button", NULL);
@@ -9936,6 +10126,7 @@ static void raymatte_init_bindings(matte_t * m) {
     
     
     matte_add_external_function(m, "raylib_SetShapesTexture", raylib_SetShapesTexture, NULL, "texture", "source",  NULL);
+
     matte_add_external_function(m, "raylib_DrawPixel", raylib_DrawPixel, NULL, "posX", "posY", "color", NULL);
     matte_add_external_function(m, "raylib_DrawPixelV", raylib_DrawPixelV, NULL, "position", "color", NULL);
     matte_add_external_function(m, "raylib_DrawLine", raylib_DrawLine, NULL, "startPosX", "startPosY", "endPosX", "endPosY", "color", NULL);
@@ -9944,6 +10135,8 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_DrawLineBezier", raylib_DrawLineBezier, NULL, "startPos", "endPos", "thick", "color", NULL);
     matte_add_external_function(m, "raylib_DrawLineBezierQuad", raylib_DrawLineBezierQuad, NULL, "startPos", "endPos", "controlPos", "thick", "color", NULL);
     matte_add_external_function(m, "raylib_DrawLineBezierCubic", raylib_DrawLineBezierCubic, NULL, "startPos", "endPos", "startControlPos", "endControlPos", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineBSpline", raylib_DrawLineBSpline, NULL, "points", "thick", "color", NULL);
+    matte_add_external_function(m, "raylib_DrawLineCatmullRom", raylib_DrawLineCatmullRom, NULL, "points", "thick", "color", NULL);
     matte_add_external_function(m, "raylib_DrawLineStrip", raylib_DrawLineStrip, NULL, "points", "color", NULL);
     matte_add_external_function(m, "raylib_DrawCircle", raylib_DrawCircle, NULL, "centerX", "centerY", "radius", "color", NULL);
     matte_add_external_function(m, "raylib_DrawCircleSector", raylib_DrawCircleSector, NULL, "center", "radius", "startAngle", "endAngle", "segments", "color", NULL);
@@ -9991,6 +10184,7 @@ static void raymatte_init_bindings(matte_t * m) {
     
     matte_add_external_function(m, "raylib_LoadImage", raylib_LoadImage, NULL, "fileName", NULL);
     matte_add_external_function(m, "raylib_LoadImageRaw", raylib_LoadImageRaw, NULL, "fileName", "width", "height", "format", "headerSize", NULL);
+    matte_add_external_function(m, "raylib_LoadImageSvg", raylib_LoadImageSvg, NULL, "fileName", "width", "height", NULL);
     matte_add_external_function(m, "raylib_LoadImageAnim", raylib_LoadImageAnim, NULL, "fileName", NULL);
     matte_add_external_function(m, "raylib_LoadImageFromMemory", raylib_LoadImageFromMemory, NULL, "fileType", "bytes", NULL);
     matte_add_external_function(m, "raylib_LoadImageFromTexture", raylib_LoadImageFromTexture, NULL, "texture", NULL);
@@ -9998,6 +10192,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_IsImageReady", raylib_IsImageReady, NULL, "image", NULL);
     matte_add_external_function(m, "raylib_UnloadImage", raylib_UnloadImage, NULL, "image", NULL);
     matte_add_external_function(m, "raylib_ExportImage", raylib_ExportImage, NULL, "image", "fileName", NULL);
+    matte_add_external_function(m, "raylib_ExportImageToMemory", raylib_ExportImageToMemory, NULL, "image", "fileType", NULL);
     matte_add_external_function(m, "raylib_ExportImageAsCode", raylib_ExportImageAsCode, NULL, "image", "fileName", NULL);
 
     matte_add_external_function(m, "raylib_GenImageColor", raylib_GenImageColor, NULL, "width", "height", "color",  NULL);
@@ -10108,11 +10303,11 @@ static void raymatte_init_bindings(matte_t * m) {
 
     matte_add_external_function(m, "raylib_GetFontDefault", raylib_GetFontDefault, NULL, NULL);                                                            
     matte_add_external_function(m, "raylib_LoadFont", raylib_LoadFont, NULL, "fileName",  NULL);                                                  
-    matte_add_external_function(m, "raylib_LoadFontEx", raylib_LoadFontEx, NULL, "fileName", "fontSize", "fontChars", NULL);  
+    matte_add_external_function(m, "raylib_LoadFontEx", raylib_LoadFontEx, NULL, "fileName", "fontSize", "codepoints", NULL);  
     matte_add_external_function(m, "raylib_LoadFontFromImage", raylib_LoadFontFromImage, NULL, "image", "key",  "firstChar", NULL);                        
     matte_add_external_function(m, "raylib_LoadFontFromMemory", raylib_LoadFontFromMemory, NULL, "fileType", "bytes", "fontSize", "fontChars", NULL); 
     matte_add_external_function(m, "raylib_IsFontReady", raylib_IsFontReady, NULL, "font", NULL);                                                          
-    matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "bytes", "fontSize", "fontChars", "type", NULL); 
+    matte_add_external_function(m, "raylib_LoadFontData", raylib_LoadFontData, NULL, "bytes", "fontSize", "codepoints", "type", NULL); 
     matte_add_external_function(m, "raylib_GenImageFontAtlas", raylib_GenImageFontAtlas, NULL, "chars", "fontSize", "padding", "packMethod", NULL); 
     matte_add_external_function(m, "raylib_UnloadFont", raylib_UnloadFont, NULL, "font", NULL);                                                           
     matte_add_external_function(m, "raylib_ExportFontAsCode", raylib_ExportFontAsCode, NULL, "font", "fileName", NULL);                               
@@ -10123,7 +10318,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_DrawTextEx", raylib_DrawTextEx, NULL, "font", "text", "position", "fontSize", "spacing", "tint", NULL); 
     matte_add_external_function(m, "raylib_DrawTextPro", raylib_DrawTextPro, NULL, "font", "text", "position", "origin", "rotation", "fontSize", "spacing", "tint", NULL); 
 
-
+    matte_add_external_function(m, "raylib_SetTextLineSpacing", raylib_SetTextLineSpacing, NULL, "spacing", NULL);
     matte_add_external_function(m, "raylib_MeasureText", raylib_MeasureText, NULL, "text", "fontSize", NULL);                                      
     matte_add_external_function(m, "raylib_MeasureTextEx", raylib_MeasureTextEx, NULL, "font", "text", "fontSize", "spacing", NULL);    
     matte_add_external_function(m, "raylib_GetGlyphIndex", raylib_GetGlyphIndex, NULL, "font", "codepoint",  NULL);                                          
@@ -10240,6 +10435,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_UpdateSound", raylib_UpdateSound, "sound", "data", "sampleCount", NULL); 
     matte_add_external_function(m, "raylib_UnloadWave", raylib_UnloadWave, NULL, "wave", NULL);                                     
     matte_add_external_function(m, "raylib_UnloadSound", raylib_UnloadSound, NULL, "sound", NULL);                                  
+    matte_add_external_function(m, "raylib_UnloadSoundAlias", raylib_UnloadSoundAlias, NULL, "sound", NULL);                                  
     matte_add_external_function(m, "raylib_ExportWave", raylib_ExportWave, NULL, "wave", "fileName", NULL);               
     matte_add_external_function(m, "raylib_ExportWaveAsCode", raylib_ExportWaveAsCode, "NULL", "wave", "fileName", NULL);         
 
@@ -10322,6 +10518,7 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_Vector2Distance", raylib_Vector2Distance, NULL, "v1","v2", NULL);                              
     matte_add_external_function(m, "raylib_Vector2DistanceSqr", raylib_Vector2DistanceSqr, NULL, "v1","v2", NULL);                           
     matte_add_external_function(m, "raylib_Vector2Angle", raylib_Vector2Angle, NULL, "v1","v2", NULL);                                 
+    matte_add_external_function(m, "raylib_Vector2LineAngle", raylib_Vector2Angle, NULL, "start","end", NULL);                                 
     matte_add_external_function(m, "raylib_Vector2Scale", raylib_Vector2Scale, NULL, "v","scale", NULL);                               
     matte_add_external_function(m, "raylib_Vector2Multiply", raylib_Vector2Multiply, NULL, "v1","v2", NULL);                            
     matte_add_external_function(m, "raylib_Vector2Negate", raylib_Vector2Negate, NULL, "v", NULL);                                           
@@ -10357,6 +10554,8 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_Vector3Negate", raylib_Vector3Negate, NULL, "v", NULL);                                           
     matte_add_external_function(m, "raylib_Vector3Divide", raylib_Vector3Divide, NULL, "v1","v2", NULL);                              
     matte_add_external_function(m, "raylib_Vector3Normalize", raylib_Vector3Normalize, NULL, "v", NULL);                                        
+    matte_add_external_function(m, "raylib_Vector3Project", raylib_Vector3Project, NULL, "v1","v2", NULL);                       
+    matte_add_external_function(m, "raylib_Vector3Reject", raylib_Vector3Reject, NULL, "v1","v2", NULL);                       
     matte_add_external_function(m, "raylib_Vector3OrthoNormalize", raylib_Vector3OrthoNormalize, NULL, "v1","v2", NULL);                       
     matte_add_external_function(m, "raylib_Vector3Transform", raylib_Vector3Transform, NULL, "v","mat", NULL);                            
     matte_add_external_function(m, "raylib_Vector3RotateByQuaternion", raylib_Vector3RotateByQuaternion, NULL, "v","q", NULL);                 

@@ -543,6 +543,7 @@
     SetWindowState : getExternalFunction(name:"raylib_SetWindowState"),
     ClearWindowState : getExternalFunction(name:"raylib_ClearWindowState"),  
     ToggleFullscreen : getExternalFunction(name:"raylib_ToggleFullscreen"),
+    ToggleBorderlessWindowed : getExternalFunction(name:"raylib_ToggleBorderlessWindowed"),
     MaximizeWindow : getExternalFunction(name:"raylib_MaximizeWindow"),
     MinimizeWindow : getExternalFunction(name:"raylib_MinimizeWindow"),
     RestoreWindow : getExternalFunction(name:"raylib_RestoreWindow"),
@@ -715,6 +716,7 @@
     
     // Keyboard
     IsKeyPressed : getExternalFunction(name:"raylib_IsKeyPressed"),
+    IsKeyPressedRepeat : getExternalFunction(name:"raylib_IsKeyPressedRepeat"),
     IsKeyDown : getExternalFunction(name:"raylib_IsKeyDown"),
     IsKeyReleased : getExternalFunction(name:"raylib_IsKeyReleased"),
     IsKeyUp : getExternalFunction(name:"raylib_IsKeyUp"),
@@ -790,6 +792,8 @@
     DrawLineBezier : getExternalFunction(name:"raylib_DrawLineBezier"),
     DrawLineBezierQuad : getExternalFunction(name:"raylib_DrawLineBezierQuad"),
     DrawLineBezierCubic : getExternalFunction(name:"raylib_DrawLineBezierCubic"),
+    DrawLineBSpline : getExternalFunction(name:"raylib_DrawLineBSpline"),
+    DrawLineCatmullRom : getExternalFunction(name:"raylib_DrawLineCatmullRom"),
     DrawLineStrip : getExternalFunction(name:"raylib_DrawLineStrip"),
     DrawCircle : getExternalFunction(name:"raylib_DrawCircle"),
     DrawCircleSector : getExternalFunction(name:"raylib_DrawCircleSector"),
@@ -837,6 +841,7 @@
     // rtextures 
     LoadImage : getExternalFunction(name: "raylib_LoadImage"),
     LoadImageRaw : getExternalFunction(name: "raylib_LoadImageRaw"),
+    LoadImageSvg : getExternalFunction(name: "raylib_LoadImageSvg"),
     LoadImageAnim : getExternalFunction(name: "raylib_LoadImageAnim"),
     LoadImageFromMemory :: (fileType, bytes => MemoryBuffer.type) {
         return base__LoadImageFromMemory(fileType, bytes:bytes.handle);
@@ -846,6 +851,7 @@
     IsImageReady : getExternalFunction(name: "raylib_IsImageReady"),
     UnloadImage : getExternalFunction(name: "raylib_UnloadImage"),
     ExportImage : getExternalFunction(name: "raylib_ExportImage"),
+    ExportImageToMemory : getExternalFunction(name: "raylib_ExportImageToMemory"),
     ExportImageAsCode : getExternalFunction(name: "raylib_ExportImageAsCode"),
 
 
@@ -980,6 +986,7 @@
     DrawTextPro : getExternalFunction(name:"raylib_DrawTextPro"),
 
 
+    SetTextLineSpacing : getExternalFunction(name:"raylib_SetTextLineSpacing"),
     MeasureText : getExternalFunction(name:"raylib_MeasureText"),
     MeasureTextEx : getExternalFunction(name:"raylib_MeasureTextEx"),
     GetGlyphIndex : getExternalFunction(name:"raylib_GetGlyphIndex"),
@@ -1102,6 +1109,7 @@
     },
     UnloadWave : getExternalFunction(name:"raylib_UnloadWave"),
     UnloadSound : getExternalFunction(name:"raylib_UnloadSound"),
+    UnloadSoundAlias : getExternalFunction(name:"raylib_UnloadSoundAlias"),
     ExportWave : getExternalFunction(name:"raylib_ExportWave"),
     ExportWaveAsCode : getExternalFunction(name:"raylib_ExportWaveAsCode"),
 
@@ -1193,6 +1201,7 @@
     Vector2Distance : getExternalFunction(name:"raylib_Vector2Distance"),
     Vector2DistanceSqr : getExternalFunction(name:"raylib_Vector2DistanceSqr"),
     Vector2Angle : getExternalFunction(name:"raylib_Vector2Angle"),
+    Vector2LineAngle : getExternalFunction(name:"raylib_Vector2LineAngle"),
     Vector2Scale : getExternalFunction(name:"raylib_Vector2Scale"),
     Vector2Multiply : getExternalFunction(name:"raylib_Vector2Multiply"),
     Vector2Negate : getExternalFunction(name:"raylib_Vector2Negate"),
@@ -1228,6 +1237,8 @@
     Vector3Negate : getExternalFunction(name:"raylib_Vector3Negate"),
     Vector3Divide : getExternalFunction(name:"raylib_Vector3Divide"),
     Vector3Normalize : getExternalFunction(name:"raylib_Vector3Normalize"),
+    Vector3Reject : getExternalFunction(name:"raylib_Vector3Reject"),
+    Vector3Project : getExternalFunction(name:"raylib_Vector3Project"),
     Vector3OrthoNormalize : getExternalFunction(name:"raylib_Vector3OrthoNormalize"),
     Vector3Transform : getExternalFunction(name:"raylib_Vector3Transform"),
     Vector3RotateByQuaternion : getExternalFunction(name:"raylib_Vector3RotateByQuaternion"),

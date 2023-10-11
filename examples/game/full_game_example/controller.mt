@@ -42,6 +42,35 @@ return class(
 
         // Resource prep
         @:musicMain = res.music["main"];
+        
+        @:spawnTimer = game.Timer.new();
+        spawnTimer.installHook(
+            event:"onTimeout",
+            hook ::(detail) {
+                // spawn
+                if (remaining > 0 && Enemy.getCount() <= active) ::<= {
+                    // spawn 
+                    
+                    @e = Enemy.new();            
+                    
+                    @pos = {
+                        x : Number.random() - 0.5,
+                        y : Number.random() - 0.5,
+                        z : 0
+                    };
+                    
+                    pos = ray.Vector3Normalize(v:pos);
+                    pos.x *= SPAWN_RADIUS;
+                    pos.y *= SPAWN_RADIUS;
+                    e.setup(
+                        position : pos,
+                        health: 4 + (Number.random()*3)->floor
+                    )
+                    room.attach(child:e);
+                    remaining -= 1;
+                }                    
+            }
+        )
 
         sm.states = {
             "displayWave_enter" : {
@@ -134,6 +163,9 @@ return class(
                 onEnter :: {
                     remaining = waveCount * 3 +  waveCount * 2 * Number.random();
                     active = waveCount * 2;
+                    
+                    spawnTimer.endless = true;
+                    spawnTimer.start(seconds: 2.5 * (0.95 ** waveCount));
                 },
                 onStep ::{
                     foreach(Enemy.getAll()) ::(enemy, t) {
@@ -141,26 +173,6 @@ return class(
                             sm.state = "gameover";
                     }
                 
-                    if (remaining > 0 && Enemy.getCount() <= active) ::<= {
-                        // spawn 
-                        @e = Enemy.new();
-                        
-                        
-                        @pos = {
-                            x : Number.random() - 0.5,
-                            y : Number.random() - 0.5,
-                            z : 0
-                        };
-                        
-                        pos = ray.Vector3Normalize(v:pos);
-                        pos.x *= SPAWN_RADIUS;
-                        pos.y *= SPAWN_RADIUS;
-                        e.setup(
-                            position : pos
-                        )
-                        room.attach(child:e);
-                        remaining -= 1;
-                    }                    
                     game.Log.display[0] = 'Remaining: ' + (remaining->ceil + Enemy.getCount());
 
                 
@@ -232,6 +244,7 @@ return class(
         
         this.constructor = ::{
             this.attach(child:sm);
+            this.attach(child:spawnTimer);
             sm.state = 'displayWave_enter';
 
             // Start playing music buffer
