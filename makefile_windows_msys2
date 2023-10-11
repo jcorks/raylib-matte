@@ -1,0 +1,24 @@
+export CC := gcc
+CONSOLE = false
+
+all: #raylib matte .WAIT raymatte
+
+# raylib:
+	cd ./raylib/src/ && make PLATFORM=PLATFORM_DESKTOP
+
+# matte:
+	cd ./matte/src/rom/ && make
+	cd ./matte/src/rom/ && makerom
+
+# raymatte:
+	cd ./src/api/ && make
+ifeq ($(CONSOLE), false)
+	$(CC) ./src/*.c -I./matte/src/ -I./raylib/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -o raymatte -lgdi32 -lOpenGL32 -lwinmm 
+else
+	$(CC) ./src/*.c -I./matte/src/ -I./raylib/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -o raymatte -lgdi32 -lOpenGL32 -lwinmm -mwindows
+endif
+
+clean:
+	cd ./matte/src && del MATTE_ROM rom\makerom.exe
+	cd ./src && del raylib.mt.h api\embed.exe
+	del raymatte.exe
