@@ -1,4 +1,4 @@
-CC := gcc
+export CC := gcc
 CONSOLE = false
 
 all: #raylib matte .WAIT raymatte
