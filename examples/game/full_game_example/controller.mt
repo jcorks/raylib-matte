@@ -72,7 +72,7 @@ return class(
                                     if (Number.random() < 0.15)
                                         1
                                     else
-                                        4 + (Number.random()*3)->floor
+                                        4 + (Number.random()*(2 + (waveCount / 4)->ceil))->floor
                                 )
                     )
                     room.attach(child:e);

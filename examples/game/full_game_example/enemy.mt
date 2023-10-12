@@ -306,14 +306,15 @@ return class(
             ) {
                 health_ = health;
                 maxHealth = health;
-                size = 0.3 + (health * 0.10)
+                size = 0.3 + ((health**1.7) * 0.04)
+                if (size > 1.4) size = 1.4;
                 all[this] = true;
                 this.x = position.x;
                 this.y = position.y;
             },
             
             speedThisFrame : {
-                get ::<- ray.GetFrameTime() * 1/size * 0.18 * (1 + 0.015 * (controller.wave))
+                get ::<- ray.GetFrameTime() * 1/((size+1)**3) * 0.87 * (1 + 0.1 * (controller.wave**1.3))
             },
             
             collideRadius : {

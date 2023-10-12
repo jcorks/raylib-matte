@@ -73,7 +73,7 @@ Stats.list[Stats.FIRERATE] = Stat.new().setup(
 
 Stats.list[Stats.KNOCKBACK] = Stat.new().setup(
     name: "Knockback",
-    formula ::(rank) <- 0.05 * (1.4 ** rank) - 0.03
+    formula ::(rank) <- 0.05 * (1.4 ** rank) - 0.01
 );
 
 Stats.list[Stats.CHARGE_RATE] = Stat.new().setup(
