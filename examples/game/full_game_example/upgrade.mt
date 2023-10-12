@@ -13,10 +13,10 @@
 @:TITLE_FONT_SIZE = 50;
 
 // Width of a row in pixels
-@:ROW_WIDTH = 400;
+@:ROW_WIDTH = 430;
 
 // Height of a row in pixels
-@:ROW_HEIGHT = 55;
+@:ROW_HEIGHT = 70;
 
 // Padding between items in a row.
 @:ROW_ITEM_PADDING = 4;
@@ -30,8 +30,6 @@
 // Width of the display portion of the row.
 @:ROW_NAME_WIDTH = 200;
 
-// space between rows
-@:ROW_SPACING = 5;
 
 
 
@@ -49,62 +47,162 @@
 // Number of upgrades choosable
 @:UPGRADE_COUNT = 4;
 
-@:UpgradeWindowRow = class(
-    name : "UpgradeWindowRow",
-    inherits : [game.Entity],
+
+
+// Shows a number key to press for the option
+@:UpgradeNumberIcon = class(
+    name : "UpgradeNumberIcon",
+    inherits : [game.Layout.Item],
     define::(this) {
+        @index_;
+        this.constructor = ::{
+            this.setup(
+                pixelSizeRequest: ROW_ICON_SIZE
+            );
+        }
     
-        // draws the ranks. If 10 or below, it is drawn as notches
-        @:drawRank ::(pen, rank) {
-            if (rank < MAX_RANK) ::<= {
-                // pen is middled, so move it to top left
-                pen.y -= RANK_HEIGHT / 2;
-                for(0, rank) ::(i) {
-                    ray.DrawLineEx(
-                        startPos:pen,
-                        endPos: {
-                            x: pen.x,
-                            y: pen.y + RANK_HEIGHT
-                        },
-                        thick: RANK_WIDTH,
-                        color: ray.GREEN
-                    );        
-                    pen.x += RANK_WIDTH + RANK_GAP;
-                }
+        this.interface = {
+            setNumber ::(index) {
+                index_ = index; 
+                return this;
+            },
+            onDraw::{
+                @:content = this.contentSpace;
+
+                @numberIconSize = ROW_ICON_SIZE;
+                ray.DrawRectangleLines(
+                    posX: content.x,
+                    posY: content.y,
+                    width : content.width,
+                    height : content.height,
+                    color : ray.WHITE
+                );
+                    
+                // icon number
+                ray.DrawText(
+                    text:'' + (index_),
+                    posX: content.x + ROW_ITEM_PADDING,
+                    posY: content.y + ROW_ITEM_PADDING,
+                    fontSize : 12,
+                    color: ray.WHITE
+                );
+            }    
+        }
+    }
+);
+
+@:UpgradeRowLabel = class(
+    name : "UpgradeRowLabel",
+    inherits : [game.Layout.Item],
+    define::(this) {
+        @display_;
+        @textSize;
+        
+        this.constructor = ::{
+            this.setup(
+                margin: 10
+            )
+        };
+        
+        this.interface = { 
+            setText ::(display) {
+                display_ = display;
                 
-                // mark empty ranks
-                for(rank, 10) ::(i) {
-                    ray.DrawLineEx(
-                        startPos:pen,
-                        endPos: {
-                            x: pen.x,
-                            y: pen.y + RANK_HEIGHT
-                        },
-                        thick: RANK_WIDTH,
-                        color: ray.BLACK
-                    );        
-                    pen.x += RANK_WIDTH + RANK_GAP;
-                }    
-            // Whoa! you ranked highly. That's crazy...
-            } else ::<= {
-                @:rankDisplay = " x" + rank + " ";
-                @textSize = ray.MeasureTextEx(
+                textSize = ray.MeasureTextEx(
                     font: ray.GetFontDefault(),
-                    text: rankDisplay,
+                    text: display_,
                     fontSize : ROW_FONT_SIZE,
                     spacing: 0
                 );
+                                
+                return this;
+            },
+            onDraw ::{
+                @:content = this.contentSpace;
 
+
+                
                 ray.DrawText(
-                    text: rankDisplay,
-                    posX: pen.x,
-                    posY: pen.y - textSize.y / 2,
+                    text: display_,
+                    posX: content.x,
+                    posY: content.y + content.height/2 - textSize.y/2,
                     fontSize: ROW_FONT_SIZE,
-                    color: ray.GREEN
-                )
+                    color: ray.WHITE
+                );                
+            }
+        }    
+    }
+);
+
+
+@UpgradeRowRank = class(
+    name : "UpgradeRowRank",
+    inherits : [game.Layout.Item],
+    define ::(this) {
+        @rank;
+        this.interface = {
+            setRank::(value) {
+                rank = value
+                return this;
+            },
+            onDraw ::{
+                @content = {...this.contentSpace};
+                if (rank < MAX_RANK) ::<= {
+                    // pen is middled, so move it to top left
+                    for(0, rank) ::(i) {
+                        ray.DrawLineEx(
+                            startPos:content,
+                            endPos: {
+                                x: content.x,
+                                y: content.y + content.height
+                            },
+                            thick: RANK_WIDTH,
+                            color: ray.GREEN
+                        );        
+                        content.x += RANK_WIDTH + RANK_GAP;
+                    }
+                    
+                    // mark empty ranks
+                    for(rank, 10) ::(i) {
+                        ray.DrawLineEx(
+                            startPos:content,
+                            endPos: {
+                                x: content.x,
+                                y: content.y + content.height
+                            },
+                            thick: RANK_WIDTH,
+                            color: ray.BLACK
+                        );        
+                        content.x += RANK_WIDTH + RANK_GAP;
+                    }    
+                // Whoa! you ranked highly. That's crazy...
+                } else ::<= {
+                    @:rankDisplay = " x" + rank + " ";
+                    @textSize = ray.MeasureTextEx(
+                        font: ray.GetFontDefault(),
+                        text: rankDisplay,
+                        fontSize : ROW_FONT_SIZE,
+                        spacing: 0
+                    );
+
+                    ray.DrawText(
+                        text: rankDisplay,
+                        posX: content.x,
+                        posY: content.y + content.height/2 - textSize.y / 2,
+                        fontSize: ROW_FONT_SIZE,
+                        color: ray.GREEN
+                    )
+                }                    
             }        
         }
-    
+    }
+);
+
+
+@:UpgradeWindowRow = class(
+    name : "UpgradeWindowRow",
+    inherits : [game.Layout.Horizontal],
+    define::(this) {
         @index_;
         @display_;
         @onSelect_;
@@ -112,33 +210,31 @@
         @hovered = false;
         @color = {r:128, g:128, b:128, a:64};
         @targetAlpha = 64;
-        @selfRec = {
-            width: ROW_WIDTH,
-            height: ROW_HEIGHT,
-            x: 0,
-            y: 0
-        }
+
+
         this.interface = {
-            setup ::(
-                y,
-                index,
-                display,
-                onSelect,
-                rank
-            ) {
-                selfRec.x = (ray.GetRenderWidth() - ROW_WIDTH) / 2;
-                selfRec.y = y;
+            setData::(index, upgrade, onSelect) {
                 index_ = index;
-                display_ = display;
                 onSelect_ = onSelect;
-                rank_ = rank;
+                this.setup(
+                    pixelSizeRequest : ROW_HEIGHT,
+                    margin : 5,
+                    padding : 10
+                );
+                this.layout(
+                    items : [
+                        UpgradeNumberIcon.new().setNumber(index),
+                        UpgradeRowLabel.new().setup(sizeRequest: 0.7).setText(display:upgrade.name),
+                        UpgradeRowRank.new().setup(sizeRequest: 0.3).setRank(value:upgrade.rank)
+                    ]
+                )
                 return this;
             },
             
             onStep ::{
                 hovered = (ray.CheckCollisionPointRec(
                     point:ray.GetMousePosition(),
-                    rec: selfRec
+                    rec: this.contentSpace
                 ));
                 
                 if (hovered) ::<= {
@@ -156,117 +252,23 @@
             },
             
             onDraw ::{
+                @content = this.contentSpace;
                 @delta = ray.GetFrameTime();
                 color.a = ray.Lerp(start:color.a, end:targetAlpha, amount:7 * delta);
                 ray.DrawRectangleRec(
-                    rec: selfRec,
+                    rec: content,
                     color: color
                 );
-
-                // pen to track where we are drawing the 
-                // UI in the row
-                @pen = {x: selfRec.x, y: selfRec.y}
-                
-                
-                // draw number button icon
-                pen.x += ROW_ITEM_PADDING;
-                pen.y += (ROW_HEIGHT - ROW_ICON_SIZE)/2
-                @numberIconSize = ROW_ICON_SIZE;
-                ray.DrawRectangleLines(
-                    posX: pen.x,
-                    posY: pen.y,
-                    width : ROW_ICON_SIZE,
-                    height : ROW_ICON_SIZE,
-                    color : ray.WHITE
-                );
-                
-                // icon number
-                pen.x += ROW_ITEM_PADDING;
-                ray.DrawText(
-                    text:'' + (index_),
-                    posX: pen.x + ROW_ITEM_PADDING,
-                    posY: pen.y + ROW_ITEM_PADDING,
-                    fontSize : 12,
-                    color: ray.WHITE
-                );
-                
-                
-                
-                
-                
-                // then draw the description
-                pen.x += ROW_ICON_SIZE + ROW_ITEM_PADDING;
-                @textSize = ray.MeasureTextEx(
-                    font: ray.GetFontDefault(),
-                    text: display_,
-                    fontSize : ROW_FONT_SIZE,
-                    spacing: 0
-                );
-                
-                pen.y = selfRec.y + (ROW_HEIGHT - textSize.y) / 2;
-                ray.DrawText(
-                    text: display_,
-                    posX: pen.x,
-                    posY: pen.y,
-                    fontSize: ROW_FONT_SIZE,
-                    color: ray.WHITE
-                );
-
-
-
-
-                // finally draw the rank
-                pen.x += ROW_NAME_WIDTH;
-                pen.y = selfRec.y + ROW_HEIGHT/2;
-                drawRank(pen, rank:rank_);
             }
         }
     }
 );
 
 
-
-return class(
-    name : "Upgrade",
-    inherits : [game.Node],
+@:UpgradeTitleLabel = class(
+    name: "UpgradeTitleLabel",
+    inherits : [game.Layout.Item],
     define::(this) {
-    
-        @originY = DISPLAY_Y;
-        @picked = false;
-
-        // Resource prep
-        @:soundUpgraded = res.sounds["upgraded"];
-
-        @:addRow::(upgrade) {
-        
-        
-            this.attach(
-                child:UpgradeWindowRow.new().setup(
-                    y: originY + this.children->size * (ROW_HEIGHT + ROW_SPACING),
-                    index : this.children->size+1,
-                    display:upgrade.name,
-                    onSelect ::{
-                        upgrade.rankUp();
-                        ray.PlaySound(sound: soundUpgraded);
-                        picked = true;
-                        breakpoint();                    
-                    },
-                    rank: upgrade.rank
-                )
-            );
-        }
-        this.constructor = ::{
-            @upgrades = {...Stats.list};
-            @:pickOneUpgrade :: {
-                @index = (Number.random() * (upgrades->size))->floor
-                @upgrade = upgrades[index];
-                upgrades->remove(key:index);
-                return upgrade;
-            }
-            for(0, UPGRADE_COUNT) ::(i) {
-                addRow(upgrade:pickOneUpgrade());
-            }
-        }
         
         @:titleDisplay = "Choose an Upgrade";
         @:titleSize = ray.MeasureTextEx(
@@ -274,21 +276,88 @@ return class(
             fontSize: TITLE_FONT_SIZE,
             spacing: 4,
             text:titleDisplay
-        );
+        );    
+    
+        this.constructor = ::{
+            this.setup(
+                pixelSizeRequest : TITLE_FONT_SIZE + 10,
+                margin: 10
+            );
+        }
+    
+        this.interface = {
+            onDraw ::{
+                @content = this.contentSpace;
+                ray.DrawText(
+                    posX: content.x + content.width / 2 - titleSize.x / 2,
+                    posY: content.y + content.height / 2 - titleSize.y / 2,
+                    color: ray.GRAY,
+                    text: titleDisplay,
+                    fontSize: TITLE_FONT_SIZE
+                );                
+            }
+        }    
+    }
+);
+
+
+return class(
+    name : "Upgrade",
+    inherits : [game.Layout.Vertical],
+    define::(this) {
+    
+        @picked = false;
+
+        // Resource prep
+        @:soundUpgraded = res.sounds["upgraded"];
+
+        @:newRow::(upgrade, index) {
+            return UpgradeWindowRow.new().setData(
+                upgrade,
+                index,
+                onSelect ::{
+                    upgrade.rankUp();
+                    ray.PlaySound(sound: soundUpgraded);
+                    picked = true;
+                    breakpoint();                    
+                }
+            )
+        }
+        this.constructor = ::{
+            this.move(
+                x:ray.GetRenderWidth()/2 - ROW_WIDTH/2, 
+                y:50
+            );
+            this.resize(
+                width: ROW_WIDTH,
+                height: ray.GetRenderHeight()
+            );            
+            
+
+            @upgrades = {...Stats.list};
+            @:pickOneUpgrade :: {
+                @index = (Number.random() * (upgrades->size))->floor
+                @upgrade = upgrades[index];
+                upgrades->remove(key:index);
+                return upgrade;
+            }
+
+            this.layout(
+                items : [
+                    UpgradeTitleLabel.new(),
+                    newRow(upgrade:pickOneUpgrade(), index:1),
+                    newRow(upgrade:pickOneUpgrade(), index:2),
+                    newRow(upgrade:pickOneUpgrade(), index:3),
+                    newRow(upgrade:pickOneUpgrade(), index:4)
+                ]
+            );
+            
+        }
+
         this.interface = {
             shouldContinue : {
                 get ::<- picked
             },
-            
-            onDraw ::{
-                ray.DrawText(
-                    posX: (ray.GetRenderWidth() - titleSize.x) / 2,
-                    posY: DISPLAY_Y - titleSize.y,
-                    color: ray.GRAY,
-                    text: titleDisplay,
-                    fontSize: TITLE_FONT_SIZE
-                );
-            }
         }   
     }
 );
