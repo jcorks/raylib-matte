@@ -613,89 +613,280 @@ and do not have a stable interface are suffixed with _
 
 
 
-/*
+
 @:Layout = ::<= {
-    @Vertical = class(
-        name: "game.Layout.Vertical",
-        inherits : [Node],
-        define::(this) {
-            @bounds_ = {};
-            @margin = 0;
-            @padding = 0;
-            @updateLayout ::{
-                @padded = {...bounds_};
-                padded.x += padding;
-                padded.y += padding;
-                padded.width -= padding;
-                padded.height -= padding;
-                
-                
-                @:childBox = {...padded};
-                foreach(this.children) ::(index, child) {
-                    
-                    child.resize(
-                }
-            }
-            
-            
-            this.interface = {
-                resize ::(bounds) {
-                    @boundsInner = {...bounds_};
-                    boundsInner.x += margin;
-                    boundsInner.y += margin;
-                    boundsInner.width -= margin;
-                    boundsInner.height -= margin;
-                    bounds_ = boundsInner;
-                    onRecalculate(bounds:bounds_);
-                },
-                setup ::(
-                    name, 
-                    items,
-                    margin,
-                    padding,
-                    sizeRequest, // fraction of remainingSpace
-                    pixelSizeRequest, // pixels of total space used. calculated first. Takes priority if both are present
-                ) {
-                    foreach(items) ::(i, item) {
-                        this.attach(child:item);
-                    }     
-                    return this;               
-                },
-                
-                onRecalculate::(bounds) {
-                    updateLayout();
-                }
-            }
-        }
-    );
-
-
     @Item = class(
         name: "game.Layout.Item",
         inherits : [Node],
         define::(this) {
-            @bounds_ = {}
+            @bounds_ = {x:0, y:0, width:0, height:0};
+            
+            @marginOffset_ = {x:0, y:0, width:0, height:0};
+            @paddingOffset_ = {x:0, y:0, width:0, height:0};
+            @sizeRequest_;
+            @pixelSizeRequest_;
+            @dirty = true;
+            @innerSpace = {x:0, y:0, width:0, height:0};
+            @outerSpace = {x:0, y:0, width:0, height:0};
             this.interface = {
+                /*
+                    If no sizeRequest or pixelSizeRequest is present, 
+                    the remaining available space is divided equally among
+                    children.
+                */
                 setup ::(
-                    margin,
-                    padding,
+                    margin, // total margin as one number
+                    padding, // total padding as one number
+                    marginOffset, // margin as a Rectangle set of offsets.
+                    paddingOffset, // padding as a Rectangle set of offsets
                     sizeRequest, // fraction of remainingSpace
                     pixelSizeRequest // pixels of total space used. calculated first. Takes priority if both are present                
                 ) {
+                    if (margin != empty) ::<= {
+                        marginOffset_.x = margin;
+                        marginOffset_.y = margin;
+                        marginOffset_.width = -margin*2;
+                        marginOffset_.height = -margin*2;
+                    }
+                    
+                    if (padding != empty) ::<= {
+                        paddingOffset_.x = padding;
+                        paddingOffset_.y = padding;
+                        paddingOffset_.width = -padding*2;
+                        paddingOffset_.height = -padding*2;
+                    }
                 
+                    if (marginOffset != empty) ::<= {
+                        marginOffset_ = {...marginOffset};
+                    }
+
+                    if (paddingOffset != empty) ::<= {
+                        paddingOffset_ = {...paddingOffset};
+                    }
+                    
+                    sizeRequest_ = sizeRequest;
+                    pixelSizeRequest_ = pixelSizeRequest;
+                
+                    dirty = true;
+                    return this;
                 },
-                resize(bounds) {
-                    bounds_ = {...bounds};
-                    onRecalculate(bounds:bounds_);
-                }
+                resize::(width, height) {
+                    bounds_.width = width;
+                    bounds_.height = height;
+                    dirty = true;
+                },
+                
+                move::(x, y) {
+                    bounds_.x = x;
+                    bounds_.y = y;
+                    dirty = true;
+                },
+                
+                recalculate::{
+                    
+                    outerSpace.x = bounds_.x + marginOffset_.x;
+                    outerSpace.y = bounds_.y + marginOffset_.y;
+                    outerSpace.width = bounds_.width + marginOffset_.width;
+                    outerSpace.height = bounds_.height + marginOffset_.height;
+                    
+                    innerSpace.x = outerSpace.x + paddingOffset_.x;
+                    innerSpace.y = outerSpace.y + paddingOffset_.y;
+                    innerSpace.width = outerSpace.width + paddingOffset_.width;
+                    innerSpace.height = outerSpace.height + paddingOffset_.height;
+                    
+                    
+                    
+                    foreach(this.children) ::(i, child) {
+                        when(child => Item.type)
+                            child.needsRecalculation();
+                    }                    
+                    
+                    this.onRecalculate();
+                    dirty = false;                
+                },
+                
+                pixelSizeRequest : {
+                    set ::(value) {
+                        pixelSizeRequest_ = value;
+                        dirty = true;
+                    },
+                    get ::<- pixelSizeRequest_
+                },
+                
+                sizeRequest : {
+                    set ::(value) {
+                        sizeRequest_ = value;
+                        dirty = true;
+                    },
+                    get ::<- sizeRequest_
+                },
+                
+                marginOffset : {
+                    set ::(value => Object) {
+                        marginOffset_ = {...value};
+                        dirty = true;
+                    },
+                    get ::<- marginOffset_
+                },
+                
+                paddingOffset : {
+                    set ::(value => Object) {
+                        paddingOffset_ = {...value};
+                        dirty = true;
+                    },
+                    get ::<- paddingOffset_
+                },
+                
+                // OVERRIDES node step, so do it right!
+                step ::{                
+                    if (dirty) ::<= {
+                        this.recalculate();
+                    }
+                    
+                    this.onStep();
+                    foreach(this.children) ::(i, child) {
+                        child.step();
+                    }                    
+                },
+                
+                childSpace : {
+                    get ::<- innerSpace
+                },
+                
+                contentSpace : {
+                    get ::<- outerSpace
+                },
+                
+                needsRecalculation :: {
+                    dirty = true
+                },  
                 
                 
-                onRecalculate ::(bounds){}
+                onRecalculate ::(){}
             }
         }
     );
+
+
+    @Vertical = class(
+        name: "game.Layout.Vertical",
+        inherits : [Item],
+        define::(this) {
+            this.interface = {
+                layout ::(items) {
+                    foreach(items) ::(index, item) {
+                        this.attach(child:item);
+                    }
+                    return this;
+                },
+                onRecalculate :: {
+                    @totalVerticalAvailable = this.childSpace.height;
+                    @empties = [];
+                    @emptyCount = 0;
+                    @freeSpaceFraction = 1;
+
+                    
+                    // first iterate through and find pixelSizeRequests
+                    foreach(this.children) ::(index, child) {
+                        @p = child.pixelSizeRequest;
+                        if (p != empty) 
+                            totalVerticalAvailable -= p->floor;
+                        
+                        if (child.sizeRequest != empty)
+                            freeSpaceFraction -= child.sizeRequest;
+                        
+                        if (p == empty && child.sizeRequest == empty) ::<= {
+                            empties[index] = true;
+                            emptyCount += 1;
+                        }
+                    }                
+
+                    @:childBox = {...this.childSpace};
+
+                    foreach(this.children) ::(index, child) {
+                        @p = child.pixelSizeRequest;
+                        if (p != empty) ::<= {
+                            childBox.height = p->floor;
+                        } else ::<= {
+                            if (empties[index] != empty) 
+                                childBox.height = ((1/emptyCount) * freeSpaceFraction * totalVerticalAvailable)->floor
+                            else
+                                childBox.height = (child.sizeRequest * totalVerticalAvailable)->floor
+                        }
+                        
+                        child.move(x: childBox.x, y: childBox.y);
+                        child.resize(width:childBox.width, height:childBox.height);
+                        
+                        childBox.y += childBox.height
+                    }
+                }
+            }
+        }
+    );
+    
+    @Horizontal = class(
+        name: "game.Layout.Horizontal",
+        inherits : [Item],
+        define::(this) {
+            this.interface = {
+                layout ::(items) {
+                    foreach(items) ::(index, item) {
+                        this.attach(child:item);
+                    }
+                    return this;
+                },
+                onRecalculate :: {
+                    @totalHorizontalAvailable = this.childSpace.width;
+                    @empties = [];
+                    @emptyCount = 0;
+                    @freeSpaceFraction = 1;
+
+                    
+                    // first iterate through and find pixelSizeRequests
+                    foreach(this.children) ::(index, child) {
+                        @p = child.pixelSizeRequest;
+                        if (p != empty) 
+                            totalHorizontalAvailable -= p->floor;
+
+                        if (child.sizeRequest != empty)
+                            freeSpaceFraction -= child.sizeRequest;
+                        
+                        if (p == empty && child.sizeRequest == empty) ::<= {
+                            empties[index] = true;
+                            emptyCount += 1;
+                        }
+                        
+                    }                
+
+                    @:childBox = {...this.childSpace};
+
+                    foreach(this.children) ::(index, child) {
+                        @p = child.pixelSizeRequest;
+                        if (p != empty) ::<= {
+                            childBox.width = p->floor;
+                        } else ::<= {
+                            if (empties[index] != empty) 
+                                childBox.width = ((1/emptyCount) * freeSpaceFraction * totalHorizontalAvailable)->floor
+                            else
+                                childBox.width = (child.sizeRequest * totalHorizontalAvailable)->floor
+                        }
+                        
+                        child.move(x: childBox.x, y: childBox.y);
+                        child.resize(width:childBox.width, height:childBox.height);
+                        
+                        childBox.x += childBox.width
+                    }
+                }
+            }
+        }
+    );    
+    return {
+        Item : Item,
+        Vertical : Vertical,
+        Horizontal : Horizontal
+    }
 }
-*/
+
 
 
 return ::<= {
@@ -710,6 +901,7 @@ return ::<= {
         Entity : Entity,
         Timer : Timer,
         StateMachine : StateMachine,
+        Layout : Layout,
         StartLoop ::{
             forever ::{
                 foreach(roots) ::(i, root) {
