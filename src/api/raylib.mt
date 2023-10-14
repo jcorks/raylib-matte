@@ -1071,6 +1071,8 @@
     IsMaterialReady : getExternalFunction(name:"raylib_IsMaterialReady"),
     UnloadMaterial : getExternalFunction(name:"raylib_UnloadMaterial"),
     SetMaterialTexture : getExternalFunction(name:"raylib_SetMaterialTexture"),
+    SetMaterialMapColor : getExternalFunction(name:"raylib_SetMaterialMapColor"),
+    SetMaterialMapValue : getExternalFunction(name:"raylib_SetMaterialMapValue"),
     SetModelMeshMaterial : getExternalFunction(name:"raylib_SetModelMeshMaterial"),
 
 

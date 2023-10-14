@@ -9,6 +9,7 @@ slash-star comments
 NOTE;
 Functions that are not meant to be called by user code 
 and do not have a stable interface are suffixed with _
+or have no slash-star comments.
 
 
 */
@@ -20,7 +21,7 @@ and do not have a stable interface are suffixed with _
 
 @toDestroy = empty;
 /*
-    Class: Node
+    Class: Game.Node
    
     A generic node.
     Like in game engines, nodes are the basic building 
@@ -29,7 +30,8 @@ and do not have a stable interface are suffixed with _
     this class.
 
     Nodes also can generate their own events to which 
-    user code can respond.
+    user code can respond, as they inherit from 
+    Matte.Core.EventSystem (https://github.com/jcorks/matte/blob/main/src/rom/core/eventsystem.mt)
 
 */
 @:Node = class(
@@ -43,6 +45,9 @@ and do not have a stable interface are suffixed with _
             /*
                 Adds a node as a child of this node. If the child 
                 already has a parent, that parent is detached.
+                The child is added at the end, meaning it will 
+                be the last child of this Node to be stepped and 
+                drawn.
             */
             attach ::(child) {
                 when(child.parent == this) empty;
@@ -54,6 +59,9 @@ and do not have a stable interface are suffixed with _
             /*
                 Adds a node as a child of this node. If the child 
                 already has a parent, that parent is detached.
+                The child is added at the start, meaning it will 
+                be the first child of this Node to be stepped and 
+                drawn.
             */
             attachFirst ::(child) {
                 when(child.parent == this) empty;
@@ -184,9 +192,9 @@ and do not have a stable interface are suffixed with _
 
 
 /*
-    Class: Entity
+    Class: Game.Entity
    
-    A node that responds to a 2D or 3D environment. allowing
+    A Game.Node that responds to a 2D or 3D environment. allowing
     its transform to be inherited by children.
     
     Every entity has a position, rotation, and scale, all of which 
@@ -223,6 +231,7 @@ and do not have a stable interface are suffixed with _
             @position = ray.Vector3Zero();
             @rotation = ray.QuaternionIdentity();
             @scale = ray.Vector3One();
+            @globalPosition;
             
             this.interface = {
             
@@ -289,7 +298,9 @@ and do not have a stable interface are suffixed with _
                 */
                 globalPosition : {
                     get :: {
-                        return ray.Vector3Transform(v:ray.Vector3Zero(), mat:matrix);
+                        when(globalPosition != empty) globalPosition;
+                        globalPosition = ray.Vector3Transform(v:ray.Vector3Zero(), mat:matrix);
+                        return globalPosition;
                     }
                 },
                 
@@ -344,6 +355,7 @@ and do not have a stable interface are suffixed with _
                             scale
                         );
                         isDirty = false;
+                        globalPosition = empty;
                         foreach(this.children) ::(i, child) {
                             // this should propogate to children
                             if (child->isa(type:Entity.type))
@@ -360,8 +372,12 @@ and do not have a stable interface are suffixed with _
     )
 }
 
+
+
+
+
 /*
-    Class: StateMachine
+    Class: Game.StateMachine
    
     Provides a mechanism by which states can be controlled
     and updated of a particular object.
@@ -457,6 +473,13 @@ and do not have a stable interface are suffixed with _
 );
 
 
+/*
+    Class: Game.Timer 
+    
+    Provides a convenient way to work with times and timeouts.
+    Timer utilizes the base class EventSystem to emit the "onTimeout"
+    event when a timer expires.
+*/
 @:Timer = class(
     inherits : [Node],
     name : 'Game.Timer',
@@ -474,17 +497,29 @@ and do not have a stable interface are suffixed with _
         }
         
         this.interface = {
+            /*
+                Setter / Getter for if this timer automatically 
+                resets itself from the start after expiring.
+            */
             endless : {
                 get ::<- endless,
                 set ::(value) <- endless = value
             },
         
+            /*
+                Starts the timer instance, emitting an "onTimeout"
+                event once the "seconds" seconds has elapsed.
+            */
             start ::(seconds) {
                 duration = seconds;
                 start = ray.GetTime();
                 active = true;
             },
-            
+
+            /*
+                Getter for the amount of seconds that remain until 
+                the timer expires.
+            */            
             remaining : {
                 get ::{
                     when(freezeRemaining) freezeRemaining;
@@ -494,21 +529,36 @@ and do not have a stable interface are suffixed with _
                 }   
             },
             
+            
+            /*
+                Getter for whether the timer is actively recording 
+                any time.
+            */
             active : {
                 get ::<- active
             },
             
+            
+            /*
+                Pauses the timer.
+            */
             pause ::{
                 when(freezeRemaining != empty) empty;
                 freezeRemaining = this.remaining;
             },
             
+            /*
+                Resumes the timer from the paused state.
+            */
             resume ::{
                 when(freezeRemaining == empty) empty;
                 start = ray.GetTime() - (duration - freezeRemaining);
                 freezeRemaining = empty;
             },
             
+            /*
+                Stops the timer and makes it inactive.
+            */
             stop :: {
                 start = 0;
                 duration = 0;
@@ -533,6 +583,19 @@ and do not have a stable interface are suffixed with _
 
 
 @:FONT_SIZE = 12;
+
+
+/*
+    Singleton: Game.Log
+    Log is not a class, but an instance to be used 
+    immediately without instantiation.
+    
+    It allows for quick-and-dirty display of strings 
+    on-screen above the rest of existing content 
+    (its always drawn last).
+
+*/
+
 @:Log = class(
     name : 'Game.Log',
     define::(this) {
@@ -541,6 +604,13 @@ and do not have a stable interface are suffixed with _
         @baseHeight = 0;
         @:bgColor = {r:32, g:32, b:32, a:255 * 0.8};
         this.interface = {
+            /*
+                Setter / Getter for the display array.
+                "display" is an array of strings, each drawn 
+                serially from the top left of the screen.
+                The array may be modified in-place or replaced 
+                entirely.
+            */
             display : {
                 set ::(value) {
                     display = value;
@@ -613,10 +683,30 @@ and do not have a stable interface are suffixed with _
 
 
 
+/*
+    Namespace: Game.Layout
+    
+    Layout contains the building blocks for a basic 
+    layout engine, which controls the spacings of 2D
+    elements in a reactive, hierarchical way.
+    
+    The namespace consists of 3 classes.
 
+*/
 @:Layout = ::<= {
+
+    /*
+        Class: Game.Layout.Item
+    
+        Layout Items are the building blocks of the layout engine.
+        Each Item is organized in 2D space by being given a 
+        space (rectangle) to exist and place child content,
+        all while taking into account margins and padding.
+        Items can also make requests to parent Horizontal or 
+        Vertical layouts to better position them in space.
+    */
     @Item = class(
-        name: "game.Layout.Item",
+        name: "Game.Layout.Item",
         inherits : [Node],
         define::(this) {
             @bounds_ = {x:0, y:0, width:0, height:0};
@@ -630,9 +720,47 @@ and do not have a stable interface are suffixed with _
             @outerSpace = {x:0, y:0, width:0, height:0};
             this.interface = {
                 /*
+                    Sets a new set of spacing rules for this Item.
+                    The inputs have the following meanings:
+                    
+                    - margin: the distance from the donated space that this item 
+                              may have its content reside. This is a single-number input 
+                              that uniformly establishes boundaries on each side
+
+                    - padding: the distance from the content space that this item 
+                               may have its child(ren) reside. This is a single-number input 
+                               that uniformly establishes boundaries on each side
+
+                    - marginOffset: a more advanced alternative to "margin" that establishes 
+                                    top, left, right, and bottom offsets to the margin as a Rectangle, allowing for 
+                                    more dynamic and specific setups. These are offsets from the parent space.
+                                    This is prioritized over "margin" if both are specified.
+
+                    - paddingOffset: a more advanced alternative to "padding" that establishes 
+                                     top, left, right, and bottom offsets to the padding as a Rectangle, allowing for 
+                                     more dynamic and specific setups. These are offsets from the parent space.
+                                     This is prioritized over "padding" if both are specified.
+                                     
+                    - sizeRequest: When children of Horizontal or Vertical layouts, this specifies 
+                                   how much space this Item should be donated of available size remaining 
+                                   in the parent. This is a number expressed as a fraction [0, 1] of how 
+                                   much space it should take in the direction of the layout. When calculated,
+                                   this fraction refers to the space available AFTER pixelSizeRequests are 
+                                   calculated among siblings.
+                                   
+                    - pixelSizeRequest: When children of Horizontal or Vertical layouts, this specifies
+                                        exactly how much pixel space to take up of the parent layout. This is 
+                                        expressed as a single number.
+                                        
+                    
+
+                    NOTE:
                     If no sizeRequest or pixelSizeRequest is present, 
                     the remaining available space is divided equally among
                     children.
+                    
+                    For convenience, this is returned, allowing for chaining 
+                    on creation.
                 */
                 setup ::(
                     margin, // total margin as one number
@@ -670,18 +798,42 @@ and do not have a stable interface are suffixed with _
                     dirty = true;
                     return this;
                 },
+                
+                /*
+                    Establishes a new width and height for the Item,
+                    which will modify the space available for use.
+                    
+                    This is only needed for toplevel items that do not 
+                    have a parent item.
+                */
                 resize::(width, height) {
                     bounds_.width = width;
                     bounds_.height = height;
                     dirty = true;
                 },
                 
+                /*
+                    Establishes a new topleft for the Item,
+                    which will modify the space available for use.
+                    
+                    This is only needed for toplevel items that do not 
+                    have a parent item.
+                */
                 move::(x, y) {
                     bounds_.x = x;
                     bounds_.y = y;
                     dirty = true;
                 },
                 
+                
+                /*
+                    Immediately recalculates the space available for this 
+                    Item and requests children be recalculated.
+                    
+                    Under normal circumstances, this is called for you, but 
+                    if changes arent immediate enough, this can be called 
+                    by hand.
+                */
                 recalculate::{
                     
                     outerSpace.x = bounds_.x + marginOffset_.x;
@@ -705,6 +857,10 @@ and do not have a stable interface are suffixed with _
                     dirty = false;                
                 },
                 
+                /*
+                    Setter/Getter for the current pixelSizeRequest for the Item.
+                    See setup() for more information.
+                */
                 pixelSizeRequest : {
                     set ::(value) {
                         pixelSizeRequest_ = value;
@@ -713,6 +869,10 @@ and do not have a stable interface are suffixed with _
                     get ::<- pixelSizeRequest_
                 },
                 
+                /*
+                    Setter/Getter for the current sizeRequest for the Item.
+                    See setup() for more information.
+                */
                 sizeRequest : {
                     set ::(value) {
                         sizeRequest_ = value;
@@ -721,6 +881,10 @@ and do not have a stable interface are suffixed with _
                     get ::<- sizeRequest_
                 },
                 
+                /*
+                    Setter/Getter for the current marginOffset Rectangle for the Item.
+                    See setup() for more information.
+                */
                 marginOffset : {
                     set ::(value => Object) {
                         marginOffset_ = {...value};
@@ -729,6 +893,10 @@ and do not have a stable interface are suffixed with _
                     get ::<- marginOffset_
                 },
                 
+                /*
+                    Setter/Getter for the current paddingOffset Rectangle for the Item.
+                    See setup() for more information.
+                */
                 paddingOffset : {
                     set ::(value => Object) {
                         paddingOffset_ = {...value};
@@ -736,6 +904,40 @@ and do not have a stable interface are suffixed with _
                     },
                     get ::<- paddingOffset_
                 },
+                
+
+                /*
+                    Gets a space that is allotted for a children 
+                    that may be used as a Rectangle.
+                */
+                childSpace : {
+                    get ::<- innerSpace
+                },
+                
+                /*
+                    Gets a space that is allotted for this Item's content 
+                    that may be used as a Rectangle.
+                */
+                contentSpace : {
+                    get ::<- outerSpace
+                },
+                
+                /*
+                    Puts in a soft request that this Item needs to be recalculated
+                    next frame.
+                */
+                needsRecalculation :: {
+                    dirty = true
+                },  
+                
+                /*
+                    Virtual function to react to any time an Item has been given 
+                    a new allotted spatial Rectangle for itself and children.
+                */
+                onRecalculate ::(){},
+                
+                
+                
                 
                 // OVERRIDES node step, so do it right!
                 step ::{                
@@ -747,36 +949,34 @@ and do not have a stable interface are suffixed with _
                     foreach(this.children) ::(i, child) {
                         child.step();
                     }                    
-                },
-                
-                childSpace : {
-                    get ::<- innerSpace
-                },
-                
-                contentSpace : {
-                    get ::<- outerSpace
-                },
-                
-                needsRecalculation :: {
-                    dirty = true
-                },  
-                
-                
-                onRecalculate ::(){}
+                }
             }
         }
     );
 
-
+    /*
+        Class: Game.Layout.Vertical
+        
+        A type of Game.Layout.Item that holds children Items
+        in a vertical layout. Vertical takes into account Item's
+        size requests to distribute space among children properly.
+    */
     @Vertical = class(
-        name: "game.Layout.Vertical",
+        name: "Game.Layout.Vertical",
         inherits : [Item],
         define::(this) {
             this.interface = {
+                /*
+                    Specifies the children for the Vertical layout and 
+                    requests space recalculation. This is preferred over 
+                    attaching children by hand because of the inherent 
+                    recalculation request.
+                */
                 layout ::(items) {
                     foreach(items) ::(index, item) {
                         this.attach(child:item);
                     }
+                    this.needsRecalculation();
                     return this;
                 },
                 onRecalculate :: {
@@ -824,15 +1024,29 @@ and do not have a stable interface are suffixed with _
         }
     );
     
+    /*
+        Class: Game.Layout.Horizontal
+        
+        A type of Game.Layout.Item that holds children Items
+        in a horizontal layout. Horizontal takes into account Item's
+        size requests to distribute space among children properly.
+    */
     @Horizontal = class(
-        name: "game.Layout.Horizontal",
+        name: "Game.Layout.Horizontal",
         inherits : [Item],
         define::(this) {
             this.interface = {
+                /*
+                    Specifies the children for the Horizontal layout and 
+                    requests space recalculation. This is preferred over 
+                    attaching children by hand because of the inherent 
+                    recalculation request.
+                */
                 layout ::(items) {
                     foreach(items) ::(index, item) {
                         this.attach(child:item);
                     }
+                    this.needsRecalculation();
                     return this;
                 },
                 onRecalculate :: {
@@ -888,44 +1102,137 @@ and do not have a stable interface are suffixed with _
 }
 
 
+/*
+    Namespace: Game
+    
+    This is the main module thats returned.
+    Along with acting as a namespace for all these 
+    utilities, this section contains some standalone
+    functions that may prove to be useful but dont 
+    necessarily fit as part of their own classes
 
-return ::<= {
-    @:roots = [];
+*/
+@:Game = ::<= {
+    @:root = Node.new();
     return {
+        /*
+            Correctly linearly interpolates between angles 
+            without wrap-around.
+        */
         LerpAngle ::(start, end, amount) {
             @:dt = lerp_repeat(t:end - start, m:360);
             return ray.Lerp(start, end:start + (if(dt > 180) dt - 360 else dt), amount);
-        },    
+        }, 
+        /*
+            Function that allows drawing of textures in 2D space 
+            according to transforms, which is convenient for working 
+            in 2D with Entities.
+        */
+        DrawSprite ::<= {
+            @mat;
+            @mesh;
+            @model;
+            @SPRITE_CAMERA = {
+                position: {x:0, y:0, z:-1},
+                target: {x:0, y:0, z:0},
+                up : {x:0, y:-1, z:0},
+                fovy : 400,
+                projection : ray.CAMERA_ORTHOGRAPHIC
+            }            
+            return ::(transform, texture, tint) {
+                if (mat == empty) ::<= {
+                    mat = ray.LoadMaterialDefault();
+                    mesh = ray.GenMeshPlane(width:1, length:1, resX: 1, resZ: 1);
+                    model = ray.LoadModelFromMesh(mesh);
+                };
+                @m = ray.MatrixScale(
+                    x: texture.width,
+                    y: texture.height,
+                    z:1
+                );
+
+                @ma = ray.MatrixRotate(
+                    axis: {x:1, y:0, z:0},
+                    angle: -90->asRadians
+                );
+                
+                
+                m = ray.MatrixMultiply(
+                    right:m,
+                    left:ma
+                );
+                
+                SPRITE_CAMERA.fovy = ray.GetRenderHeight();
+                SPRITE_CAMERA.target.x =  ray.GetRenderWidth()/2;
+                SPRITE_CAMERA.target.y =  ray.GetRenderHeight()/2;
+                
+
+                SPRITE_CAMERA.position.x =  ray.GetRenderWidth()/2;
+                SPRITE_CAMERA.position.y =  ray.GetRenderHeight()/2;
+                
+                ray.SetMaterialTexture(material:mat, mapType:ray.MATERIAL_MAP_ALBEDO, texture);
+                if (tint != empty) 
+                    ray.SetMaterialMapColor(material:mat, mapType:ray.MATERIAL_MAP_ALBEDO, color: tint)
+                else
+                    ray.SetMaterialMapColor(material:mat, mapType:ray.MATERIAL_MAP_ALBEDO, color: ray.WHITE);
+
+                ray.BeginMode3D(camera:SPRITE_CAMERA);
+                    ray.DrawMesh(
+                        mesh,
+                        material:mat,
+                        transform: ray.MatrixMultiply(
+                            right:transform,
+                            left: m
+                        )
+                    );
+                ray.EndMode3D();        
+            }   
+        },
+
+        
+        /* 
+            Starts the main loop, which 
+            updates roots regularly.
+        */
+            
+        StartLoop ::(allowExit => Boolean) {
+            {:::} {
+                forever ::{
+                    root.updateTransform_();
+                    root.step();
+                    ray.BeginDrawing();
+                        ray.ClearBackground(color:ray.BLACK);
+                        root.draw();
+                        Log.draw();
+                    ray.EndDrawing();
+                    
+                    if (toDestroy) ::<= {
+                        foreach(toDestroy) ::(node, v) {
+                            node.finalize_();
+                        }
+                        toDestroy = empty;
+                    }
+                    
+                    if (allowExit && ray.WindowShouldClose())
+                        send();
+                }
+            }
+        },
+
+        /*
+            Gets the main root of Game module.
+            Any child of the root will get stepped and 
+            drawn.
+        */
+        GetRoot ::<- root,
+
+
         Log : Log,
         Node : Node,
         Entity : Entity,
         Timer : Timer,
         StateMachine : StateMachine,
         Layout : Layout,
-        StartLoop ::{
-            forever ::{
-                foreach(roots) ::(i, root) {
-                    root.updateTransform_();
-                }
-                foreach(roots) ::(i, root) {
-                    root.step();
-                }
-                ray.BeginDrawing();
-                    ray.ClearBackground(color:ray.BLACK);
-                    foreach(roots) ::(i, root) {
-                        root.draw();
-                    }                            
-                Log.draw();
-                ray.EndDrawing();
-                
-                if (toDestroy) ::<= {
-                    foreach(toDestroy) ::(node, v) {
-                        node.finalize_();
-                    }
-                    toDestroy = empty;
-                }
-            }
-        },
-        roots : roots,
     }
 }
+return Game;

@@ -34,7 +34,7 @@ return class(
         main = this;
         @:shootBullet ::{
             camera.shake(amount: .5, length: 0.05);
-            @:spreadCount = Stats.list[Stats.SPREAD].value;
+            @:spreadCount = 0;//Stats.list[Stats.SPREAD].value;
             @dir = direction - ((spreadCount)*BULLET_SPREAD_DEGREES / 2)
             @:dirSpread = Stats.list[Stats.ACCURACY].value;
 
@@ -57,9 +57,9 @@ return class(
                 room.attach(child:b);
                 dir += BULLET_SPREAD_DEGREES;
 
-                // Sound
-                ray.PlaySound(sound: soundShoot);
             }
+            // Sound
+            ray.PlaySound(sound: soundShoot);
         }
         
         
@@ -177,17 +177,12 @@ return class(
             "shootSecondary" : {
                 onEnter :: {
                     shootBomb();
-                    shotCount += getShotsCharged();
                     charge = 0;                    
                 },
                 
                 onStep ::{
-                    if (shotCount >= Stats.list[Stats.MAX_SHOTS].value) ::<={
-                        sm.state = "cooldown";
-                        shotCount = 0;
-                    } else ::<= {
-                        sm.state = "ready";
-                    }
+                    sm.state = "cooldown";
+                    shotCount = 0;
                 }
             },
             

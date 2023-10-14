@@ -14,28 +14,22 @@ ray.InitAudioDevice();
 @:room = import(module:"room.mt");
 @:camera = import(module:"camera.mt");
 @:res = import(module:"resources.mt");
-
+@:uiLayer = import(module:"ui_layer.mt");
 
 // Add it to the roots so it and its 
 // children get updated
-game.roots->push(value:room);
-game.roots->push(value:camera);
+game.GetRoot().attach(child:room);
+game.GetRoot().attach(child:camera);
+game.GetRoot().attach(child:uiLayer);
 
 
 
 // The root node that acts as a room.
 room.attach(child:player);
-
 room.attach(child:controller);
 
-{:::} {
-    // Starts the main loop.
-    game.StartLoop();
-} : {
-    onSend:::(message) {
-        print(message: "Main loop ended with message: " + message);
-    }
-}
+
+game.StartLoop(allowExit:true);
 
 // Unload resources
 res.unloadAll();

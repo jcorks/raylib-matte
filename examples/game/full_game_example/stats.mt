@@ -48,9 +48,9 @@
     KNOCKBACK : 3,
     SPEED : 4,
     CHARGE_RATE : 5,
-    SPREAD : 6,
-    ACCURACY : 7,
-    CHARGED_INTENSITY : 8,
+    ACCURACY : 6,
+    CHARGED_INTENSITY : 7,
+    //SPREAD : 8,
     list : []
 }
 
@@ -78,14 +78,16 @@ Stats.list[Stats.KNOCKBACK] = Stat.new().setup(
 
 Stats.list[Stats.CHARGE_RATE] = Stat.new().setup(
     name: "Charge rate",
-    formula ::(rank) <- 4 * (0.9 ** rank)
+    formula ::(rank) <- 2 * (1.23 ** rank)
 );
 
-
+// The most OP stat has been removed... Sorry gamers....
+/*
 Stats.list[Stats.SPREAD] = Stat.new().setup(
     name: "Bullet Spread",
     formula ::(rank) <- rank
 );
+*/
 
 Stats.list[Stats.SPEED] = Stat.new().setup(
     name: "Bullet Speed",

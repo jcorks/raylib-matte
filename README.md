@@ -145,6 +145,13 @@ These changes are listed here:
 
 - ALL symbols are part of a module object (referred to as a namespace) 
   rather than in scope references
+
+- The following functions were added to the raylib API with reasons listed.
+  
+  | Function | Reason |
+  |----------|--------|
+  |`SetMaterialMapColor`| Material maps are read-only within structures. |  
+  |`SetMaterialMapValue`| Material maps are read-only within structures. |  
   
 - Enums are layed out flat within the raylib namespace
 

@@ -208,7 +208,7 @@
         @onSelect_;
         @rank_;
         @hovered = false;
-        @color = {r:128, g:128, b:128, a:64};
+        @color = {r:64, g:64, b:64, a:128};
         @targetAlpha = 64;
 
 
@@ -248,7 +248,7 @@
                     onSelect_();
                 
                 
-                targetAlpha = if (hovered) 128 else 64;
+                targetAlpha = if (hovered) 255 else 128;
             },
             
             onDraw ::{

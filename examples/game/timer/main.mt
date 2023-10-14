@@ -1,7 +1,7 @@
 
 /*
 
-    game.Timer
+    raymatte: Timer example
     
     The Timer node provides a convenient 
     interface for working with timers.
@@ -88,5 +88,5 @@ game.Log.display[1] = "a -> pause, s -> resume";
 
 // Create and add the timer example as an instance 
 // in the main loop.
-game.roots->push(value:TimerExample.new());
-game.StartLoop();
+game.GetRoot().attach(child:TimerExample.new());
+game.StartLoop(allowExit:true);

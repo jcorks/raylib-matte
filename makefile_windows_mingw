@@ -8,7 +8,7 @@ all: #raylib matte .WAIT raymatte
 
 # matte:
 	cd ./matte/src/rom/ && make
-	cd ./matte/src/rom/ && ./makerom
+	cd ./matte/src/rom/ && makerom
 
 # raymatte:
 	cd ./src/api/ && make
@@ -19,6 +19,6 @@ else
 endif
 
 clean:
-	cd ./matte/src && rm MATTE_ROM rom/makerom.exe
-	cd ./src && del raylib.mt.h api/embed.exe
-	rm raymatte.exe
+	cd ./matte/src && del MATTE_ROM rom\makerom.exe
+	cd ./src && del raylib.mt.h api\embed.exe
+	del raymatte.exe

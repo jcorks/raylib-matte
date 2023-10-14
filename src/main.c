@@ -6183,7 +6183,7 @@ RAYLIB_FN__END
 
 RAYLIB_FN__ARG0(raylib_LoadMaterialDefault
 )
-    native_to_value_material(
+    return native_to_value_material(
         vm,
         LoadMaterialDefault()
     );
@@ -6193,7 +6193,7 @@ RAYLIB_FN__END
 RAYLIB_FN__ARG1(raylib_IsMaterialReady,
     MATTE_VALUE_TYPE_OBJECT
 )
-    native_to_value_boolean(
+    return native_to_value_boolean(
         vm,
         IsMaterialReady(
             native_from_value_material(vm, args[0])
@@ -6221,6 +6221,26 @@ RAYLIB_FN__ARG3(raylib_SetMaterialTexture,
         args[1].value.number, 
         native_from_value_texture(vm, args[2])
     );
+    native_update_value_material(vm, args[0]);
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_SetMaterialMapColor,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_OBJECT
+)
+    Material * m = native_from_value_material_ref(vm, args[0]);
+    m->maps[(int)args[1].value.number].color = native_from_value_color(vm, args[2]);
+    native_update_value_material(vm, args[0]);
+RAYLIB_FN__END
+
+RAYLIB_FN__ARG3(raylib_SetMaterialMapValue,
+    MATTE_VALUE_TYPE_OBJECT,
+    MATTE_VALUE_TYPE_NUMBER,
+    MATTE_VALUE_TYPE_NUMBER
+)
+    Material * m = native_from_value_material_ref(vm, args[0]);
+    m->maps[(int)args[1].value.number].value = args[2].value.number;
     native_update_value_material(vm, args[0]);
 RAYLIB_FN__END
 
@@ -8276,7 +8296,7 @@ RAYLIB_FN__ARG2(raylib_MatrixRotate,
     return native_to_value_matrix(
         vm,
         MatrixRotate(
-            native_from_value_vector3(vm, args[1]),
+            native_from_value_vector3(vm, args[0]),
             args[1].value.number
         )
     );
@@ -10401,6 +10421,8 @@ static void raymatte_init_bindings(matte_t * m) {
     matte_add_external_function(m, "raylib_IsMaterialReady", raylib_IsMaterialReady, NULL, "material", NULL);                                              
     matte_add_external_function(m, "raylib_UnloadMaterial", raylib_UnloadMaterial, NULL, "material", NULL);                                               
     matte_add_external_function(m, "raylib_SetMaterialTexture", raylib_SetMaterialTexture, NULL, "material", "mapType",  "texture", NULL);          
+    matte_add_external_function(m, "raylib_SetMaterialMapColor", raylib_SetMaterialMapColor, NULL, "material", "mapType",  "color", NULL);          
+    matte_add_external_function(m, "raylib_SetMaterialMapValue", raylib_SetMaterialMapValue, NULL, "material", "mapType",  "value", NULL);          
     matte_add_external_function(m, "raylib_SetModelMeshMaterial", raylib_SetModelMeshMaterial, NULL, "model", "meshId",  "materialId", NULL);                  
 
 

@@ -112,11 +112,7 @@ ray.InitWindow(width: 800, height: 480, title: 'Entity Test');
 
 
 
-@:room = game.Node.new();
 
-// Add it to the roots so it and its 
-// children get updated
-game.roots->push(value:room);
 
 
 
@@ -131,9 +127,10 @@ cube2.z += 5;
 cube2.color = ray.RED;
 
 
-// The root node that acts as a room.
-room.attach(child:cube);
+// Add it to the roots so it and its 
+// children get updated
+game.GetRoot().attach(child:cube);
 
 // Starts the main loop.
-game.StartLoop();
+game.StartLoop(allowExit:true);
 

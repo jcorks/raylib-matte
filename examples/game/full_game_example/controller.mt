@@ -9,6 +9,8 @@
 @:room   = import(module:"room.mt");
 @:res    = import(module:"resources.mt");
 @:Upgrade = import(module:"upgrade.mt");
+@:HowToPlay = import(module:"how_to_play.mt");
+@:uiLayer = import(module:"ui_layer.mt");
 
 
 @:WAVE_DISPLAY_ENTER = 1;
@@ -39,6 +41,7 @@ return class(
         @active;
         @remaining;
         @upgradeMenu;
+        @tutorial;
 
         // Resource prep
         @:musicMain = res.music["main"];
@@ -167,6 +170,19 @@ return class(
                 }
             },
             
+            "showTutorial" : {
+                onEnter ::{
+                    tutorial = HowToPlay.new();
+                    uiLayer.attach(child:tutorial);
+                },
+                
+                onStep ::{
+                    if (ray.IsMouseButtonPressed(button:ray.MOUSE_BUTTON_LEFT)) ::<= {
+                        tutorial.destroy();
+                        sm.state = "displayWave_enter";
+                    }
+                }
+            },
             
             "wave" : {
                 onEnter :: {
@@ -196,7 +212,7 @@ return class(
             "upgrade" : {
                 onEnter :: {
                     upgradeMenu = Upgrade.new();
-                    room.attach(child:upgradeMenu);
+                    uiLayer.attach(child:upgradeMenu);
                     game.Log.display = [];
 
                     // Adjust music volume
@@ -254,7 +270,7 @@ return class(
         this.constructor = ::{
             this.attach(child:sm);
             this.attach(child:spawnTimer);
-            sm.state = 'displayWave_enter';
+            sm.state = 'showTutorial';
 
             // Start playing music buffer
             ray.SetMusicVolume(music: musicMain, volume: MUSIC_BASE_VOLUME);
@@ -269,9 +285,6 @@ return class(
             onStep :: {
                 // Update music buffer
                 ray.UpdateMusicStream(music: musicMain);
-
-                if (ray.WindowShouldClose())
-                    send (message: "The game has exited!");
             }
         }
         
