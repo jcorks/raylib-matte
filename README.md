@@ -2,7 +2,7 @@
 
 
 # raylib-matte (raymatte)
-Raylib bindings as a standalone Matte executable, adding the full base and math libraries for raylib while also tayloring each function for use within a high-level language. 
+Raylib bindings as a standalone Matte executable, adding the full base and math libraries for raylib while also tailoring each function for use within a high-level language environment. 
 
 
 
@@ -18,11 +18,13 @@ Raylib bindings as a standalone Matte executable, adding the full base and math 
 
 **Features.**
 - raygui bindings included
+- No additional dependencies and a small executable footprint
 - High-level environment for making games and other tools with raylib, adding built-in support for strings, functions as first class objects, and other useful features.
+- Extra Game extension library for making game organization easier, adding hierarchy, event systems, object-oriented design and more
 - Bindings for raylib.h, rcamera.h, and rmath.h
-- Extra extension library for making game organization easier, adding hierarchy, event systems, and more
-- Raylib examples rewritten in Matte
-- Additional examples with the game extension library
+- Integration with raygui and bindings
+- Select raylib and raygui translated examples 
+- Additional examples with the game extension library including a fully functional game
 
 Not familiar with [Matte](http://github.com/jcorks/matte/)? Check out the [language Quick Guide](https://jcorks.github.io/matte/doc-quick.html) to get a feel for it!
 
