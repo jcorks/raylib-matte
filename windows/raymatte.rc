@@ -1,0 +1,26 @@
+id ICON "logo.ico"
+1001 ICON "logo.ico"
+1 24 "raymatte.manifest"
+1 VERSIONINFO
+FILEVERSION     0,2,0,0
+PRODUCTVERSION  0,2,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "github.com/jcorks/"
+      VALUE "FileDescription", "A small game-making engine using the Matte language bindings of raylib and other tools."
+      VALUE "FileVersion", "0.2a"
+      VALUE "InternalName", "raymatte"
+      VALUE "LegalCopyright", "Johnathan Corkery"
+      VALUE "OriginalFilename", "raymatte.exe"
+      VALUE "ProductName", "Raylib-Matte"
+      VALUE "ProductVersion", "0.2a"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
