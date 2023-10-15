@@ -10826,10 +10826,9 @@ static void raymatte_load_main(const char * binPath, matte_t * m) {
             rawpackSize = *((int*)(exec+index+18));
             rawpack = MemAlloc(rawpackSize);
             memcpy(rawpack, (exec+index) - rawpackSize, rawpackSize);
-            
+            TraceLog(LOG_INFO, "Found embedded rawpack data.");            
         }
         UnloadFileData(exec);
-        TraceLog(LOG_INFO, "Found embedded rawpack data.");
     }
 
     // if that failed or was unavailable, check 
@@ -10852,7 +10851,8 @@ static void raymatte_load_main(const char * binPath, matte_t * m) {
     
     unsigned int bytesRead;
     char * data = LoadFileText("main.mt");
-    matte_run_source(m, data);
+    if (data != NULL)
+        matte_run_source(m, data);
     UnloadFileText(data);
 }
 
