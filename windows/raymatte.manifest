@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <assemblyIdentity version="0.2.a" processorArchitecture="X86" name="raylib-matte" type="win32"/> 
+    <description>A small game-making engine using the Matte language bindings of raylib and other tools.</description> 
+</assembly>
