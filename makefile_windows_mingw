@@ -13,9 +13,9 @@ all: #raylib matte .WAIT raymatte
 # raymatte:
 	cd ./src/api/ && make
 ifeq ($(CONSOLE), false)
-	$(CC) ./src/*.c -I./matte/src/ -I./raylib/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -o raymatte -lgdi32 -lOpenGL32 -lwinmm 
-else
 	$(CC) ./src/*.c -I./matte/src/ -I./raylib/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -o raymatte -lgdi32 -lOpenGL32 -lwinmm -mwindows
+else
+	$(CC) ./src/*.c -I./matte/src/ -I./raylib/src/ ./matte/src/*.c ./matte/src/rom/native.c -lm ./raylib/src/libraylib.a -o raymatte -lgdi32 -lOpenGL32 -lwinmm
 endif
 
 clean:
