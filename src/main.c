@@ -1,3 +1,24 @@
+/*
+Copyright (c) 2023 Johnathan Corkery
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #include <string.h>
 #include "../matte/src/matte.h"
 #include "../matte/src/matte_string.h"
@@ -9755,8 +9776,8 @@ RAYLIB_FN__ARG5(raygui_GuiTextInputBox,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    bool toggle  = gui_extract_data_param(vm, "secretViewActive", args[5]).value.number;
-    matteValue_t v = gui_extract_data_param(vm, "text", args[5]);
+    bool toggle  = gui_extract_data_param(vm, "secretViewActive", args[4]).value.boolean;
+    matteValue_t v = gui_extract_data_param(vm, "text", args[4]);
     if (v.binID != MATTE_VALUE_TYPE_STRING) {
         matte_vm_raise_error_cstring(vm, "GuiTextInputBox: 'inOut' parameter MUST contain a 'text' member thats a string!");
         return v;
@@ -9776,8 +9797,8 @@ RAYLIB_FN__ARG5(raygui_GuiTextInputBox,
             &toggle
         )
     );
-    gui_update_data_param(vm, args[5], "secretViewActive", native_to_value_int(vm, toggle));
-    gui_update_data_param(vm, args[5], "text", native_to_value_string(vm, text));
+    gui_update_data_param(vm, args[4], "secretViewActive", native_to_value_int(vm, toggle));
+    gui_update_data_param(vm, args[4], "text", native_to_value_string(vm, text));
     return output;
 
 
