@@ -24,35 +24,35 @@ SOFTWARE.
 
 
 */
-@:ray    = import(module:"raylib.mt");
+@:ray    = import(:"raylib.mt");
 
 ray.SetConfigFlags(flags:ray.FLAG_MSAA_4X_HINT);
 ray.InitWindow(width: 800, height: 480, title: 'Game');
 ray.InitAudioDevice();
 
-@:game = import(module:"game.mt");
-@:Shooter = import(module:"shooter.mt");
+@:game = import(:"game.mt");
+@:Shooter = import(:"shooter.mt");
 
 // Create a new cube
 @:player = Shooter.new();
 
-@:controller = import(module:"controller.mt");
-@:room = import(module:"room.mt");
-@:camera = import(module:"camera.mt");
-@:res = import(module:"resources.mt");
-@:uiLayer = import(module:"ui_layer.mt");
+@:controller = import(:"controller.mt");
+@:room = import(:"room.mt");
+@:camera = import(:"camera.mt");
+@:res = import(:"resources.mt");
+@:uiLayer = import(:"ui_layer.mt");
 
 // Add it to the roots so it and its 
 // children get updated
-game.GetRoot().attach(child:room);
-game.GetRoot().attach(child:camera);
-game.GetRoot().attach(child:uiLayer);
+game.GetRoot().attach(:room);
+game.GetRoot().attach(:camera);
+game.GetRoot().attach(:uiLayer);
 
 
 
 // The root node that acts as a room.
-room.attach(child:player);
-room.attach(child:controller);
+room.attach(:player);
+room.attach(:controller);
 
 
 game.StartLoop(allowExit:true);

@@ -400,83 +400,83 @@ SOFTWARE.
 
 
 
-    GuiEnable : getExternalFunction(name:"raygui_GuiEnable"),
-    GuiDisable : getExternalFunction(name:"raygui_GuiDisable"),
-    GuiLock : getExternalFunction(name:"raygui_GuiLock"),
-    GuiUnlock : getExternalFunction(name:"raygui_GuiUnlock"),
-    GuiIsLocked : getExternalFunction(name:"raygui_GuiIsLocked"),
-    GuiSetAlpha : getExternalFunction(name:"raygui_GuiSetAlpha"),
-    GuiSetState : getExternalFunction(name:"raygui_GuiSetState"),
-    GuiGetState : getExternalFunction(name:"raygui_GuiGetState"),
+    GuiEnable : getExternalFunction(:"raygui_GuiEnable"),
+    GuiDisable : getExternalFunction(:"raygui_GuiDisable"),
+    GuiLock : getExternalFunction(:"raygui_GuiLock"),
+    GuiUnlock : getExternalFunction(:"raygui_GuiUnlock"),
+    GuiIsLocked : getExternalFunction(:"raygui_GuiIsLocked"),
+    GuiSetAlpha : getExternalFunction(:"raygui_GuiSetAlpha"),
+    GuiSetState : getExternalFunction(:"raygui_GuiSetState"),
+    GuiGetState : getExternalFunction(:"raygui_GuiGetState"),
 
 
-    GuiSetFont : getExternalFunction(name:"raygui_GuiSetFont"),
-    GuiGetFont : getExternalFunction(name:"raygui_GuiGetFont"),
+    GuiSetFont : getExternalFunction(:"raygui_GuiSetFont"),
+    GuiGetFont : getExternalFunction(:"raygui_GuiGetFont"),
 
 
-    GuiSetStyle : getExternalFunction(name:"raygui_GuiSetStyle"),
-    GuiGetStyle : getExternalFunction(name:"raygui_GuiGetStyle"),
+    GuiSetStyle : getExternalFunction(:"raygui_GuiSetStyle"),
+    GuiGetStyle : getExternalFunction(:"raygui_GuiGetStyle"),
 
 
-    GuiLoadStyle : getExternalFunction(name:"raygui_GuiLoadStyle"),
-    GuiLoadStyleDefault : getExternalFunction(name:"raygui_GuiLoadStyleDefault"),
+    GuiLoadStyle : getExternalFunction(:"raygui_GuiLoadStyle"),
+    GuiLoadStyleDefault : getExternalFunction(:"raygui_GuiLoadStyleDefault"),
 
 
-    GuiEnableTooltip : getExternalFunction(name:"raygui_GuiEnableTooltip"),
-    GuiDisableTooltip : getExternalFunction(name:"raygui_GuiDisableTooltip"),
-    GuiSetTooltip : getExternalFunction(name:"raygui_GuiSetTooltip"),
+    GuiEnableTooltip : getExternalFunction(:"raygui_GuiEnableTooltip"),
+    GuiDisableTooltip : getExternalFunction(:"raygui_GuiDisableTooltip"),
+    GuiSetTooltip : getExternalFunction(:"raygui_GuiSetTooltip"),
 
 
-    GuiIconText : getExternalFunction(name:"raygui_GuiIconText"),
-    GuiSetIconScale : getExternalFunction(name:"raygui_GuiSetIconScale"),
-    //GuiGetIcons : getExternalFunction(name:"raygui_GuiGetIcons"),
-    //GuiLoadIcons : getExternalFunction(name:"raygui_GuiLoadIcons"),
-    GuiDrawIcon : getExternalFunction(name:"raygui_GuiDrawIcon"),
+    GuiIconText : getExternalFunction(:"raygui_GuiIconText"),
+    GuiSetIconScale : getExternalFunction(:"raygui_GuiSetIconScale"),
+    //GuiGetIcons : getExternalFunction(:"raygui_GuiGetIcons"),
+    //GuiLoadIcons : getExternalFunction(:"raygui_GuiLoadIcons"),
+    GuiDrawIcon : getExternalFunction(:"raygui_GuiDrawIcon"),
 
 
 
 
 
-    GuiWindowBox : getExternalFunction(name:"raygui_GuiWindowBox"),
-    GuiGroupBox : getExternalFunction(name:"raygui_GuiGroupBox"),
-    GuiLine : getExternalFunction(name:"raygui_GuiLine"),
-    GuiPanel : getExternalFunction(name:"raygui_GuiPanel"),
-    GuiTabBar : getExternalFunction(name:"raygui_GuiTabBar"),
-    GuiScrollPanel : getExternalFunction(name:"raygui_GuiScrollPanel"),
+    GuiWindowBox : getExternalFunction(:"raygui_GuiWindowBox"),
+    GuiGroupBox : getExternalFunction(:"raygui_GuiGroupBox"),
+    GuiLine : getExternalFunction(:"raygui_GuiLine"),
+    GuiPanel : getExternalFunction(:"raygui_GuiPanel"),
+    GuiTabBar : getExternalFunction(:"raygui_GuiTabBar"),
+    GuiScrollPanel : getExternalFunction(:"raygui_GuiScrollPanel"),
 
 
-    GuiLabel : getExternalFunction(name:"raygui_GuiLabel"),
-    GuiButton : getExternalFunction(name:"raygui_GuiButton"),
-    GuiLabelButton : getExternalFunction(name:"raygui_GuiLabelButton"),
-    GuiToggle : getExternalFunction(name:"raygui_GuiToggle"),
-    GuiToggleGroup : getExternalFunction(name:"raygui_GuiToggleGroup"),
-    GuiToggleSlider : getExternalFunction(name:"raygui_GuiToggleSlider"),
-    GuiCheckBox : getExternalFunction(name:"raygui_GuiCheckBox"),
-    GuiComboBox : getExternalFunction(name:"raygui_GuiComboBox"),
+    GuiLabel : getExternalFunction(:"raygui_GuiLabel"),
+    GuiButton : getExternalFunction(:"raygui_GuiButton"),
+    GuiLabelButton : getExternalFunction(:"raygui_GuiLabelButton"),
+    GuiToggle : getExternalFunction(:"raygui_GuiToggle"),
+    GuiToggleGroup : getExternalFunction(:"raygui_GuiToggleGroup"),
+    GuiToggleSlider : getExternalFunction(:"raygui_GuiToggleSlider"),
+    GuiCheckBox : getExternalFunction(:"raygui_GuiCheckBox"),
+    GuiComboBox : getExternalFunction(:"raygui_GuiComboBox"),
 
-    GuiDropdownBox : getExternalFunction(name:"raygui_GuiDropdownBox"),
-    GuiSpinner : getExternalFunction(name:"raygui_GuiSpinner"),
-    GuiValueBox : getExternalFunction(name:"raygui_GuiValueBox"),
-    GuiTextBox : getExternalFunction(name:"raygui_GuiTextBox"),
+    GuiDropdownBox : getExternalFunction(:"raygui_GuiDropdownBox"),
+    GuiSpinner : getExternalFunction(:"raygui_GuiSpinner"),
+    GuiValueBox : getExternalFunction(:"raygui_GuiValueBox"),
+    GuiTextBox : getExternalFunction(:"raygui_GuiTextBox"),
 
-    GuiSlider : getExternalFunction(name:"raygui_GuiSlider"),
-    GuiSliderBar : getExternalFunction(name:"raygui_GuiSliderBar"),
-    GuiProgressBar : getExternalFunction(name:"raygui_GuiProgressBar"),
-    GuiStatusBar : getExternalFunction(name:"raygui_GuiStatusBar"),
-    GuiDummyRec : getExternalFunction(name:"raygui_GuiDummyRec"),
-    GuiGrid : getExternalFunction(name:"raygui_GuiGrid"),
+    GuiSlider : getExternalFunction(:"raygui_GuiSlider"),
+    GuiSliderBar : getExternalFunction(:"raygui_GuiSliderBar"),
+    GuiProgressBar : getExternalFunction(:"raygui_GuiProgressBar"),
+    GuiStatusBar : getExternalFunction(:"raygui_GuiStatusBar"),
+    GuiDummyRec : getExternalFunction(:"raygui_GuiDummyRec"),
+    GuiGrid : getExternalFunction(:"raygui_GuiGrid"),
 
 
-    GuiListView : getExternalFunction(name:"raygui_GuiListView"),
-    GuiListViewEx : getExternalFunction(name:"raygui_GuiListViewEx"),
-    GuiMessageBox : getExternalFunction(name:"raygui_GuiMessageBox"),
-    GuiTextInputBox : getExternalFunction(name:"raygui_GuiTextInputBox"),
-    GuiColorPicker : getExternalFunction(name:"raygui_GuiColorPicker"),
-    GuiColorPanel : getExternalFunction(name:"raygui_GuiColorPanel"),
-    GuiColorBarAlpha : getExternalFunction(name:"raygui_GuiColorBarAlpha"),
-    GuiColorBarHue : getExternalFunction(name:"raygui_GuiColorBarHue"),
-    GuiColorPickerHSV : getExternalFunction(name:"raygui_GuiColorPickerHSV"),
-    GuiColorPanelHSV : getExternalFunction(name:"raygui_GuiColorPanelHSV")
+    GuiListView : getExternalFunction(:"raygui_GuiListView"),
+    GuiListViewEx : getExternalFunction(:"raygui_GuiListViewEx"),
+    GuiMessageBox : getExternalFunction(:"raygui_GuiMessageBox"),
+    GuiTextInputBox : getExternalFunction(:"raygui_GuiTextInputBox"),
+    GuiColorPicker : getExternalFunction(:"raygui_GuiColorPicker"),
+    GuiColorPanel : getExternalFunction(:"raygui_GuiColorPanel"),
+    GuiColorBarAlpha : getExternalFunction(:"raygui_GuiColorBarAlpha"),
+    GuiColorBarHue : getExternalFunction(:"raygui_GuiColorBarHue"),
+    GuiColorPickerHSV : getExternalFunction(:"raygui_GuiColorPickerHSV"),
+    GuiColorPanelHSV : getExternalFunction(:"raygui_GuiColorPanelHSV")
 };
 
 return raygui;

@@ -24,19 +24,19 @@ SOFTWARE.
 
 
 */
-@:game   = import(module:"game.mt");
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
+@:game   = import(:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
 
 
-@:Enemy = import(module:"enemy.mt"); 
-@:Shooter = import(module:"shooter.mt"); 
-@:camera = import(module:"camera.mt");
-@:room   = import(module:"room.mt");
-@:res    = import(module:"resources.mt");
-@:Upgrade = import(module:"upgrade.mt");
-@:HowToPlay = import(module:"how_to_play.mt");
-@:uiLayer = import(module:"ui_layer.mt");
+@:Enemy = import(:"enemy.mt"); 
+@:Shooter = import(:"shooter.mt"); 
+@:camera = import(:"camera.mt");
+@:room   = import(:"room.mt");
+@:res    = import(:"resources.mt");
+@:Upgrade = import(:"upgrade.mt");
+@:HowToPlay = import(:"how_to_play.mt");
+@:uiLayer = import(:"ui_layer.mt");
 
 
 @:WAVE_DISPLAY_ENTER = 1;
@@ -104,7 +104,7 @@ return class(
                                         4 + (Number.random()*(2 + (waveCount / 4)->ceil))->floor
                                 )
                     )
-                    room.attach(child:e);
+                    room.attach(:e);
                     remaining -= 1;
                 }                    
             }
@@ -199,7 +199,7 @@ return class(
             "showTutorial" : {
                 onEnter ::{
                     tutorial = HowToPlay.new();
-                    uiLayer.attach(child:tutorial);
+                    uiLayer.attach(:tutorial);
                 },
                 
                 onStep ::{
@@ -238,7 +238,7 @@ return class(
             "upgrade" : {
                 onEnter :: {
                     upgradeMenu = Upgrade.new();
-                    uiLayer.attach(child:upgradeMenu);
+                    uiLayer.attach(:upgradeMenu);
                     game.Log.display = [];
 
                     // Adjust music volume
@@ -294,8 +294,8 @@ return class(
         
         
         this.constructor = ::{
-            this.attach(child:sm);
-            this.attach(child:spawnTimer);
+            this.attach(:sm);
+            this.attach(:spawnTimer);
             sm.state = 'showTutorial';
 
             // Start playing music buffer

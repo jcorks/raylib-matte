@@ -106,17 +106,17 @@ return class(
                 // title
                 Label.new().setup(
                     sizeRequest: 0.2
-                ).setText(display:"How to play (mouse)"),
+                ).setText(:"How to play (mouse)"),
                 
                 
                 // mouse button row
                 game.Layout.Horizontal.new().setup(
                     sizeRequest:0.3
                 ).layout(items: [
-                    Label.new().setup(sizeRequest:0.3).setText(display:"Shoot -"),
+                    Label.new().setup(sizeRequest:0.3).setText(:"Shoot -"),
                     Rectangle.new(),
                     Rectangle.new(),
-                    Label.new().setup(sizeRequest:0.3).setText(display:"- Charge"),
+                    Label.new().setup(sizeRequest:0.3).setText(:"- Charge"),
                 ]),
                 
                 // mouse base
@@ -127,7 +127,7 @@ return class(
                 ]),
                 
                 // continue text
-                Label.new().setup(sizeRequest: 0.1).setText(display:"Left-click to continue")
+                Label.new().setup(sizeRequest: 0.1).setText(:"Left-click to continue")
             ]);
             
             // center it and set the size

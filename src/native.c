@@ -68,7 +68,7 @@ static void native_to_value_finalizer(void * objectUserdata, void * functionUser
 
 int native_is_value_closed(matteVM_t * vm, matteValue_t val) {
     matteStore_t * store = matte_vm_get_store(vm);
-    if (val.binID != MATTE_VALUE_TYPE_OBJECT) {
+    if (matte_value_type(val) != MATTE_VALUE_TYPE_OBJECT) {
         return FALSE;
     }
     
@@ -91,30 +91,30 @@ int native_is_value_closed(matteVM_t * vm, matteValue_t val) {
 
 
 matteValue_t native_to_value_int(matteVM_t * vm, int value) {
-    matteValue_t v;
-    v.binID = MATTE_VALUE_TYPE_NUMBER;
-    v.value.number = value;
+    matteStore_t * store = matte_vm_get_store(vm);
+    matteValue_t v = {};
+    matte_value_into_number(store, &v, value);
     return v;
 }
 
 matteValue_t native_to_value_boolean(matteVM_t * vm, int value) {
-    matteValue_t v;
-    v.binID = MATTE_VALUE_TYPE_BOOLEAN;
-    v.value.boolean = value;
+    matteStore_t * store = matte_vm_get_store(vm);
+    matteValue_t v = {};
+    matte_value_into_boolean(store, &v, value);
     return v;
 }
 
 matteValue_t native_to_value_float(matteVM_t * vm, float value) {
-    matteValue_t v;
-    v.binID = MATTE_VALUE_TYPE_NUMBER;
-    v.value.number = value;
+    matteStore_t * store = matte_vm_get_store(vm);
+    matteValue_t v = {};
+    matte_value_into_number(store, &v, value);
     return v;
 }
 
 matteValue_t native_to_value_double(matteVM_t * vm, double value) {
-    matteValue_t v;
-    v.binID = MATTE_VALUE_TYPE_NUMBER;
-    v.value.number = value;
+    matteStore_t * store = matte_vm_get_store(vm);
+    matteValue_t v = {};
+    matte_value_into_number(store, &v, value);
     return v;
 }
 
@@ -489,7 +489,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
 #define INIT_FROM(__TYPE__)\
     matteStore_t * store = matte_vm_get_store(vm);\
     __TYPE__ out = {};\
-    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+    if (matte_value_type(in) != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         return out;\
     }\
@@ -499,7 +499,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
 
 #define RETRIEVE_NATIVE_OBJECT_PTR(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
-    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+    if (matte_value_type(in) != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         return NULL;\
     }\
@@ -513,7 +513,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
     
 #define RETRIEVE_NATIVE_OBJECT(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
-    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+    if (matte_value_type(in) != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         return;\
     }\
@@ -527,7 +527,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
 
 #define RETRIEVE_NATIVE(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
-    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+    if (matte_value_type(in) != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         __TYPE__ dout = {};\
         return dout;\
@@ -543,7 +543,7 @@ matteValue_t native_to_value_filePathList_reduced(matteVM_t * vm, FilePathList l
     
 #define RETRIEVE_NATIVE_PRELUDE(__TYPE__,__TAG__)\
     matteStore_t * store = matte_vm_get_store(vm);\
-    if (in.binID != MATTE_VALUE_TYPE_OBJECT) {\
+    if (matte_value_type(in) != MATTE_VALUE_TYPE_OBJECT) {\
         matte_vm_raise_error_cstring(vm, "Could not decode __TYPE__: value is not an Object.");\
         __TYPE__ dout = {};\
         return dout;\
@@ -824,7 +824,7 @@ void native_update_value_rectangle(matteVM_t * vm, matteValue_t v, Rectangle r) 
 void native_unload(matteVM_t * vm, matteValue_t obj) {
     matteStore_t * store = matte_vm_get_store(vm);    
 
-    if (obj.binID != MATTE_VALUE_TYPE_OBJECT) {
+    if (matte_value_type(obj) != MATTE_VALUE_TYPE_OBJECT) {
         return;
     }
     

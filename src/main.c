@@ -51,7 +51,7 @@ SOFTWARE.
 
 // Input type checkers to raylib functions
 static int ensure_arg_types1(matteVM_t * vm, const matteValue_t * args, int bin0) {
-    if (args[0].binID != bin0) {
+    if (matte_value_type(args[0]) != bin0) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -59,8 +59,8 @@ static int ensure_arg_types1(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types2(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -68,9 +68,9 @@ static int ensure_arg_types2(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types3(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -78,10 +78,10 @@ static int ensure_arg_types3(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types4(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -89,11 +89,11 @@ static int ensure_arg_types4(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types5(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3 ||
-        args[4].binID != bin4) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3 ||
+        matte_value_type(args[4]) != bin4) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -101,12 +101,12 @@ static int ensure_arg_types5(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types6(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3 ||
-        args[4].binID != bin4 ||
-        args[5].binID != bin5) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3 ||
+        matte_value_type(args[4]) != bin4 ||
+        matte_value_type(args[5]) != bin5) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -114,13 +114,13 @@ static int ensure_arg_types6(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types7(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3 ||
-        args[4].binID != bin4 ||
-        args[5].binID != bin5 ||
-        args[6].binID != bin6) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3 ||
+        matte_value_type(args[4]) != bin4 ||
+        matte_value_type(args[5]) != bin5 ||
+        matte_value_type(args[6]) != bin6) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -128,14 +128,14 @@ static int ensure_arg_types7(matteVM_t * vm, const matteValue_t * args, int bin0
 }
 
 static int ensure_arg_types8(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6, int bin7) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3 ||
-        args[4].binID != bin4 ||
-        args[5].binID != bin5 ||
-        args[6].binID != bin6 ||
-        args[7].binID != bin7) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3 ||
+        matte_value_type(args[4]) != bin4 ||
+        matte_value_type(args[5]) != bin5 ||
+        matte_value_type(args[6]) != bin6 ||
+        matte_value_type(args[7]) != bin7) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -144,15 +144,15 @@ static int ensure_arg_types8(matteVM_t * vm, const matteValue_t * args, int bin0
 
 
 static int ensure_arg_types9(matteVM_t * vm, const matteValue_t * args, int bin0, int bin1, int bin2, int bin3, int bin4, int bin5, int bin6, int bin7, int bin8) {
-    if (args[0].binID != bin0 ||
-        args[1].binID != bin1 ||
-        args[2].binID != bin2 ||
-        args[3].binID != bin3 ||
-        args[4].binID != bin4 ||
-        args[5].binID != bin5 ||
-        args[6].binID != bin6 ||
-        args[7].binID != bin7 ||
-        args[8].binID != bin8) {
+    if (matte_value_type(args[0]) != bin0 ||
+        matte_value_type(args[1]) != bin1 ||
+        matte_value_type(args[2]) != bin2 ||
+        matte_value_type(args[3]) != bin3 ||
+        matte_value_type(args[4]) != bin4 ||
+        matte_value_type(args[5]) != bin5 ||
+        matte_value_type(args[6]) != bin6 ||
+        matte_value_type(args[7]) != bin7 ||
+        matte_value_type(args[8]) != bin8) {
         matte_vm_raise_error_cstring(vm, "An argument was passed of an incorrect type.");
         return FALSE;
     }
@@ -467,8 +467,8 @@ RAYLIB_FN__ARG3(raylib_InitWindow,
     MATTE_VALUE_TYPE_STRING
 )
     InitWindow(
-        (int)args[0].value.number,
-        (int)args[1].value.number,
+        (int)matte_value_get_number(args[0]),
+        (int)matte_value_get_number(args[1]),
         matte_string_get_c_str(matte_value_string_get_string_unsafe(store, args[2]))
     );
 RAYLIB_FN__END
@@ -517,17 +517,17 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_IsWindowState, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_boolean(vm, (unsigned int)args[0].value.number);
+    return native_to_value_boolean(vm, (unsigned int)matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 
 
 RAYLIB_FN__ARG1(raylib_SetWindowState, MATTE_VALUE_TYPE_NUMBER)
-    SetWindowState((unsigned int)args[0].value.number);
+    SetWindowState((unsigned int)matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_ClearWindowState, MATTE_VALUE_TYPE_NUMBER)
-    ClearWindowState((unsigned int)args[0].value.number);
+    ClearWindowState((unsigned int)matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG0(raylib_ToggleFullscreen)
@@ -579,43 +579,43 @@ RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_SetWindowPosition, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER)
     SetWindowPosition(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_SetWindowMonitor, MATTE_VALUE_TYPE_NUMBER) 
     SetWindowMonitor(
-        (int)args[0].value.number
+        (int)matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_SetWindowMinSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER)
     SetWindowMinSize(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG2(raylib_SetWindowMaxSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER)
     SetWindowMaxSize(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG2(raylib_SetWindowSize, MATTE_VALUE_TYPE_NUMBER, MATTE_VALUE_TYPE_NUMBER) 
     SetWindowSize(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_SetWindowOpacity, MATTE_VALUE_TYPE_NUMBER) 
     SetWindowOpacity(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -648,29 +648,29 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_GetMonitorPosition, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_vector2(vm, GetMonitorPosition(args[0].value.number));
+    return native_to_value_vector2(vm, GetMonitorPosition(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_GetMonitorWidth, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_int(vm, GetMonitorWidth(args[0].value.number));
+    return native_to_value_int(vm, GetMonitorWidth(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_GetMonitorHeight, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_int(vm, GetMonitorHeight(args[0].value.number));
+    return native_to_value_int(vm, GetMonitorHeight(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_GetMonitorPhysicalWidth, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_int(vm, GetMonitorPhysicalWidth(args[0].value.number));
+    return native_to_value_int(vm, GetMonitorPhysicalWidth(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_GetMonitorPhysicalHeight, MATTE_VALUE_TYPE_NUMBER) 
-    return native_to_value_int(vm, GetMonitorPhysicalHeight(args[0].value.number));
+    return native_to_value_int(vm, GetMonitorPhysicalHeight(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_GetMonitorRefreshRate, MATTE_VALUE_TYPE_NUMBER) 
-    return native_to_value_int(vm, GetMonitorRefreshRate(args[0].value.number));
+    return native_to_value_int(vm, GetMonitorRefreshRate(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG0(raylib_GetWindowPosition)
@@ -682,7 +682,7 @@ RAYLIB_FN__ARG0(raylib_GetWindowScaleDPI)
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_GetMonitorName, MATTE_VALUE_TYPE_NUMBER)
-    return native_to_value_string(vm, GetMonitorName(args[0].value.number));
+    return native_to_value_string(vm, GetMonitorName(matte_value_get_number(args[0])));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_SetClipboardText, MATTE_VALUE_TYPE_STRING)
@@ -718,7 +718,7 @@ RAYLIB_FN__END
 
 
 RAYLIB_FN__ARG1(raylib_WaitTime, MATTE_VALUE_TYPE_NUMBER)
-    WaitTime(args[0].value.number);
+    WaitTime(matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 
@@ -802,7 +802,7 @@ RAYLIB_FN__ARG0(raylib_EndShaderMode)
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG1(raylib_BeginBlendMode, MATTE_VALUE_TYPE_NUMBER)
-    BeginBlendMode(args[0].value.number);
+    BeginBlendMode(matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 RAYLIB_FN__ARG0(raylib_EndBlendMode)
@@ -817,10 +817,10 @@ RAYLIB_FN__ARG4(raylib_BeginScissorMode,
     MATTE_VALUE_TYPE_NUMBER
 )
     BeginScissorMode(
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3])
     );
 RAYLIB_FN__END
 
@@ -925,7 +925,7 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueFloat,
 
     SetShaderValue(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         vals,
         uniformType
     );
@@ -966,7 +966,7 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueInt,
 
     SetShaderValue(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         vals,
         uniformType
     );
@@ -986,7 +986,7 @@ RAYLIB_FN__ARG4(raylib_SetShaderValueFloatV,
 
     uint32_t len = matte_value_object_get_number_key_count(store, args[2]);
     if (len == 0) goto L_END;
-    uint32_t numComponents = args[3].value.number;
+    uint32_t numComponents = matte_value_get_number(args[3]);
     if (numComponents == 0 || numComponents > 4)
         goto L_END;
         
@@ -1015,7 +1015,7 @@ RAYLIB_FN__ARG4(raylib_SetShaderValueFloatV,
 
         SetShaderValueV(
             native_from_value_shader(vm, args[0]),
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             vals,
             uniformType,
             len / numComponents
@@ -1041,7 +1041,7 @@ RAYLIB_FN__ARG4(raylib_SetShaderValueIntV,
 
     uint32_t len = matte_value_object_get_number_key_count(store, args[2]);
     if (len == 0) goto L_END;
-    uint32_t numComponents = args[3].value.number;
+    uint32_t numComponents = matte_value_get_number(args[3]);
     if (numComponents == 0 || numComponents > 4)
         goto L_END;
         
@@ -1070,7 +1070,7 @@ RAYLIB_FN__ARG4(raylib_SetShaderValueIntV,
 
         SetShaderValueV(
             native_from_value_shader(vm, args[0]),
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             vals,
             uniformType,
             len / numComponents
@@ -1091,10 +1091,10 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueSampler2D,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER
 )
-    int id = args[2].value.number;
+    int id = matte_value_get_number(args[2]);
     SetShaderValue(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         &id,
         SHADER_UNIFORM_SAMPLER2D    
     );
@@ -1123,10 +1123,10 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueSampler2DV,
     }
 
 
-    int id = args[2].value.number;
+    int id = matte_value_get_number(args[2]);
     SetShaderValueV(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         &id,
         SHADER_UNIFORM_SAMPLER2D,
         len
@@ -1145,7 +1145,7 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueMatrix,
     Matrix mat = native_from_value_matrix(vm, args[2]);
     SetShaderValueMatrix(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         mat
     );
 RAYLIB_FN__END
@@ -1158,7 +1158,7 @@ RAYLIB_FN__ARG3(raylib_SetShaderValueTexture,
     Texture2D tex = native_from_value_texture(vm, args[2]);
     SetShaderValueTexture(
         native_from_value_shader(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         tex
     );
 RAYLIB_FN__END
@@ -1252,8 +1252,8 @@ RAYLIB_FN__ARG4(raylib_GetWorldToScreenEx,
         GetWorldToScreenEx(
             native_from_value_vector3(vm, args[0]),
             native_from_value_camera(vm, args[1]),
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -1279,7 +1279,7 @@ RAYLIB_FN__END
 
 // Timing-related functions 
 RAYLIB_FN__ARG1(raylib_SetTargetFPS, MATTE_VALUE_TYPE_NUMBER)
-    SetTargetFPS(args[0].value.number);
+    SetTargetFPS(matte_value_get_number(args[0]));
 RAYLIB_FN__END
 
 
@@ -1320,8 +1320,8 @@ RAYLIB_FN__ARG2(raylib_GetRandomValue,
     return native_to_value_int(
         vm,
         GetRandomValue(
-            args[0].value.number,
-            args[1].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -1330,7 +1330,7 @@ RAYLIB_FN__ARG1(raylib_SetRandomSeed,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetRandomSeed(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -1347,7 +1347,7 @@ RAYLIB_FN__ARG1(raylib_SetConfigFlags,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetConfigFlags(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -1358,7 +1358,7 @@ RAYLIB_FN__ARG2(raylib_TraceLog,
     MATTE_VALUE_TYPE_STRING
 )
     TraceLog(
-        args[0].value.number,
+        matte_value_get_number(args[0]),
         native_from_value_string_unsafe(vm, args[1]) // ok!
     );
 RAYLIB_FN__END
@@ -1367,7 +1367,7 @@ RAYLIB_FN__ARG1(raylib_SetTraceLogLevel,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetTraceLogLevel(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -1810,7 +1810,7 @@ RAYLIB_FN__ARG1(raylib_IsKeyPressed,
         native_to_value_boolean(
             vm,
             IsKeyPressed(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1822,7 +1822,7 @@ RAYLIB_FN__ARG1(raylib_IsKeyPressedRepeat,
         native_to_value_boolean(
             vm,
             IsKeyPressedRepeat(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1835,7 +1835,7 @@ RAYLIB_FN__ARG1(raylib_IsKeyDown,
         native_to_value_boolean(
             vm,
             IsKeyDown(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1848,7 +1848,7 @@ RAYLIB_FN__ARG1(raylib_IsKeyReleased,
         native_to_value_boolean(
             vm,
             IsKeyReleased(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1861,7 +1861,7 @@ RAYLIB_FN__ARG1(raylib_IsKeyUp,
         native_to_value_boolean(
             vm,
             IsKeyUp(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1871,7 +1871,7 @@ RAYLIB_FN__ARG1(raylib_SetExitKey,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetExitKey(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -1915,7 +1915,7 @@ RAYLIB_FN__ARG1(raylib_IsGamepadAvailable,
         native_to_value_boolean(
             vm,
             IsGamepadAvailable(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1928,7 +1928,7 @@ RAYLIB_FN__ARG1(raylib_GetGamepadName,
         native_to_value_string(
             vm,
             GetGamepadName(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -1942,8 +1942,8 @@ RAYLIB_FN__ARG2(raylib_IsGamepadButtonPressed,
         native_to_value_boolean(
             vm,
             IsGamepadButtonPressed(
-                args[0].value.number,
-                args[1].value.number
+                matte_value_get_number(args[0]),
+                matte_value_get_number(args[1])
             )
         );
 RAYLIB_FN__END
@@ -1956,8 +1956,8 @@ RAYLIB_FN__ARG2(raylib_IsGamepadButtonDown,
         native_to_value_boolean(
             vm,
             IsGamepadButtonDown(
-                args[0].value.number,
-                args[1].value.number
+                matte_value_get_number(args[0]),
+                matte_value_get_number(args[1])
             )
         );
 RAYLIB_FN__END
@@ -1970,8 +1970,8 @@ RAYLIB_FN__ARG2(raylib_IsGamepadButtonReleased,
         native_to_value_boolean(
             vm,
             IsGamepadButtonReleased(
-                args[0].value.number,
-                args[1].value.number
+                matte_value_get_number(args[0]),
+                matte_value_get_number(args[1])
             )
         );
 RAYLIB_FN__END
@@ -1984,8 +1984,8 @@ RAYLIB_FN__ARG2(raylib_IsGamepadButtonUp,
         native_to_value_boolean(
             vm,
             IsGamepadButtonUp(
-                args[0].value.number,
-                args[1].value.number
+                matte_value_get_number(args[0]),
+                matte_value_get_number(args[1])
             )
         );
 RAYLIB_FN__END
@@ -2008,7 +2008,7 @@ RAYLIB_FN__ARG1(raylib_GetGamepadAxisCount,
         native_to_value_int(
             vm,
             GetGamepadAxisCount(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -2022,8 +2022,8 @@ RAYLIB_FN__ARG2(raylib_GetGamepadAxisMovement,
         native_to_value_float(
             vm,
             GetGamepadAxisMovement(
-                args[0].value.number,
-                args[1].value.number
+                matte_value_get_number(args[0]),
+                matte_value_get_number(args[1])
             )
         );
 RAYLIB_FN__END
@@ -2052,7 +2052,7 @@ RAYLIB_FN__ARG1(raylib_IsMouseButtonPressed,
         native_to_value_boolean(
             vm,
             IsMouseButtonPressed(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -2064,7 +2064,7 @@ RAYLIB_FN__ARG1(raylib_IsMouseButtonDown,
         native_to_value_boolean(
             vm,
             IsMouseButtonDown(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -2076,7 +2076,7 @@ RAYLIB_FN__ARG1(raylib_IsMouseButtonReleased,
         native_to_value_boolean(
             vm,
             IsMouseButtonReleased(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -2088,7 +2088,7 @@ RAYLIB_FN__ARG1(raylib_IsMouseButtonUp,
         native_to_value_boolean(
             vm,
             IsMouseButtonUp(
-                args[0].value.number 
+                matte_value_get_number(args[0]) 
             )
         );
 RAYLIB_FN__END
@@ -2149,8 +2149,8 @@ RAYLIB_FN__ARG2(raylib_SetMousePosition,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMousePosition(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -2160,8 +2160,8 @@ RAYLIB_FN__ARG2(raylib_SetMouseOffset,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMouseOffset(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -2171,8 +2171,8 @@ RAYLIB_FN__ARG2(raylib_SetMouseScale,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMouseScale(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -2201,7 +2201,7 @@ RAYLIB_FN__ARG1(raylib_SetMouseCursor,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMouseCursor(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -2241,7 +2241,7 @@ RAYLIB_FN__ARG1(raylib_GetTouchPosition,
         native_to_value_vector2(
             vm,
             GetTouchPosition(
-                args[0].value.number
+                matte_value_get_number(args[0])
             )
         );
 RAYLIB_FN__END
@@ -2254,7 +2254,7 @@ RAYLIB_FN__ARG1(raylib_GetTouchPointId,
         native_to_value_int(
             vm,
             GetTouchPointId(
-                args[0].value.number
+                matte_value_get_number(args[0])
             )
         );
 RAYLIB_FN__END
@@ -2281,7 +2281,7 @@ RAYLIB_FN__ARG1(raylib_SetGesturesEnabled,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetGesturesEnabled(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -2291,7 +2291,7 @@ RAYLIB_FN__ARG1(raylib_IsGestureDetected,
     return native_to_value_boolean(
         vm,
         IsGestureDetected(
-            args[0].value.number
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -2366,7 +2366,7 @@ RAYLIB_FN__ARG2(raylib_UpdateCamera,
     Camera cam = native_from_value_camera(vm, args[0]);
     UpdateCamera(
         &cam,
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
     native_update_value_camera(vm, args[0], cam);
@@ -2385,7 +2385,7 @@ RAYLIB_FN__ARG4(raylib_UpdateCameraPro,
         &cam,   
         native_from_value_vector3(vm, args[1]),
         native_from_value_vector3(vm, args[2]),
-        args[3].value.number
+        matte_value_get_number(args[3])
     );
     
     native_update_value_camera(vm, args[0], cam);
@@ -2413,8 +2413,8 @@ RAYLIB_FN__ARG3(raylib_DrawPixel,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawPixel(  
-        args[0].value.number,
-        args[1].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
 RAYLIB_FN__END
@@ -2438,10 +2438,10 @@ RAYLIB_FN__ARG5(raylib_DrawLine,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawLine(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -2468,7 +2468,7 @@ RAYLIB_FN__ARG4(raylib_DrawLineEx,
     DrawLineEx(  
         native_from_value_vector2(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2483,7 +2483,7 @@ RAYLIB_FN__ARG4(raylib_DrawLineBezier,
     DrawLineBezier(  
         native_from_value_vector2(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2499,7 +2499,7 @@ RAYLIB_FN__ARG5(raylib_DrawLineBezierQuad,
         native_from_value_vector2(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
         native_from_value_vector2(vm, args[2]),
-        args[3].value.number,
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -2517,7 +2517,7 @@ RAYLIB_FN__ARG6(raylib_DrawLineBezierCubic,
         native_from_value_vector2(vm, args[1]),
         native_from_value_vector2(vm, args[2]),
         native_from_value_vector2(vm, args[3]),
-        args[4].value.number,
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -2544,7 +2544,7 @@ RAYLIB_FN__ARG3(raylib_DrawLineBSpline,
     DrawLineBSpline(  
         pts,
         num/2,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
     
@@ -2574,7 +2574,7 @@ RAYLIB_FN__ARG3(raylib_DrawLineCatmullRom,
     DrawLineCatmullRom(  
         pts,
         num/2,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
     
@@ -2618,9 +2618,9 @@ RAYLIB_FN__ARG4(raylib_DrawCircle,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawCircle(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2636,10 +2636,10 @@ RAYLIB_FN__ARG6(raylib_DrawCircleSector,
 )
     DrawCircleSector(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -2655,10 +2655,10 @@ RAYLIB_FN__ARG6(raylib_DrawCircleSectorLines,
 )
     DrawCircleSectorLines(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -2672,9 +2672,9 @@ RAYLIB_FN__ARG5(raylib_DrawCircleGradient,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawCircleGradient(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3]),
         native_from_value_color(vm, args[4])
     );
@@ -2688,7 +2688,7 @@ RAYLIB_FN__ARG3(raylib_DrawCircleV,
 )
     DrawCircleV(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
 RAYLIB_FN__END
@@ -2700,9 +2700,9 @@ RAYLIB_FN__ARG4(raylib_DrawCircleLines,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawCircleLines(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2715,10 +2715,10 @@ RAYLIB_FN__ARG5(raylib_DrawEllipse,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawEllipse(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -2731,10 +2731,10 @@ RAYLIB_FN__ARG5(raylib_DrawEllipseLines,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawEllipseLines(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -2751,11 +2751,11 @@ RAYLIB_FN__ARG7(raylib_DrawRing,
 )
     DrawRing(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
-        args[5].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
+        matte_value_get_number(args[5]),
         native_from_value_color(vm, args[6])
     );
 RAYLIB_FN__END
@@ -2771,11 +2771,11 @@ RAYLIB_FN__ARG7(raylib_DrawRingLines,
 )
     DrawRingLines(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
-        args[5].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
+        matte_value_get_number(args[5]),
         native_from_value_color(vm, args[6])
     );
 RAYLIB_FN__END
@@ -2789,10 +2789,10 @@ RAYLIB_FN__ARG5(raylib_DrawRectangle,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawRectangle(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -2829,7 +2829,7 @@ RAYLIB_FN__ARG4(raylib_DrawRectanglePro,
     DrawRectanglePro(  
         native_from_value_rectangle(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2843,10 +2843,10 @@ RAYLIB_FN__ARG6(raylib_DrawRectangleGradientV,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawRectangleGradientV(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
 
         native_from_value_color(vm, args[4]),
         native_from_value_color(vm, args[5])
@@ -2863,10 +2863,10 @@ RAYLIB_FN__ARG6(raylib_DrawRectangleGradientH,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawRectangleGradientH(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
 
         native_from_value_color(vm, args[4]),
         native_from_value_color(vm, args[5])
@@ -2898,10 +2898,10 @@ RAYLIB_FN__ARG5(raylib_DrawRectangleLines,
     MATTE_VALUE_TYPE_OBJECT
 )
     DrawRectangleLines(  
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
 
         native_from_value_color(vm, args[4])
     );
@@ -2914,7 +2914,7 @@ RAYLIB_FN__ARG3(raylib_DrawRectangleLinesEx,
 )
     DrawRectangleLinesEx(  
         native_from_value_rectangle(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
 RAYLIB_FN__END
@@ -2927,8 +2927,8 @@ RAYLIB_FN__ARG4(raylib_DrawRectangleRounded,
 )
     DrawRectangleRounded(  
         native_from_value_rectangle(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -2943,9 +2943,9 @@ RAYLIB_FN__ARG5(raylib_DrawRectangleRoundedLines,
 )
     DrawRectangleRoundedLines(  
         native_from_value_rectangle(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -3045,9 +3045,9 @@ RAYLIB_FN__ARG5(raylib_DrawPoly,
 )
     DrawPoly(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -3061,9 +3061,9 @@ RAYLIB_FN__ARG5(raylib_DrawPolyLines,
 )
     DrawPolyLines(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -3079,10 +3079,10 @@ RAYLIB_FN__ARG6(raylib_DrawPolyLinesEx,
 )
     DrawPolyLinesEx(  
         native_from_value_vector2(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -3117,9 +3117,9 @@ RAYLIB_FN__ARG4(raylib_CheckCollisionCircles,
         vm,
         CheckCollisionCircles(  
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             native_from_value_vector2(vm, args[2]),
-            args[3].value.number
+            matte_value_get_number(args[3])
         )        
     );
 RAYLIB_FN__END
@@ -3133,7 +3133,7 @@ RAYLIB_FN__ARG3(raylib_CheckCollisionCircleRec,
         vm,
         CheckCollisionCircleRec(  
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             native_from_value_rectangle(vm, args[2])
         )        
     );
@@ -3162,7 +3162,7 @@ RAYLIB_FN__ARG3(raylib_CheckCollisionPointCircle,
         CheckCollisionPointCircle(  
             native_from_value_vector2(vm, args[0]),
             native_from_value_vector2(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )        
     );
 RAYLIB_FN__END
@@ -3251,7 +3251,7 @@ RAYLIB_FN__ARG4(raylib_CheckCollisionPointLine,
             native_from_value_vector2(vm, args[0]),
             native_from_value_vector2(vm, args[1]),
             native_from_value_vector2(vm, args[2]),
-            args[3].value.number
+            matte_value_get_number(args[3])
         )        
     );
 RAYLIB_FN__END
@@ -3297,10 +3297,10 @@ RAYLIB_FN__ARG5(raylib_LoadImageRaw,
         vm,
         LoadImageRaw(  
             native_from_value_string_unsafe(vm, args[0]), // ok!
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
-            args[4].value.number
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4])
         )        
     );
 RAYLIB_FN__END
@@ -3315,8 +3315,8 @@ RAYLIB_FN__ARG3(raylib_LoadImageSvg,
         vm,
         LoadImageSvg(  
             native_from_value_string_unsafe(vm, args[0]), // ok!
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )        
     );
 RAYLIB_FN__END
@@ -3469,8 +3469,8 @@ RAYLIB_FN__ARG3(raylib_GenImageColor,
     return native_to_value_image(
         vm,
         GenImageColor(  
-            args[0].value.number,
-            args[1].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
             native_from_value_color(vm, args[2])
         )        
     );
@@ -3487,9 +3487,9 @@ RAYLIB_FN__ARG5(raylib_GenImageGradientLinear,
     return native_to_value_image(
         vm,
         GenImageGradientLinear(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
             native_from_value_color(vm, args[3]),
             native_from_value_color(vm, args[4])
         )        
@@ -3507,9 +3507,9 @@ RAYLIB_FN__ARG5(raylib_GenImageGradientRadial,
     return native_to_value_image(
         vm,
         GenImageGradientRadial(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
             native_from_value_color(vm, args[3]),
             native_from_value_color(vm, args[4])
         )        
@@ -3526,9 +3526,9 @@ RAYLIB_FN__ARG5(raylib_GenImageGradientSquare,
     return native_to_value_image(
         vm,
         GenImageGradientSquare(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
             native_from_value_color(vm, args[3]),
             native_from_value_color(vm, args[4])
         )        
@@ -3547,10 +3547,10 @@ RAYLIB_FN__ARG6(raylib_GenImageChecked,
     return native_to_value_image(
         vm,
         GenImageChecked(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
             native_from_value_color(vm, args[4]),
             native_from_value_color(vm, args[5])
         )        
@@ -3565,9 +3565,9 @@ RAYLIB_FN__ARG3(raylib_GenImageWhiteNoise,
     return native_to_value_image(
         vm,
         GenImageWhiteNoise(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )        
     );
 RAYLIB_FN__END
@@ -3582,11 +3582,11 @@ RAYLIB_FN__ARG5(raylib_GenImagePerlinNoise,
     return native_to_value_image(
         vm,
         GenImagePerlinNoise(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
-            args[4].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4])
         )        
     );
 RAYLIB_FN__END
@@ -3599,9 +3599,9 @@ RAYLIB_FN__ARG3(raylib_GenImageCellular,
     return native_to_value_image(
         vm,
         GenImageCellular(  
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )        
     );
 RAYLIB_FN__END
@@ -3616,8 +3616,8 @@ RAYLIB_FN__ARG3(raylib_GenImageText,
     return native_to_value_image(
         vm,
         GenImageText(  
-            args[0].value.number,
-            args[1].value.number,
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
             native_from_value_string_unsafe(vm, args[2]) // ok!
         )        
     );
@@ -3663,7 +3663,7 @@ RAYLIB_FN__ARG3(raylib_ImageText,
         vm,
         ImageText(  
             native_from_value_string_unsafe(vm, args[0]), // ok!
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             native_from_value_color(vm, args[2])
         )        
     );
@@ -3682,8 +3682,8 @@ RAYLIB_FN__ARG5(raylib_ImageTextEx,
         ImageTextEx(  
             native_from_value_font(vm, args[0]),
             native_from_value_string_unsafe(vm, args[1]), // ok!
-            args[2].value.number,
-            args[3].value.number,
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
             native_from_value_color(vm, args[4])
         )        
     );
@@ -3697,7 +3697,7 @@ RAYLIB_FN__ARG2(raylib_ImageFormat,
 
     ImageFormat(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3736,7 +3736,7 @@ RAYLIB_FN__ARG2(raylib_ImageAlphaCrop,
 
     ImageAlphaCrop(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3750,7 +3750,7 @@ RAYLIB_FN__ARG3(raylib_ImageAlphaClear,
     ImageAlphaClear(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_color(vm, args[1]),
-        args[2].value.number
+        matte_value_get_number(args[2])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3784,7 +3784,7 @@ RAYLIB_FN__ARG2(raylib_ImageBlurGaussian,
 
     ImageBlurGaussian(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3798,8 +3798,8 @@ RAYLIB_FN__ARG3(raylib_ImageResize,
 
     ImageResize(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3812,8 +3812,8 @@ RAYLIB_FN__ARG3(raylib_ImageResizeNN,
 
     ImageResizeNN(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3829,10 +3829,10 @@ RAYLIB_FN__ARG6(raylib_ImageResizeCanvas,
 
     ImageResizeCanvas(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
     native_update_value_image(vm, args[0]);
@@ -3859,10 +3859,10 @@ RAYLIB_FN__ARG5(raylib_ImageDither,
 
     ImageDither(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3893,7 +3893,7 @@ RAYLIB_FN__ARG2(raylib_ImageRotate,
 
     ImageRotate(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3961,7 +3961,7 @@ RAYLIB_FN__ARG2(raylib_ImageColorContrast,
 
     ImageColorContrast(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -3973,7 +3973,7 @@ RAYLIB_FN__ARG2(raylib_ImageColorBrightness,
 
     ImageColorBrightness(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_image(vm, args[0]);
 RAYLIB_FN__END
@@ -4029,7 +4029,7 @@ RAYLIB_FN__ARG2(raylib_LoadImagePalette,
     int len;
     Color * colors = LoadImagePalette(
         img,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         &len
     );
 
@@ -4059,7 +4059,7 @@ RAYLIB_FN__ARG2(raylib_GetImageAlphaBorder,
         vm,
         GetImageAlphaBorder(
             native_from_value_image(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
     
@@ -4075,8 +4075,8 @@ RAYLIB_FN__ARG3(raylib_GetImageColor,
         vm,
         GetImageColor(
             native_from_value_image(vm, args[0]),
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
     
@@ -4110,8 +4110,8 @@ RAYLIB_FN__ARG4(raylib_ImageDrawPixel,
 )
     ImageDrawPixel(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );    
     native_update_value_image(vm, args[0]);
@@ -4143,10 +4143,10 @@ RAYLIB_FN__ARG6(raylib_ImageDrawLine,
 )
     ImageDrawLine(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );    
     native_update_value_image(vm, args[0]);
@@ -4178,9 +4178,9 @@ RAYLIB_FN__ARG5(raylib_ImageDrawCircle,
 )
     ImageDrawCircle(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );    
     native_update_value_image(vm, args[0]);
@@ -4196,7 +4196,7 @@ RAYLIB_FN__ARG4(raylib_ImageDrawCircleV,
     ImageDrawCircleV(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );    
     native_update_value_image(vm, args[0]);
@@ -4211,9 +4211,9 @@ RAYLIB_FN__ARG5(raylib_ImageDrawCircleLines,
 )
     ImageDrawCircleLines(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );    
     native_update_value_image(vm, args[0]);
@@ -4229,7 +4229,7 @@ RAYLIB_FN__ARG4(raylib_ImageDrawCircleLinesV,
     ImageDrawCircleLinesV(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );    
     native_update_value_image(vm, args[0]);
@@ -4245,10 +4245,10 @@ RAYLIB_FN__ARG6(raylib_ImageDrawRectangle,
 )
     ImageDrawRectangle(
         native_from_value_image_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );    
     native_update_value_image(vm, args[0]);
@@ -4293,7 +4293,7 @@ RAYLIB_FN__ARG4(raylib_ImageDrawRectangleLines,
     ImageDrawRectangleLines(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_rectangle(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );    
     native_update_value_image(vm, args[0]);
@@ -4330,9 +4330,9 @@ RAYLIB_FN__ARG6(raylib_ImageDrawText,
     ImageDrawText(
         native_from_value_image_ref(vm, args[0]),
         native_from_value_string_unsafe(vm, args[1]), // ok!
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );    
     native_update_value_image(vm, args[0]);
@@ -4352,8 +4352,8 @@ RAYLIB_FN__ARG7(raylib_ImageDrawTextEx,
         native_from_value_font(vm, args[1]),
         native_from_value_string_unsafe(vm, args[2]), // ok!
         native_from_value_vector2(vm, args[3]),
-        args[4].value.number,
-        args[5].value.number,
+        matte_value_get_number(args[4]),
+        matte_value_get_number(args[5]),
         native_from_value_color(vm, args[6])
     );    
     native_update_value_image(vm, args[0]);
@@ -4395,7 +4395,7 @@ RAYLIB_FN__ARG2(raylib_LoadTextureCubemap,
         vm,
         LoadTextureCubemap(
             native_from_value_image(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4409,8 +4409,8 @@ RAYLIB_FN__ARG2(raylib_LoadRenderTexture,
     return native_to_value_renderTexture(
         vm,
         LoadRenderTexture(
-            args[0].value.number,
-            args[1].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4522,7 +4522,7 @@ RAYLIB_FN__ARG2(raylib_SetTextureFilter,
 )
     SetTextureFilter(
         native_from_value_texture(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -4532,7 +4532,7 @@ RAYLIB_FN__ARG2(raylib_SetTextureWrap,
 )
     SetTextureWrap(
         native_from_value_texture(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -4551,8 +4551,8 @@ RAYLIB_FN__ARG4(raylib_DrawTexture,
 )
     DrawTexture(
         native_from_value_texture(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -4580,8 +4580,8 @@ RAYLIB_FN__ARG5(raylib_DrawTextureEx,
     DrawTextureEx(
         native_from_value_texture(vm, args[0]),
         native_from_value_vector2(vm, args[1]),
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -4614,7 +4614,7 @@ RAYLIB_FN__ARG6(raylib_DrawTexturePro,
         native_from_value_rectangle(vm, args[1]),
         native_from_value_rectangle(vm, args[2]),
         native_from_value_vector2(vm, args[3]),
-        args[4].value.number,
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -4633,7 +4633,7 @@ RAYLIB_FN__ARG6(raylib_DrawTextureNPatch,
         native_from_value_nPatchInfo(vm, args[1]),
         native_from_value_rectangle(vm, args[2]),
         native_from_value_vector2(vm, args[3]),
-        args[4].value.number,
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -4651,7 +4651,7 @@ RAYLIB_FN__ARG2(raylib_Fade,
         vm,
         Fade(
             native_from_value_color(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4711,9 +4711,9 @@ RAYLIB_FN__ARG3(raylib_ColorFromHSV,
     return native_to_value_color(
         vm,
         ColorFromHSV(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -4740,7 +4740,7 @@ RAYLIB_FN__ARG2(raylib_ColorBrightness,
         vm,
         ColorBrightness(
             native_from_value_color(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4753,7 +4753,7 @@ RAYLIB_FN__ARG2(raylib_ColorContrast,
         vm,
         ColorContrast(
             native_from_value_color(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4766,7 +4766,7 @@ RAYLIB_FN__ARG2(raylib_ColorAlpha,
         vm,
         ColorAlpha(
             native_from_value_color(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -4793,7 +4793,7 @@ RAYLIB_FN__ARG1(raylib_GetColor,
     return native_to_value_color(
         vm,
         GetColor(
-            args[0].value.number
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -4810,7 +4810,7 @@ RAYLIB_FN__ARG2(raylib_GetPixelColor,
         &size
     );
     
-    if (size < GetPixelDataSize(1, 1, args[1].value.number)) {
+    if (size < GetPixelDataSize(1, 1, matte_value_get_number(args[1]))) {
         matte_vm_raise_error_cstring(vm, "GetPixelColor: received buffer of insufficient size.");
         goto L_END;
     }
@@ -4819,7 +4819,7 @@ RAYLIB_FN__ARG2(raylib_GetPixelColor,
         vm,
         GetPixelColor(
             (void*)data,    
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
   L_END:
@@ -4839,7 +4839,7 @@ RAYLIB_FN__ARG3(raylib_SetPixelColor,
         &size
     );
     
-    if (size < GetPixelDataSize(1, 1, args[1].value.number)) {
+    if (size < GetPixelDataSize(1, 1, matte_value_get_number(args[1]))) {
         matte_vm_raise_error_cstring(vm, "SetPixelColor: received buffer of insufficient size.");
         goto L_END;
     }
@@ -4847,7 +4847,7 @@ RAYLIB_FN__ARG3(raylib_SetPixelColor,
     SetPixelColor(
         data,
         native_from_value_color(vm, args[1]),        
-        args[2].value.number
+        matte_value_get_number(args[2])
     );
   L_END:
 RAYLIB_FN__END
@@ -4861,9 +4861,9 @@ RAYLIB_FN__ARG3(raylib_GetPixelDataSize,
     return native_to_value_int(
         vm,
         GetPixelDataSize(
-            args[0].value.number,
-            args[0].value.number,
-            args[0].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -4908,7 +4908,7 @@ static int * get_codepoints(matteVM_t * vm, matteStore_t * store, matteValue_t v
     int i;
     for(i = 0; i < count; ++i) {
         matteValue_t str = matte_value_as_string(store, matte_value_object_access_index(store, v, i));
-        if (str.binID == MATTE_VALUE_TYPE_STRING) {
+        if (matte_value_type(str) == MATTE_VALUE_TYPE_STRING) {
             const matteString_t * strS = matte_value_string_get_string_unsafe(store, str);
             if (matte_string_get_length(strS) > 0) {
                 codepoints[i] = matte_string_get_char(strS, 0);
@@ -4943,7 +4943,7 @@ RAYLIB_FN__ARG3(raylib_LoadFontEx,
         vm,
         LoadFontEx(
             native_from_value_string_unsafe(vm, args[0]), // ok!
-            args[1].value.number,
+            matte_value_get_number(args[1]),
             codepoints,
             count
         )
@@ -4967,7 +4967,7 @@ RAYLIB_FN__ARG3(raylib_LoadFontFromImage,
         LoadFontFromImage(
             native_from_value_image(vm, args[0]),
             native_from_value_color(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -5003,7 +5003,7 @@ RAYLIB_FN__ARG4(raylib_LoadFontFromMemory,
             native_from_value_string_unsafe(vm, args[0]), // ok!
             data,
             size,
-            args[2].value.number,
+            matte_value_get_number(args[2]),
             codepoints,
             count
         )
@@ -5051,10 +5051,10 @@ RAYLIB_FN__ARG4(raylib_LoadFontData,
     GlyphInfo * gs = LoadFontData(
         data,
         size,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         codepoints,
         count,
-        args[3].value.number
+        matte_value_get_number(args[3])
     );
 
 
@@ -5101,9 +5101,9 @@ RAYLIB_FN__ARG4(raylib_GenImageFontAtlas,
         glyphs, 
         &recs, 
         count, 
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3])
     );
     MemFree(glyphs);
     
@@ -5167,8 +5167,8 @@ RAYLIB_FN__ARG2(raylib_DrawFPS,
     MATTE_VALUE_TYPE_NUMBER
 )
     DrawFPS(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -5182,9 +5182,9 @@ RAYLIB_FN__ARG5(raylib_DrawText,
 )
     DrawText(
         native_from_value_string_unsafe(vm, args[0]), // ok!
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5203,8 +5203,8 @@ RAYLIB_FN__ARG6(raylib_DrawTextEx,
         native_from_value_font(vm, args[0]),
         native_from_value_string_unsafe(vm, args[1]), // ok!
         native_from_value_vector2(vm, args[2]),
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5224,9 +5224,9 @@ RAYLIB_FN__ARG8(raylib_DrawTextPro,
         native_from_value_string_unsafe(vm, args[1]), // ok!
         native_from_value_vector2(vm, args[2]),
         native_from_value_vector2(vm, args[3]),
-        args[4].value.number,
-        args[5].value.number,
-        args[6].value.number,
+        matte_value_get_number(args[4]),
+        matte_value_get_number(args[5]),
+        matte_value_get_number(args[6]),
         native_from_value_color(vm, args[7])
     );
 RAYLIB_FN__END
@@ -5237,7 +5237,7 @@ RAYLIB_FN__ARG1(raylib_SetTextLineSpacing,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetTextLineSpacing(
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -5249,7 +5249,7 @@ RAYLIB_FN__ARG2(raylib_MeasureText,
         vm,
         MeasureText(
             native_from_value_string_unsafe(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -5266,8 +5266,8 @@ RAYLIB_FN__ARG4(raylib_MeasureTextEx,
         MeasureTextEx(
             native_from_value_font(vm, args[0]),
             native_from_value_string_unsafe(vm, args[1]),
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -5281,7 +5281,7 @@ RAYLIB_FN__ARG2(raylib_GetGlyphIndex,
         vm,
         GetGlyphIndex(
             native_from_value_font(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -5295,7 +5295,7 @@ RAYLIB_FN__ARG2(raylib_GetGlyphInfo,
         vm,
         GetGlyphInfo(
             native_from_value_font(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -5309,7 +5309,7 @@ RAYLIB_FN__ARG2(raylib_GetGlyphAtlasRec,
         vm,
         GetGlyphAtlasRec(
             native_from_value_font(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -5357,9 +5357,9 @@ RAYLIB_FN__ARG5(raylib_DrawCircle3D,
 )
     DrawCircle3D(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_vector3(vm, args[2]),
-        args[3].value.number,
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5414,9 +5414,9 @@ RAYLIB_FN__ARG5(raylib_DrawCube,
 )
     DrawCube(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5445,9 +5445,9 @@ RAYLIB_FN__ARG5(raylib_DrawCubeWires,
 )
     DrawCubeWires(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5473,7 +5473,7 @@ RAYLIB_FN__ARG3(raylib_DrawSphere,
 )
     DrawSphere(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         native_from_value_color(vm, args[2])
     );
 RAYLIB_FN__END
@@ -5489,9 +5489,9 @@ RAYLIB_FN__ARG5(raylib_DrawSphereEx,
 )
     DrawSphereEx(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5506,9 +5506,9 @@ RAYLIB_FN__ARG5(raylib_DrawSphereWires,
 )
     DrawSphereWires(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5525,10 +5525,10 @@ RAYLIB_FN__ARG6(raylib_DrawCylinder,
 )
     DrawCylinder(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5546,9 +5546,9 @@ RAYLIB_FN__ARG6(raylib_DrawCylinderEx,
     DrawCylinderEx(
         native_from_value_vector3(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5566,10 +5566,10 @@ RAYLIB_FN__ARG6(raylib_DrawCylinderWires,
 )
     DrawCylinderWires(
         native_from_value_vector3(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5587,9 +5587,9 @@ RAYLIB_FN__ARG6(raylib_DrawCylinderWiresEx,
     DrawCylinderWiresEx(
         native_from_value_vector3(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5607,9 +5607,9 @@ RAYLIB_FN__ARG6(raylib_DrawCapsule,
     DrawCapsule(
         native_from_value_vector3(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5627,9 +5627,9 @@ RAYLIB_FN__ARG6(raylib_DrawCapsuleWires,
     DrawCapsuleWires(
         native_from_value_vector3(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
-        args[3].value.number,
-        args[4].value.number,
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
+        matte_value_get_number(args[4]),
         native_from_value_color(vm, args[5])
     );
 RAYLIB_FN__END
@@ -5663,8 +5663,8 @@ RAYLIB_FN__ARG2(raylib_DrawGrid,
     MATTE_VALUE_TYPE_NUMBER
 )
     DrawGrid(
-        args[0].value.number,
-        args[1].value.number
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -5747,7 +5747,7 @@ RAYLIB_FN__ARG4(raylib_DrawModel,
     DrawModel(
         native_from_value_model(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -5766,7 +5766,7 @@ RAYLIB_FN__ARG6(raylib_DrawModelEx,
         native_from_value_model(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
         native_from_value_vector3(vm, args[2]),
-        args[3].value.number,
+        matte_value_get_number(args[3]),
         native_from_value_vector3(vm, args[4]),
         native_from_value_color(vm, args[5])
     );
@@ -5782,7 +5782,7 @@ RAYLIB_FN__ARG4(raylib_DrawModelWires,
     DrawModelWires(
         native_from_value_model(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
-        args[2].value.number,
+        matte_value_get_number(args[2]),
         native_from_value_color(vm, args[3])
     );
 RAYLIB_FN__END
@@ -5801,7 +5801,7 @@ RAYLIB_FN__ARG6(raylib_DrawModelWiresEx,
         native_from_value_model(vm, args[0]),
         native_from_value_vector3(vm, args[1]),
         native_from_value_vector3(vm, args[2]),
-        args[3].value.number,
+        matte_value_get_number(args[3]),
         native_from_value_vector3(vm, args[4]),
         native_from_value_color(vm, args[5])
     );
@@ -5831,7 +5831,7 @@ RAYLIB_FN__ARG5(raylib_DrawBillboard,
         native_from_value_camera(vm, args[0]),
         native_from_value_texture(vm, args[1]),
         native_from_value_vector3(vm, args[2]),
-        args[3].value.number,
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -5874,7 +5874,7 @@ RAYLIB_FN__ARG9(raylib_DrawBillboardPro,
         native_from_value_vector3(vm, args[4]),
         native_from_value_vector2(vm, args[5]),
         native_from_value_vector2(vm, args[6]),
-        args[7].value.number,
+        matte_value_get_number(args[7]),
         native_from_value_color(vm, args[8])
     );
 RAYLIB_FN__END
@@ -5887,7 +5887,7 @@ RAYLIB_FN__ARG2(raylib_UploadMesh,
 )
     UploadMesh(
         native_from_value_mesh_ref(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_mesh(vm, args[0]);
 RAYLIB_FN__END
@@ -5910,10 +5910,10 @@ RAYLIB_FN__ARG4(raylib_UpdateMeshBuffer,
 
     UpdateMeshBuffer(
         native_from_value_mesh(vm, args[0]),
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         data,
         size,
-        args[3].value.number
+        matte_value_get_number(args[3])
     );
 RAYLIB_FN__END
 
@@ -6010,8 +6010,8 @@ RAYLIB_FN__ARG2(raylib_GenMeshPoly,
     return native_to_value_mesh(
         vm, 
         GenMeshPoly(
-            args[0].value.number,
-            args[1].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -6026,10 +6026,10 @@ RAYLIB_FN__ARG4(raylib_GenMeshPlane,
     return native_to_value_mesh(
         vm, 
         GenMeshPlane(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -6044,9 +6044,9 @@ RAYLIB_FN__ARG3(raylib_GenMeshCube,
     return native_to_value_mesh(
         vm,
         GenMeshCube(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6059,9 +6059,9 @@ RAYLIB_FN__ARG3(raylib_GenMeshSphere,
     return native_to_value_mesh(
         vm,
         GenMeshSphere(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6074,9 +6074,9 @@ RAYLIB_FN__ARG3(raylib_GenMeshHemiSphere,
     return native_to_value_mesh(
         vm,
         GenMeshHemiSphere(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6089,9 +6089,9 @@ RAYLIB_FN__ARG3(raylib_GenMeshCylinder,
     return native_to_value_mesh(
         vm,
         GenMeshCylinder(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6105,9 +6105,9 @@ RAYLIB_FN__ARG3(raylib_GenMeshCone,
     return native_to_value_mesh(
         vm,
         GenMeshCone(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6122,10 +6122,10 @@ RAYLIB_FN__ARG4(raylib_GenMeshTorus,
     return native_to_value_mesh(
         vm,
         GenMeshTorus(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -6139,10 +6139,10 @@ RAYLIB_FN__ARG4(raylib_GenMeshKnot,
     return native_to_value_mesh(
         vm,
         GenMeshKnot(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -6239,7 +6239,7 @@ RAYLIB_FN__ARG3(raylib_SetMaterialTexture,
 )
     SetMaterialTexture(
         native_from_value_material_ref(vm, args[0]),
-        args[1].value.number, 
+        matte_value_get_number(args[1]), 
         native_from_value_texture(vm, args[2])
     );
     native_update_value_material(vm, args[0]);
@@ -6251,7 +6251,7 @@ RAYLIB_FN__ARG3(raylib_SetMaterialMapColor,
     MATTE_VALUE_TYPE_OBJECT
 )
     Material * m = native_from_value_material_ref(vm, args[0]);
-    m->maps[(int)args[1].value.number].color = native_from_value_color(vm, args[2]);
+    m->maps[(int)matte_value_get_number(args[1])].color = native_from_value_color(vm, args[2]);
     native_update_value_material(vm, args[0]);
 RAYLIB_FN__END
 
@@ -6261,7 +6261,7 @@ RAYLIB_FN__ARG3(raylib_SetMaterialMapValue,
     MATTE_VALUE_TYPE_NUMBER
 )
     Material * m = native_from_value_material_ref(vm, args[0]);
-    m->maps[(int)args[1].value.number].value = args[2].value.number;
+    m->maps[(int)matte_value_get_number(args[1])].value = matte_value_get_number(args[2]);
     native_update_value_material(vm, args[0]);
 RAYLIB_FN__END
 
@@ -6274,8 +6274,8 @@ RAYLIB_FN__ARG3(raylib_SetModelMeshMaterial,
 )
     SetModelMeshMaterial(
         native_from_value_model_ref(vm, args[0]),
-        args[1].value.number, 
-        args[2].value.number
+        matte_value_get_number(args[1]), 
+        matte_value_get_number(args[2])
     );
     native_update_value_model(vm, args[0]);
 RAYLIB_FN__END
@@ -6319,7 +6319,7 @@ RAYLIB_FN__ARG3(raylib_UpdateModelAnimation,
     UpdateModelAnimation(
         native_from_value_model(vm, args[0]),
         native_from_value_modelAnimation(vm, args[1]),
-        args[2].value.number
+        matte_value_get_number(args[2])
     );
 RAYLIB_FN__END
 
@@ -6361,9 +6361,9 @@ RAYLIB_FN__ARG4(raylib_CheckCollisionSpheres,
         vm,
         CheckCollisionSpheres(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number,        
+            matte_value_get_number(args[1]),        
             native_from_value_vector3(vm, args[2]),        
-            args[3].value.number 
+            matte_value_get_number(args[3]) 
         )
     );
 RAYLIB_FN__END
@@ -6392,7 +6392,7 @@ RAYLIB_FN__ARG3(raylib_CheckCollisionBoxSphere,
         CheckCollisionBoxSphere(
             native_from_value_boundingBox(vm, args[0]),
             native_from_value_vector3(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6408,7 +6408,7 @@ RAYLIB_FN__ARG3(raylib_GetRayCollisionSphere,
         GetRayCollisionSphere(
             native_from_value_ray(vm, args[0]),
             native_from_value_vector3(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -6518,7 +6518,7 @@ RAYLIB_FN__ARG1(raylib_SetMasterVolume,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetMasterVolume(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -6768,7 +6768,7 @@ RAYLIB_FN__ARG2(raylib_SetSoundVolume,
 )
     SetSoundVolume(
         native_from_value_sound(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -6779,7 +6779,7 @@ RAYLIB_FN__ARG2(raylib_SetSoundPitch,
 )
     SetSoundPitch(
         native_from_value_sound(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -6789,7 +6789,7 @@ RAYLIB_FN__ARG2(raylib_SetSoundPan,
 )
     SetSoundPan(
         native_from_value_sound(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
 RAYLIB_FN__END
 
@@ -6816,8 +6816,8 @@ RAYLIB_FN__ARG3(raylib_WaveCrop,
     
     WaveCrop(
         native_from_value_wave_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2])
     );
     
     native_update_value_wave(vm, args[0]);
@@ -6834,9 +6834,9 @@ RAYLIB_FN__ARG4(raylib_WaveFormat,
     
     WaveFormat(
         native_from_value_wave_ref(vm, args[0]),
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3])
     );
     
     native_update_value_wave(vm, args[0]);
@@ -6995,7 +6995,7 @@ RAYLIB_FN__ARG2(raylib_SeekMusicStream,
 )
     SeekMusicStream(
         native_from_value_music(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7007,7 +7007,7 @@ RAYLIB_FN__ARG2(raylib_SetMusicVolume,
 )
     SetMusicVolume(
         native_from_value_music(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7019,7 +7019,7 @@ RAYLIB_FN__ARG2(raylib_SetMusicPitch,
 )
     SetMusicPitch(
         native_from_value_music(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7031,7 +7031,7 @@ RAYLIB_FN__ARG2(raylib_SetMusicPan,
 )
     SetMusicPan(
         native_from_value_music(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7078,9 +7078,9 @@ RAYLIB_FN__ARG3(raylib_LoadAudioStream,
     return native_to_value_audioStream(
         vm,
         LoadAudioStream(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )        
     );
     
@@ -7199,7 +7199,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamVolume,
 )
     SetAudioStreamVolume(
         native_from_value_audioStream(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7211,7 +7211,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamPitch,
 )
     SetAudioStreamPitch(
         native_from_value_audioStream(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7223,7 +7223,7 @@ RAYLIB_FN__ARG2(raylib_SetAudioStreamPan,
 )
     SetAudioStreamPan(
         native_from_value_audioStream(vm, args[0]),
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     
 RAYLIB_FN__END
@@ -7232,7 +7232,7 @@ RAYLIB_FN__ARG1(raylib_SetAudioStreamBufferSizeDefault,
     MATTE_VALUE_TYPE_NUMBER
 )
     SetAudioStreamBufferSizeDefault(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
     
 RAYLIB_FN__END
@@ -7247,9 +7247,9 @@ RAYLIB_FN__ARG3(raylib_Clamp,
     return native_to_value_float(
         vm,
         Clamp(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7263,9 +7263,9 @@ RAYLIB_FN__ARG3(raylib_Lerp,
     return native_to_value_float(
         vm,
         Lerp(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7279,9 +7279,9 @@ RAYLIB_FN__ARG3(raylib_Normalize,
     return native_to_value_float(
         vm,
         Normalize(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7297,11 +7297,11 @@ RAYLIB_FN__ARG5(raylib_Remap,
     return native_to_value_float(
         vm,
         Remap(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
-            args[4].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4])
         )
     );
 RAYLIB_FN__END
@@ -7315,9 +7315,9 @@ RAYLIB_FN__ARG3(raylib_Wrap,
     return native_to_value_float(
         vm,
         Wrap(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7330,8 +7330,8 @@ RAYLIB_FN__ARG2(raylib_FloatEquals,
     return native_to_value_boolean(
         vm,
         FloatEquals(
-            args[0].value.number,
-            args[1].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7379,7 +7379,7 @@ RAYLIB_FN__ARG2(raylib_Vector2AddValue,
         vm,
         Vector2AddValue(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7407,7 +7407,7 @@ RAYLIB_FN__ARG2(raylib_Vector2SubtractValue,
         vm,
         Vector2SubtractValue(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7509,7 +7509,7 @@ RAYLIB_FN__ARG2(raylib_Vector2Scale,
         vm,
         Vector2Scale(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7586,7 +7586,7 @@ RAYLIB_FN__ARG3(raylib_Vector2Lerp,
         Vector2Lerp(
             native_from_value_vector2(vm, args[0]),
             native_from_value_vector2(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7613,7 +7613,7 @@ RAYLIB_FN__ARG2(raylib_Vector2Rotate,
         vm,
         Vector2Rotate(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7629,7 +7629,7 @@ RAYLIB_FN__ARG3(raylib_Vector2MoveTowards,
         Vector2MoveTowards(
             native_from_value_vector2(vm, args[0]),
             native_from_value_vector2(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7670,8 +7670,8 @@ RAYLIB_FN__ARG3(raylib_Vector2ClampValue,
         vm,
         Vector2ClampValue(
             native_from_value_vector2(vm, args[0]),
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -7739,7 +7739,7 @@ RAYLIB_FN__ARG2(raylib_Vector3AddValue,
         vm,
         Vector3AddValue(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7766,7 +7766,7 @@ RAYLIB_FN__ARG2(raylib_Vector3SubtractValue,
         vm,
         Vector3SubtractValue(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -7792,7 +7792,7 @@ RAYLIB_FN__ARG2(raylib_Vector3Scale,
         vm,
         Vector3Scale(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8025,7 +8025,7 @@ RAYLIB_FN__ARG3(raylib_Vector3RotateByAxisAngle,
         Vector3RotateByAxisAngle(
             native_from_value_vector3(vm, args[0]),
             native_from_value_vector3(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8040,7 +8040,7 @@ RAYLIB_FN__ARG3(raylib_Vector3Lerp,
         Vector3Lerp(
             native_from_value_vector3(vm, args[0]),
             native_from_value_vector3(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8155,8 +8155,8 @@ RAYLIB_FN__ARG3(raylib_Vector3ClampValue,
         vm,
         Vector3ClampValue(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8186,7 +8186,7 @@ RAYLIB_FN__ARG3(raylib_Vector3Refract,
         Vector3Refract(
             native_from_value_vector3(vm, args[0]),
             native_from_value_vector3(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8302,9 +8302,9 @@ RAYLIB_FN__ARG3(raylib_MatrixTranslate,
     return native_to_value_matrix(
         vm,
         MatrixTranslate(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8318,7 +8318,7 @@ RAYLIB_FN__ARG2(raylib_MatrixRotate,
         vm,
         MatrixRotate(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8331,7 +8331,7 @@ RAYLIB_FN__ARG1(raylib_MatrixRotateX,
     return native_to_value_matrix(
         vm,
         MatrixRotateX(
-            args[0].value.number
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -8342,7 +8342,7 @@ RAYLIB_FN__ARG1(raylib_MatrixRotateY,
     return native_to_value_matrix(
         vm,
         MatrixRotateY(
-            args[0].value.number
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -8353,7 +8353,7 @@ RAYLIB_FN__ARG1(raylib_MatrixRotateZ,
     return native_to_value_matrix(
         vm,
         MatrixRotateZ(
-            args[0].value.number
+            matte_value_get_number(args[0])
         )
     );
 RAYLIB_FN__END
@@ -8389,9 +8389,9 @@ RAYLIB_FN__ARG3(raylib_MatrixScale,
     return native_to_value_matrix(
         vm,
         MatrixScale(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8407,12 +8407,12 @@ RAYLIB_FN__ARG6(raylib_MatrixFrustum,
     return native_to_value_matrix(
         vm,
         MatrixFrustum(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
-            args[4].value.number,
-            args[5].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4]),
+            matte_value_get_number(args[5])
         )
     );
 RAYLIB_FN__END
@@ -8428,10 +8428,10 @@ RAYLIB_FN__ARG4(raylib_MatrixPerspective,
     return native_to_value_matrix(
         vm,
         MatrixPerspective(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3])
         )
     );
 RAYLIB_FN__END
@@ -8448,12 +8448,12 @@ RAYLIB_FN__ARG6(raylib_MatrixOrtho,
     return native_to_value_matrix(
         vm,
         MatrixOrtho(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number,
-            args[3].value.number,
-            args[4].value.number,
-            args[5].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4]),
+            matte_value_get_number(args[5])
         )
     );
 RAYLIB_FN__END
@@ -8495,7 +8495,7 @@ RAYLIB_FN__ARG2(raylib_QuaternionAddValue,
         vm,
         QuaternionAddValue(
             native_from_value_vector4(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8521,7 +8521,7 @@ RAYLIB_FN__ARG2(raylib_QuaternionSubtractValue,
         vm,
         QuaternionSubtractValue(
             native_from_value_vector4(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8607,7 +8607,7 @@ RAYLIB_FN__ARG2(raylib_QuaternionScale,
         vm,
         QuaternionScale(
             native_from_value_vector4(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8623,7 +8623,7 @@ RAYLIB_FN__ARG3(raylib_QuaternionLerp,
         QuaternionLerp(
             native_from_value_vector4(vm, args[0]),
             native_from_value_vector4(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8640,7 +8640,7 @@ RAYLIB_FN__ARG3(raylib_QuaternionNlerp,
         QuaternionNlerp(
             native_from_value_vector4(vm, args[0]),
             native_from_value_vector4(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8655,7 +8655,7 @@ RAYLIB_FN__ARG3(raylib_QuaternionSlerp,
         QuaternionSlerp(
             native_from_value_vector4(vm, args[0]),
             native_from_value_vector4(vm, args[1]),
-            args[2].value.number
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8707,7 +8707,7 @@ RAYLIB_FN__ARG2(raylib_QuaternionFromAxisAngle,
         vm,
         QuaternionFromAxisAngle(
             native_from_value_vector3(vm, args[0]),
-            args[1].value.number
+            matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -8741,9 +8741,9 @@ RAYLIB_FN__ARG3(raylib_QuaternionFromEuler,
     return native_to_value_vector4(
         vm,
         QuaternionFromEuler(
-            args[0].value.number,
-            args[1].value.number,
-            args[2].value.number
+            matte_value_get_number(args[0]),
+            matte_value_get_number(args[1]),
+            matte_value_get_number(args[2])
         )
     );
 RAYLIB_FN__END
@@ -8836,7 +8836,7 @@ RAYLIB_FN__ARG3(raylib_CameraMoveForward,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraMoveForward(
         &cam,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         args[2].value.boolean
     );
     native_update_value_camera(vm, args[0], cam);
@@ -8850,7 +8850,7 @@ RAYLIB_FN__ARG2(raylib_CameraMoveUp,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraMoveUp(
         &cam,
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_camera(vm, args[0], cam);
 RAYLIB_FN__END
@@ -8864,7 +8864,7 @@ RAYLIB_FN__ARG3(raylib_CameraMoveRight,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraMoveRight(
         &cam,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         args[2].value.boolean
     );
     native_update_value_camera(vm, args[0], cam);
@@ -8877,7 +8877,7 @@ RAYLIB_FN__ARG2(raylib_CameraMoveToTarget,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraMoveToTarget(
         &cam,
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_camera(vm, args[0], cam);
 RAYLIB_FN__END
@@ -8891,7 +8891,7 @@ RAYLIB_FN__ARG3(raylib_CameraYaw,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraYaw(
         &cam,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         args[2].value.boolean
     );
     native_update_value_camera(vm, args[0], cam);
@@ -8907,7 +8907,7 @@ RAYLIB_FN__ARG5(raylib_CameraPitch,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraPitch(
         &cam,
-        args[1].value.number,
+        matte_value_get_number(args[1]),
         args[2].value.boolean,
         args[3].value.boolean,
         args[4].value.boolean
@@ -8924,7 +8924,7 @@ RAYLIB_FN__ARG2(raylib_CameraRoll,
     Camera cam = native_from_value_camera(vm, args[0]);
     CameraRoll(
         &cam,
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_camera(vm, args[0], cam);
 RAYLIB_FN__END
@@ -8951,7 +8951,7 @@ RAYLIB_FN__ARG2(raylib_GetCameraProjectionMatrix,
     Camera cam = native_from_value_camera(vm, args[0]);
     Matrix out = GetCameraProjectionMatrix(
         &cam,
-        args[1].value.number
+        matte_value_get_number(args[1])
     );
     native_update_value_camera(vm, args[0], cam);
     return native_to_value_matrix(vm, out);
@@ -9006,7 +9006,7 @@ RAYLIB_FN__ARG1(raygui_GuiSetAlpha,
     MATTE_VALUE_TYPE_NUMBER
 )
     GuiSetAlpha(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -9015,7 +9015,7 @@ RAYLIB_FN__ARG1(raygui_GuiSetState,
     MATTE_VALUE_TYPE_NUMBER
 )
     GuiSetState(
-        (int)args[0].value.number
+        (int)matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -9059,9 +9059,9 @@ RAYLIB_FN__ARG3(raygui_GuiSetStyle,
     MATTE_VALUE_TYPE_NUMBER
 )
     GuiSetStyle(
-        (int)args[0].value.number,
-        (int)args[1].value.number,
-        (int)args[2].value.number
+        (int)matte_value_get_number(args[0]),
+        (int)matte_value_get_number(args[1]),
+        (int)matte_value_get_number(args[2])
     );
 RAYLIB_FN__END
 
@@ -9074,8 +9074,8 @@ RAYLIB_FN__ARG2(raygui_GuiGetStyle,
     return native_to_value_int(
         vm,
         GuiGetStyle(
-            (int)args[0].value.number,
-            (int)args[1].value.number
+            (int)matte_value_get_number(args[0]),
+            (int)matte_value_get_number(args[1])
         )
     );
 RAYLIB_FN__END
@@ -9122,7 +9122,7 @@ RAYLIB_FN__ARG2(raygui_GuiIconText,
     return native_to_value_string(
         vm,
         GuiIconText(
-            args[0].value.number,
+            matte_value_get_number(args[0]),
             native_from_value_string_unsafe(vm, args[1]) // ok!
         )
     );
@@ -9133,7 +9133,7 @@ RAYLIB_FN__ARG1(raygui_GuiSetIconScale,
     MATTE_VALUE_TYPE_NUMBER
 )
     GuiSetIconScale(
-        args[0].value.number
+        matte_value_get_number(args[0])
     );
 RAYLIB_FN__END
 
@@ -9146,10 +9146,10 @@ RAYLIB_FN__ARG5(raygui_GuiDrawIcon,
     MATTE_VALUE_TYPE_OBJECT
 )
     GuiDrawIcon(
-        args[0].value.number,
-        args[1].value.number,
-        args[2].value.number,
-        args[3].value.number,
+        matte_value_get_number(args[0]),
+        matte_value_get_number(args[1]),
+        matte_value_get_number(args[2]),
+        matte_value_get_number(args[3]),
         native_from_value_color(vm, args[4])
     );
 RAYLIB_FN__END
@@ -9214,7 +9214,7 @@ RAYLIB_FN__END
 static matteValue_t gui_extract_data_param(matteVM_t * vm, const char * name, matteValue_t v) {
     matteStore_t * store = matte_vm_get_store(vm);    
     matteValue_t out = matte_value_object_access_string(store, v, MATTE_VM_STR_CAST(vm, name));
-    if (out.binID == MATTE_VALUE_TYPE_EMPTY) {
+    if (matte_value_type(out) == MATTE_VALUE_TYPE_EMPTY) {
         matte_vm_raise_error_cstring(vm, "In/out parameter missing original member! This member is required for in/out computation.");
     }
     return out;
@@ -9236,7 +9236,7 @@ RAYLIB_FN__ARG3(raygui_GuiTabBar,
     uint32_t i;
     for(i = 0; i < count; ++i) {
         matteValue_t vstr = matte_value_object_access_index(store, args[1], i);
-        if (vstr.binID == MATTE_VALUE_TYPE_STRING) {
+        if (matte_value_type(vstr) == MATTE_VALUE_TYPE_STRING) {
             text[i] = native_from_value_string_unsafe(vm, vstr); // ok!
         } else {
             matte_vm_raise_error_cstring(vm, "GuiListViewEx: given array for text contains a non-string value.");
@@ -9244,7 +9244,7 @@ RAYLIB_FN__ARG3(raygui_GuiTabBar,
     }
 
 
-    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;    
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));    
     matteValue_t output =  native_to_value_int(
         vm,
         GuiTabBar(
@@ -9360,7 +9360,7 @@ RAYLIB_FN__ARG3(raygui_GuiToggleGroup,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiToggleGroup(
@@ -9379,7 +9379,7 @@ RAYLIB_FN__ARG3(raygui_GuiToggleSlider,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiToggleSlider(
@@ -9418,7 +9418,7 @@ RAYLIB_FN__ARG3(raygui_GuiComboBox,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiComboBox(
@@ -9438,7 +9438,7 @@ RAYLIB_FN__ARG4(raygui_GuiDropdownBox,
     MATTE_VALUE_TYPE_OBJECT,
     MATTE_VALUE_TYPE_BOOLEAN
 )
-    int toggle = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiDropdownBox(
@@ -9462,15 +9462,15 @@ RAYLIB_FN__ARG6(raygui_GuiSpinner,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_BOOLEAN
 )
-    int toggle = gui_extract_data_param(vm, "value", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "value", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiSpinner(
             native_from_value_rectangle(vm, args[0]),
             native_from_value_string_unsafe(vm, args[1]), // ok!
             &toggle,
-            args[3].value.number,
-            args[4].value.number,
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4]),
             args[5].value.boolean
         )
     );
@@ -9488,15 +9488,15 @@ RAYLIB_FN__ARG6(raygui_GuiValueBox,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_BOOLEAN
 )
-    int toggle = gui_extract_data_param(vm, "value", args[2]).value.number;
+    int toggle = matte_value_get_number(gui_extract_data_param(vm, "value", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiValueBox(
             native_from_value_rectangle(vm, args[0]),
             native_from_value_string_unsafe(vm, args[1]), // ok!
             &toggle,
-            args[3].value.number,
-            args[4].value.number,
+            matte_value_get_number(args[3]),
+            matte_value_get_number(args[4]),
             args[5].value.boolean
         )
     );
@@ -9530,7 +9530,7 @@ RAYLIB_FN__ARG3(raygui_GuiTextBox,
 )
 
     matteValue_t vtext = gui_extract_data_param(vm, "text", args[1]);
-    if (vtext.binID != MATTE_VALUE_TYPE_STRING) {
+    if (matte_value_type(vtext) != MATTE_VALUE_TYPE_STRING) {
         matte_vm_raise_error_cstring(vm, "GuiTextBox: input parameter for text's data parameter isnt a string!");
         return vtext;
     }
@@ -9560,7 +9560,7 @@ RAYLIB_FN__ARG6(raygui_GuiSlider,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER
 )
-    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    float toggle = matte_value_get_number(gui_extract_data_param(vm, "value", args[3]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiSlider(
@@ -9568,8 +9568,8 @@ RAYLIB_FN__ARG6(raygui_GuiSlider,
             native_from_value_string_unsafe(vm, args[1]), // ok!
             native_from_value_string_unsafe(vm, args[2]), // ok!
             &toggle,
-            args[4].value.number,
-            args[5].value.number
+            matte_value_get_number(args[4]),
+            matte_value_get_number(args[5])
         )
     );
     
@@ -9586,7 +9586,7 @@ RAYLIB_FN__ARG6(raygui_GuiSliderBar,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER
 )
-    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    float toggle = matte_value_get_number(gui_extract_data_param(vm, "value", args[3]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiSliderBar(
@@ -9594,8 +9594,8 @@ RAYLIB_FN__ARG6(raygui_GuiSliderBar,
             native_from_value_string_unsafe(vm, args[1]), // ok!
             native_from_value_string_unsafe(vm, args[2]), // ok!
             &toggle,
-            args[4].value.number,
-            args[5].value.number
+            matte_value_get_number(args[4]),
+            matte_value_get_number(args[5])
         )
     );
     
@@ -9613,7 +9613,7 @@ RAYLIB_FN__ARG6(raygui_GuiProgressBar,
     MATTE_VALUE_TYPE_NUMBER,
     MATTE_VALUE_TYPE_NUMBER
 )
-    float toggle = gui_extract_data_param(vm, "value", args[3]).value.number;
+    float toggle = matte_value_get_number(gui_extract_data_param(vm, "value", args[3]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiProgressBar(
@@ -9621,8 +9621,8 @@ RAYLIB_FN__ARG6(raygui_GuiProgressBar,
             native_from_value_string_unsafe(vm, args[1]), // ok!
             native_from_value_string_unsafe(vm, args[2]), // ok!
             &toggle,
-            args[4].value.number,
-            args[5].value.number
+            matte_value_get_number(args[4]),
+            matte_value_get_number(args[5])
         )
     );
     
@@ -9673,8 +9673,8 @@ RAYLIB_FN__ARG5(raygui_GuiGrid,
         GuiGrid(
             native_from_value_rectangle(vm, args[0]),
             native_from_value_string_unsafe(vm, args[1]), // ok!
-            args[2].value.number,
-            args[3].value.number,
+            matte_value_get_number(args[2]),
+            matte_value_get_number(args[3]),
             &toggle
         )
     );
@@ -9690,8 +9690,8 @@ RAYLIB_FN__ARG3(raygui_GuiListView,
     MATTE_VALUE_TYPE_OBJECT
 )
 
-    int toggle =  gui_extract_data_param(vm, "scrollIndex", args[2]).value.number;
-    int toggle2 = gui_extract_data_param(vm, "active", args[2]).value.number;
+    int toggle =  matte_value_get_number(gui_extract_data_param(vm, "scrollIndex", args[2]));
+    int toggle2 = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
 
     matteValue_t output = native_to_value_int(
         vm,
@@ -9720,7 +9720,7 @@ RAYLIB_FN__ARG3(raygui_GuiListViewEx,
     uint32_t i;
     for(i = 0; i < count; ++i) {
         matteValue_t vstr = matte_value_object_access_index(store, args[1], i);
-        if (vstr.binID == MATTE_VALUE_TYPE_STRING) {
+        if (matte_value_type(vstr) == MATTE_VALUE_TYPE_STRING) {
             text[i] = native_from_value_string_unsafe(vm, vstr); // ok!
         } else {
             matte_vm_raise_error_cstring(vm, "GuiListViewEx: given array for text contains a non-string value.");
@@ -9729,9 +9729,9 @@ RAYLIB_FN__ARG3(raygui_GuiListViewEx,
     
 
 
-    int toggle  = gui_extract_data_param(vm, "scrollIndex", args[2]).value.number;
-    int toggle2 = gui_extract_data_param(vm, "active", args[2]).value.number;
-    int toggle3 = gui_extract_data_param(vm, "focus", args[2]).value.number;
+    int toggle  = matte_value_get_number(gui_extract_data_param(vm, "scrollIndex", args[2]));
+    int toggle2 = matte_value_get_number(gui_extract_data_param(vm, "active", args[2]));
+    int toggle3 = matte_value_get_number(gui_extract_data_param(vm, "focus", args[2]));
     matteValue_t output = native_to_value_int(
         vm,
         GuiListViewEx(
@@ -9778,7 +9778,7 @@ RAYLIB_FN__ARG5(raygui_GuiTextInputBox,
 )
     bool toggle  = gui_extract_data_param(vm, "secretViewActive", args[4]).value.boolean;
     matteValue_t v = gui_extract_data_param(vm, "text", args[4]);
-    if (v.binID != MATTE_VALUE_TYPE_STRING) {
+    if (matte_value_type(v) != MATTE_VALUE_TYPE_STRING) {
         matte_vm_raise_error_cstring(vm, "GuiTextInputBox: 'inOut' parameter MUST contain a 'text' member thats a string!");
         return v;
     }
@@ -9852,7 +9852,7 @@ RAYLIB_FN__ARG3(raygui_GuiColorBarAlpha,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    float toggle  = gui_extract_data_param(vm, "alpha", args[2]).value.number;
+    float toggle  = matte_value_get_number(gui_extract_data_param(vm, "alpha", args[2]));
     
     matteValue_t output = native_to_value_int(
         vm,
@@ -9872,7 +9872,7 @@ RAYLIB_FN__ARG3(raygui_GuiColorBarHue,
     MATTE_VALUE_TYPE_STRING,
     MATTE_VALUE_TYPE_OBJECT
 )
-    float toggle  = gui_extract_data_param(vm, "value", args[2]).value.number;
+    float toggle  = matte_value_get_number(gui_extract_data_param(vm, "value", args[2]));
     
     matteValue_t output = native_to_value_int(
         vm,
@@ -10920,7 +10920,7 @@ static int raymatte_package() {
         package
     );
     
-    if (arr.binID != MATTE_VALUE_TYPE_OBJECT) {
+    if (matte_value_type(arr) != MATTE_VALUE_TYPE_OBJECT) {
         TraceLog(LOG_FATAL, "package.mt must return an array of filenames to package.");        
         return 1;
     }
@@ -10930,7 +10930,7 @@ static int raymatte_package() {
     int hasMain = 0;
     for(i = 0; i < count; ++i) {
         matteValue_t v = matte_value_object_access_index(store, arr, i);
-        if (v.binID != MATTE_VALUE_TYPE_STRING) {
+        if (matte_value_type(v) != MATTE_VALUE_TYPE_STRING) {
             TraceLog(LOG_FATAL, "package.mt returned array should only contain strings.");                
             return 1;
         } 
@@ -10967,7 +10967,7 @@ static int raymatte_package() {
 }
 
 
-uint32_t raymatte_importer(matte_t * m, const char * name, void * userdata) {
+uint32_t raymatte_importer(matte_t * m, const char * name, const char * alias, void * userdata) {
     unsigned int size = 0;
     unsigned char * data = LoadFileData(
         name,

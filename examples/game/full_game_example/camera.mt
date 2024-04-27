@@ -24,9 +24,9 @@ SOFTWARE.
 
 
 */
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
-@:game = import(module:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
+@:game = import(:"game.mt");
 
 
 @:Camera = class(

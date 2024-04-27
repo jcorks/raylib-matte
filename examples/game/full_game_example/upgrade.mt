@@ -24,12 +24,12 @@ SOFTWARE.
 
 
 */
-@:game   = import(module:"game.mt");
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
-@:Shooter = import(module:"shooter.mt"); 
-@:res    = import(module:"resources.mt");
-@:Stats  = import(module:"stats.mt");
+@:game   = import(:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
+@:Shooter = import(:"shooter.mt"); 
+@:res    = import(:"resources.mt");
+@:Stats  = import(:"stats.mt");
 
 
 // WHere the table should begin, vertically

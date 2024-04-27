@@ -24,14 +24,14 @@ SOFTWARE.
 
 
 */
-@:game   = import(module:"game.mt");
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
+@:game   = import(:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
 
 
-@:bullet = import(module:"bullet.mt"); 
-@:camera = import(module:"camera.mt");
-@:room   = import(module:"room.mt");
+@:bullet = import(:"bullet.mt"); 
+@:camera = import(:"camera.mt");
+@:room   = import(:"room.mt");
 
 
 

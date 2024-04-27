@@ -24,15 +24,15 @@ SOFTWARE.
 
 
 */
-@:game   = import(module:"game.mt");
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
+@:game   = import(:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
 
-@:Bullet = import(module:"bullet.mt"); 
-@:camera = import(module:"camera.mt");
-@:room   = import(module:"room.mt");
-@:res    = import(module:"resources.mt");
-@:Stats  = import(module:"stats.mt");
+@:Bullet = import(:"bullet.mt"); 
+@:camera = import(:"camera.mt");
+@:room   = import(:"room.mt");
+@:res    = import(:"resources.mt");
+@:Stats  = import(:"stats.mt");
 
 @main;
 
@@ -162,11 +162,11 @@ return class(
                     ray.PlaySound(sound: soundLoaded);
                 },
                 onStep :: {
-                    if (ray.IsKeyDown(key:ray.KEY_SPACE) || ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_LEFT)) ::<= {
+                    if (ray.IsKeyDown(:ray.KEY_SPACE) || ray.IsMouseButtonDown(:ray.MOUSE_BUTTON_LEFT)) ::<= {
                         sm.state = "shootPrimary"
                         charge = 0;
                     } else ::<= {
-                        if (ray.IsMouseButtonDown(button:ray.MOUSE_BUTTON_RIGHT)) ::<= {
+                        if (ray.IsMouseButtonDown(:ray.MOUSE_BUTTON_RIGHT)) ::<= {
                             charge += Stats.list[Stats.CHARGE_RATE].value * ray.GetFrameTime();
                         } else ::<= {
                             if (charge < CHARGE_THRESHOLD)
@@ -237,8 +237,8 @@ return class(
  
 
         this.constructor = ::{
-            this.attach(child:shootingTimer);
-            this.attach(child:sm);               
+            this.attach(:shootingTimer);
+            this.attach(:sm);               
         }
  
         

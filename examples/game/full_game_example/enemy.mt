@@ -24,16 +24,16 @@ SOFTWARE.
 
 
 */
-@:game   = import(module:"game.mt");
-@:ray    = import(module:"raylib.mt");
-@:class  = import(module:"Matte.Core.Class");
+@:game   = import(:"game.mt");
+@:ray    = import(:"raylib.mt");
+@:class  = import(:"Matte.Core.Class");
 
 
-@:Bullet = import(module:"bullet.mt"); 
-@:camera = import(module:"camera.mt");
-@:room   = import(module:"room.mt");
-@:res    = import(module:"resources.mt");
-@:Explosion = import(module:"explosion.mt");
+@:Bullet = import(:"bullet.mt"); 
+@:camera = import(:"camera.mt");
+@:room   = import(:"room.mt");
+@:res    = import(:"resources.mt");
+@:Explosion = import(:"explosion.mt");
 
 @:mesh = ray.GenMeshCube(width:1, length: 1, height: 1);
 
@@ -57,7 +57,7 @@ return class(
     },
 
     define::(this) {
-        @:controller = import(module:"controller.mt");
+        @:controller = import(:"controller.mt");
         @size;
         @health_;
         @maxHealth;

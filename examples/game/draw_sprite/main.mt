@@ -31,9 +31,9 @@ SOFTWARE.
 
 
 
-@:ray = import(module:"raylib.mt");
-@:class = import(module:"Matte.Core.Class");
-@:game = import(module:"game.mt");
+@:ray = import(:"raylib.mt");
+@:class = import(:"Matte.Core.Class");
+@:game = import(:"game.mt");
 
 // need to init window early because we 
 // generate textures immediately
@@ -135,12 +135,12 @@ ray.InitWindow(width: 800, height: 480, title: 'Entity Test');
         this.interface = {
             onStep ::{
                 // If left mouse button is pressed, spawn a ball.
-                if (ray.IsMouseButtonPressed(button:ray.MOUSE_BUTTON_LEFT)) ::<={
+                if (ray.IsMouseButtonPressed(:ray.MOUSE_BUTTON_LEFT)) ::<={
                     @ball = Ball.new();
                     @pos = ray.GetMousePosition();
                     ball.x = pos.x;
                     ball.y = pos.y;
-                    this.attach(child:ball);
+                    this.attach(:ball);
                 }
             }
         }
@@ -152,7 +152,7 @@ game.Log.display[0] = "Press Left Mouse to spawn a ball!"
 
 // Create and attach controller.
 @:controller = Controller.new();
-game.GetRoot().attach(child:controller);
+game.GetRoot().attach(:controller);
 
 // Start the main loop.
 game.StartLoop(allowExit:true);

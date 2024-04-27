@@ -24,7 +24,7 @@ SOFTWARE.
 
 
 */
-@:class  = import(module:"Matte.Core.Class");
+@:class  = import(:"Matte.Core.Class");
 
 
 

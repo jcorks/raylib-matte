@@ -34,9 +34,9 @@ SOFTWARE.
 */
 
 
-@:ray = import(module:"raylib.mt");
-@:game = import(module:"game.mt");
-@:class = import(module:"Matte.Core.Class");
+@:ray = import(:"raylib.mt");
+@:game = import(:"game.mt");
+@:class = import(:"Matte.Core.Class");
 
 
 // Create a custom Node class that will update the 
@@ -56,7 +56,7 @@ SOFTWARE.
             // Attaches the timer to this node.
             // The timer node needs to be attached, 
             // as it will need to be updated.
-            this.attach(child:timer);
+            this.attach(:timer);
             
             // This sets whether the timer will auto-reset 
             // after it expires.
@@ -86,11 +86,11 @@ SOFTWARE.
             
             onStep :: {
                 // If "a" is pressed, pause the timer.
-                if (ray.IsKeyPressed(key:ray.KEY_A)) 
+                if (ray.IsKeyPressed(:ray.KEY_A)) 
                     timer.pause();
                 
                 // If "s" is pressed, resume the paused timer.
-                if (ray.IsKeyPressed(key:ray.KEY_S)) 
+                if (ray.IsKeyPressed(:ray.KEY_S)) 
                     timer.resume();
                 
 
@@ -108,5 +108,5 @@ game.Log.display[1] = "a -> pause, s -> resume";
 
 // Create and add the timer example as an instance 
 // in the main loop.
-game.GetRoot().attach(child:TimerExample.new());
+game.GetRoot().attach(:TimerExample.new());
 game.StartLoop(allowExit:true);

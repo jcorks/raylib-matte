@@ -35,10 +35,10 @@ SOFTWARE.
 */
 
 
-@:game  = import(module:"game.mt");
-@:ray   = import(module:"raylib.mt");
-@:gui   = import(module:"raygui.mt");
-@:class = import(module:"Matte.Core.Class");
+@:game  = import(:"game.mt");
+@:ray   = import(:"raylib.mt");
+@:gui   = import(:"raygui.mt");
+@:class = import(:"Matte.Core.Class");
 
 
 // Panel using the raygui module and Layouts.
@@ -101,7 +101,7 @@ SOFTWARE.
             // Add a press detection routine
             onStep ::{
                 if (pressed)
-                    print(message:"Hello! from: " + text_);
+                    print(:"Hello! from: " + text_);
             },
             
             
@@ -132,21 +132,21 @@ ray.InitWindow(width: 800, height: 480, title: 'Layout Test');
             margin: 20
         ).layout(items : [
         
-            Panel.new().setText(text: "Im a panel!"),
+            Panel.new().setText(: "Im a panel!"),
             game.Layout.Vertical.new().setup(
                 margin: 10
             ).layout(items : [
-                Button.new().setText(text: "Button0"),
+                Button.new().setText(: "Button0"),
                 Button.new().setup(
                     // pixel size requests override regular sizeRequests.
                     pixelSizeRequest : 50 
-                ).setText(text: "Button1"),
-                Button.new().setText(text: "Button2")
+                ).setText(: "Button1"),
+                Button.new().setText(: "Button2")
             ]),
         ]),
         Button.new().setup(
             sizeRequest: 0.5 // uses half of the parent space available.
-        ).setText(text: "Im large!")
+        ).setText(: "Im large!")
     ]
 )
 
@@ -163,5 +163,5 @@ box.resize(
 );
 
 // Attach root and start loop
-game.GetRoot().attach(child:box);
+game.GetRoot().attach(:box);
 game.StartLoop(allowExit:true);

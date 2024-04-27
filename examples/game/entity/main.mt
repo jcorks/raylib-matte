@@ -36,9 +36,9 @@ SOFTWARE.
 
 
 
-@:ray = import(module:"raylib.mt");
-@:game = import(module:"game.mt");
-@:class = import(module:"Matte.Core.Class");
+@:ray = import(:"raylib.mt");
+@:game = import(:"game.mt");
+@:class = import(:"Matte.Core.Class");
 
 
 
@@ -144,14 +144,14 @@ cube.z = 30;
 
 // Create a cube thats a sub component of the first cube.
 @:cube2 = Cube.new();
-cube.attach(child:cube2);
+cube.attach(:cube2);
 cube2.z += 5;
 cube2.color = ray.RED;
 
 
 // Add it to the roots so it and its 
 // children get updated
-game.GetRoot().attach(child:cube);
+game.GetRoot().attach(:cube);
 
 // Starts the main loop.
 game.StartLoop(allowExit:true);
